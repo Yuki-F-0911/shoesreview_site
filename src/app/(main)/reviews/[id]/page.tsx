@@ -85,7 +85,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                   <div>
                     <div className="mb-2 flex items-center justify-between">
                       <span className="text-sm font-medium text-gray-700">履き心地</span>
-                      <ReviewRating rating={review.comfortRating} showNumber />
+                      <ReviewRating rating={parseFloat(String(review.comfortRating))} showNumber />
                     </div>
                   </div>
                 )}
@@ -93,7 +93,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                   <div>
                     <div className="mb-2 flex items-center justify-between">
                       <span className="text-sm font-medium text-gray-700">デザイン</span>
-                      <ReviewRating rating={review.designRating} showNumber />
+                      <ReviewRating rating={parseFloat(String(review.designRating))} showNumber />
                     </div>
                   </div>
                 )}
@@ -101,7 +101,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                   <div>
                     <div className="mb-2 flex items-center justify-between">
                       <span className="text-sm font-medium text-gray-700">耐久性</span>
-                      <ReviewRating rating={review.durabilityRating} showNumber />
+                      <ReviewRating rating={parseFloat(String(review.durabilityRating))} showNumber />
                     </div>
                   </div>
                 )}
