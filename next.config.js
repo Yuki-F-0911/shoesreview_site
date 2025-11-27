@@ -4,6 +4,22 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   
+  // サーバーコンポーネント専用パッケージ（webpackのバンドルから除外）
+  serverComponentsExternalPackages: ['cheerio', 'undici'],
+  
+  // webpack設定: cheerioとundiciをサーバーサイドのみで使用
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // クライアントサイドではcheerioとundiciを使用しない
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        cheerio: false,
+        undici: false,
+      }
+    }
+    return config
+  },
+  
   // 画像の最適化設定
   images: {
     domains: ['res.cloudinary.com'],

@@ -3,8 +3,6 @@
  * レビュー記事から情報を抽出
  */
 
-import * as cheerio from 'cheerio'
-
 export interface WebArticleInfo {
   title: string
   author?: string
@@ -38,6 +36,8 @@ export async function scrapeWebArticle(url: string): Promise<WebArticleInfo> {
     }
 
     const html = await response.text()
+    // 動的インポートでcheerioを読み込み（webpackのバンドルから除外）
+    const cheerio = await import('cheerio')
     const $ = cheerio.load(html)
 
     // タイトルを抽出（og:title > title > h1の順で試行）
