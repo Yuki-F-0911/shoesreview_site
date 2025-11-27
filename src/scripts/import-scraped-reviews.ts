@@ -455,6 +455,9 @@ async function processConsolidatedReview(
         isPublished: true,
         isDraft: false,
       },
+      include: {
+        aiSources: true,
+      },
     })
 
     console.log(`  ✓ 統合レビューを作成`)
