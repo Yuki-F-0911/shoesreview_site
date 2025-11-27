@@ -4,6 +4,9 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { Button } from '@/components/ui/Button'
 import Link from 'next/link'
 
+// 動的レンダリングを強制（ビルド時の静的生成をスキップ）
+export const dynamic = 'force-dynamic'
+
 async function getShoes() {
   return await prisma.shoe.findMany({
     orderBy: [

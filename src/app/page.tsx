@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/Button'
 import { ReviewCard } from '@/components/reviews/ReviewCard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 
+// 動的レンダリングを強制（ビルド時の静的生成をスキップ）
+export const dynamic = 'force-dynamic'
+
 async function getLatestReviews() {
   const reviews = await prisma.review.findMany({
     where: {
