@@ -1,0 +1,62 @@
+[
+  {
+    "query": "Brooks running shoes review",
+    "query_type": "review",
+    "url": "https://runrepeat.com/guides/best-brooks-running-shoes",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Brooks\",\n    \"model_name\": \"Glycerin 22\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": 10.3,\n    \"stack_height_heel_mm\": 38.5,\n    \"stack_height_forefoot_mm\": 28.2\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Brooks Glycerin 22は、22代目となる安定性と快適性を兼ね備えた最高のランニングシューズです。ラボテストでは、優れたミッドソール、通気性の高いアッパー、耐久性のあるアウトソールが確認されました。高いスタックハイトで衝撃から足を保護しつつ、二重密度のフォームにより安定感も確保されています。特にヒールストライカーに適しており、長距離ランの後半でも安定性と疲労軽減に貢献します。\",\n    \"pros\": [\n      \"DNA Tunedによる衝撃吸収性の向上\",\n      \"安定した走行感\",\n      \"非常に通気性の高いアッパー\",\n      \"スタックハイトの増加\",\n      \"オールラウンドな快適性\",\n      \"一流の耐久性\",\n      \"毎日のランニングに最適\",\n      \"ヒールストライカーに素晴らしい\",\n      \"普段使いのシューズとしても優れている\"\n    ],\n    \"cons\": [\n      \"もう少し軽量化が必要\",\n      \"つま先部分の高さが低い\",\n      \"価格の上昇\",\n      \"最もエネルギッシュな走りではない\"\n    ],\n    \"comparable_shoes\": []\n  },\n  \"analysis\": {\n    \"sentiment_score\": 90,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のランニング、長距離走、ヒールストライカー\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:16:24",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Brooks running shoes review",
+    "query_type": "review",
+    "url": "https://www.brooksrunning.com/en_us/featured/best-sellers/",
+    "article_length": 6653,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Brooks\",\n    \"model_name\": \"Adrenaline GTS 25\",\n    \"category\": \"Stability\",\n    \"release_year\": null,\n    \"price_usd\": 155.00\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Brooksのベストセラーの一つであるAdrenaline GTS 25は、ロードランニングとウォーキングの両方に適した新しいスタイルのシューズです。高い偏差を持つランナー向けに設計されたサポートテクノロジーを搭載しており、ランナーの自然な動きをガイドします。ナローからエクストラワイドまで、多様な足幅に対応する選択肢が提供されており、幅広いランナーに快適なフィット感を提供します。\",\n    \"pros\": [\n      \"新しいスタイルで提供されている\",\n      \"ロードランニングとウォーキングの両方に適している\",\n      \"ナロー、ミディアム、ワイド、エクストラワイドといった多様な幅が選択可能\",\n      \"高い偏差を持つランナー向けのサポート機能が充実している\"\n    ],\n    \"cons\": [],\n    \"comparable_shoes\": [\n      \"Glycerin 22\",\n      \"Ghost Max 2\",\n      \"Adrenaline GTS 24\",\n      \"Ghost 17\",\n      \"Ghost Max 3\",\n      \"Glycerin GTS 22\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 90,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のロードランニング、ウォーキング、サポートを必要とするランナー\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:16:39",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Brooks running shoes review",
+    "query_type": "review",
+    "url": "https://theruntesters.com/the-best-brooks-running-shoes/",
+    "article_length": 7795,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Brooks\",\n    \"model_name\": \"Hyperion Elite 5\",\n    \"category\": \"Race/Carbon\",\n    \"release_year\": null,\n    \"price_usd\": 275\n  },\n  \"specs\": {\n    \"weight_g\": 203,\n    \"drop_mm\": 8,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Brooksのカーボンプレートレーシングシューズの最新モデル。初期のHyperion Eliteは他社のスーパーシューズに及ばなかったものの、Hyperion Elite 4 PBで導入されたPEBAフォーム「DNA Gold」により大幅に改善されました。Hyperion Elite 5はさらに軽量化され、反発性が向上。様々な距離のレースやハードなトレーニングで優れた性能を発揮し、市場のトップレーサーに匹敵するパフォーマンスを提供します。\",\n    \"pros\": [\n      \"軽量で反発性に優れたデザイン\",\n      \"PEBAフォーム「DNA Gold」による高いパフォーマンス\",\n      \"様々な距離のレースやハードなトレーニングで優れた性能を発揮\",\n      \"市場のトップレーサーに匹敵するパフォーマンス\"\n    ],\n    \"cons\": [\n      \"他の優れたレーシングシューズと比較して価格が高め\",\n      \"Hyperion Elite 4 PBよりも高価だが、性能は同等レベル\",\n      \"Puma Fast-R Nitro Elite 3など、より高く評価されるレーシングシューズが存在する\"\n    ],\n    \"comparable_shoes\": [\n      \"Nike Vaporfly 4%\",\n      \"Brooks Hyperion Elite 4 PB\",\n      \"Puma Fast-R Nitro Elite 3\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 80,\n    \"recommended_runner_level\": \"Advanced, Elite\",\n    \"best_for\": \"レース、スピードトレーニング、マラソン\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:16:53",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Brooks running shoes review",
+    "query_type": "review",
+    "url": "https://www.brooksrunning.com/en_us/womens/shoes/",
+    "article_length": 7682,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Brooks\",\n    \"model_name\": \"Adrenaline GTS 25\",\n    \"category\": \"Stability\",\n    \"release_year\": null,\n    \"price_usd\": 155.00\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Brooksの女性用ランニングシューズの幅広いラインナップを紹介するページで、特に新スタイルのAdrenaline GTS 25が強調されています。Adrenaline GTS 25は、四半世紀以上にわたり多くのランナーに愛されてきたサポートシューズの伝統を受け継ぎ、構造的なサポートとスムーズな履き心地を提供します。このページでは、路面での衝撃吸収と反発性に優れたGhostシリーズや、非常に柔らかいクッション性を提供するGlycerinシリーズなど、様々なニーズに対応するモデルが紹介されており、ロードランニングからトレイルランニングまで、あらゆるランナーに最適な一足が見つかるでしょう。サポートの度合い（ニュートラル、サポート、マックスサポート）や、狭い、標準、広い、非常に広いといった豊富な幅の選択肢も特徴です。\",\n    \"pros\": [\n      \"構造的なサポートとスムーズな履き心地（Adrenaline GTS 25）\",\n      \"路面での優れた衝撃吸収と反発性（Ghostシリーズ）\",\n      \"非常に柔らかい足元のクッション性（Glycerinシリーズ）\",\n      \"ロードからトレイルまで多様なランニングシーンに対応\",\n      \"狭い、標準、広い、非常に広いなど豊富な幅の選択肢\"\n    ],\n    \"cons\": [],\n    \"comparable_shoes\": [\n      \"Ghost Max 2\",\n      \"Adrenaline GTS 24\",\n      \"Ghost 17\",\n      \"Ghost Max 3\",\n      \"Glycerin 22\",\n      \"Hyperion 3\",\n      \"Adrenaline GTS 24 Weatherized\",\n      \"Hyperion Max 3\",\n      \"Glycerin Max 2\",\n      \"Glycerin GTS 22\",\n      \"Revel 8\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 90,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のロードランニング、ウォーキング、サポートを必要とするランナー\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:17:16",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Brooks running shoes review",
+    "query_type": "review",
+    "url": "https://believeintherun.com/shoe-reviews/best-brooks-running-shoes/",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Brooks\",\n    \"model_name\": \"Glycerin 22\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": 2025,\n    \"price_usd\": 165\n  },\n  \"specs\": {\n    \"weight_g\": 289,\n    \"drop_mm\": 10,\n    \"stack_height_heel_mm\": 38,\n    \"stack_height_forefoot_mm\": 28\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Brooks Glycerin 22は、窒素注入された新しいDNA Tunedミッドソールを搭載し、ヒールには柔らかい着地のための大きな気泡、フォアフットには反発性のある蹴り出しのための小さな気泡が特徴です。エンジニアードダブルジャカードメッシュアッパーは快適なフィット感を提供し、フォアフットのラバーは優れた耐久性を約束します。アッパーのデザインは賛否あるものの、快適性、パフォーマンス、耐久性のバランスが取れた堅実なデイリートレーナーとして、長距離ランニングに最適です。価格はやや高めですが、その価値は十分にあります。\",\n    \"pros\": [\n      \"新しいDNA Tunedミッドソールによる優れたクッション性と反発性\",\n      \"快適でぴったりフィットするエンジニアードダブルジャカードメッシュアッパー\",\n      \"長距離での耐久性を約束するフォアフットラバー\",\n      \"快適性、パフォーマンス、寿命のバランスが取れた投資価値のあるシューズ\"\n    ],\n    \"cons\": [\n      \"アッパーのデザインが「醜い」と評されている\",\n      \"価格がやや高めである\"\n    ],\n    \"comparable_shoes\": []\n  },\n  \"analysis\": {\n    \"sentiment_score\": 90,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のトレーニング、長距離ランニング\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:17:27",
+    "from_cache": false,
+    "service": "Dify"
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "query": "Adidas racing running shoes review",
+    "query_type": "review",
+    "url": "https://runrepeat.com/guides/best-adidas-running-shoes",
+    "article_length": 8000,
+    "analysis": {
+      "id": "16d57523-bdd7-46d9-af0a-0396790876d8",
+      "workflow_id": "d8e4ab0e-4d3d-4616-836f-8d0a5e5cf987",
+      "status": "failed",
+      "outputs": {},
+      "error": "[google] Error: PluginInvokeError: {\"args\":{},\"error_type\":\"ClientError\",\"message\":\"404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-2.5-flash-lite-preview-06-17 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}\"}",
+      "elapsed_time": 0.305307,
+      "total_tokens": 0,
+      "total_steps": 2,
+      "created_at": 1764047911,
+      "finished_at": 1764047911
+    },
+    "processed_at": "2025-11-25 14:18:31",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Adidas racing running shoes review",
+    "query_type": "review",
+    "url": "https://www.runnersworld.com/gear/a22170339/best-adidas-shoes/",
+    "article_length": 8000,
+    "analysis": {
+      "id": "fa8049ed-d55f-4aec-84c6-380469095b16",
+      "workflow_id": "d8e4ab0e-4d3d-4616-836f-8d0a5e5cf987",
+      "status": "failed",
+      "outputs": {},
+      "error": "[google] Error: PluginInvokeError: {\"args\":{},\"error_type\":\"ClientError\",\"message\":\"404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-2.5-flash-lite-preview-06-17 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}\"}",
+      "elapsed_time": 0.330313,
+      "total_tokens": 0,
+      "total_steps": 2,
+      "created_at": 1764047914,
+      "finished_at": 1764047914
+    },
+    "processed_at": "2025-11-25 14:18:34",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Adidas racing running shoes review",
+    "query_type": "review",
+    "url": "https://believeintherun.com/shoe-reviews/best-adidas-running-shoes/",
+    "article_length": 8000,
+    "analysis": {
+      "id": "39754cf9-463b-46b2-96df-12a54482f7b9",
+      "workflow_id": "d8e4ab0e-4d3d-4616-836f-8d0a5e5cf987",
+      "status": "failed",
+      "outputs": {},
+      "error": "[google] Error: PluginInvokeError: {\"args\":{},\"error_type\":\"ClientError\",\"message\":\"404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-2.5-flash-lite-preview-06-17 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}\"}",
+      "elapsed_time": 0.328829,
+      "total_tokens": 0,
+      "total_steps": 2,
+      "created_at": 1764047918,
+      "finished_at": 1764047918
+    },
+    "processed_at": "2025-11-25 14:18:38",
+    "from_cache": false,
+    "service": "Dify"
+  }
+]

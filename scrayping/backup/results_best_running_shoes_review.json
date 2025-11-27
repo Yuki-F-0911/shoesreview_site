@@ -1,0 +1,11 @@
+[
+  {
+    "query": "best running shoes review",
+    "url": "https://runrepeat.com/guides/best-running-shoes",
+    "article_length": 30093,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"ASICS\",\n    \"model_name\": \"Gel Kayano 32\",\n    \"category\": \"Stability\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": 39.9,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"ASICS Gel Kayano 32は、トップクラスの安定性と快適性を両立させたランニングシューズです。独自の4D Guidance Systemがアーチに合わせたサポートを提供し、広大な接地面とサイドウォールが足元の安定性を確保します。ヒールにはPureGELテクノロジーが搭載され、優れた衝撃吸収性で柔らかな着地を実現。ASICSGRIPラバーアウトソールは、ウェット・ドライ両路面で高いトラクションを発揮し、安心して走れます。ただし、エネルギーリターンが低いため、速さを求めるランナーには不向きで、快適性と安定性を重視する日常のランニングに適しています。\",\n    \"pros\": [\n      \"驚異的な衝撃吸収性\",\n      \"ふかふかで通気性の良いアッパー\",\n      \"優れた耐久性\",\n      \"ほとんどのプロネーションタイプに適応\",\n      \"優れたグリップ力を持つ頑丈なアウトソール\",\n      \"抜群の安定性\",\n      \"クッション性の高い柔らかいヒールパッド\",\n      \"フィット感の向上\",\n      \"優れた製造品質\"\n    ],\n    \"cons\": [\n      \"ソフトフォーム愛好家には不向き\",\n      \"エネルギーリターンが低い\",\n      \"ヨーロッパでは高価\"\n    ],\n    \"comparable_shoes\": []\n  },\n  \"analysis\": {\n    \"sentiment_score\": 80,\n    \"recommended_runner_level\": \"Intermediate\",\n    \"best_for\": \"安定性重視の日常ジョグ、長距離ラン、回復走\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 10:25:04"
+  }
+]

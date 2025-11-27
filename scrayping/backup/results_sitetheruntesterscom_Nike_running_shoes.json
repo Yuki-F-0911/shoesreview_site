@@ -1,0 +1,74 @@
+[
+  {
+    "query": "site:theruntesters.com Nike running shoes",
+    "query_type": "review",
+    "url": "https://theruntesters.com/the-best-nike-running-shoes/",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Nike\",\n    \"model_name\": \"Vomero Plus\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": 180\n  },\n  \"specs\": {\n    \"weight_g\": 300,\n    \"drop_mm\": 10,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Nike Vomero Plusは、Nikeのトレーニングシューズの中で最も評価が高く、あらゆるブランドの中でも最高のクッション性を持つランニングシューズの一つです。ミッドソールに搭載されたZoomXフォームが、非常に快適で弾むような履き心地を提供し、ランニングへのモチベーションを高めます。イージーペースでの走行やマラソントレーニング中のロングランに最適ですが、その反発性により驚くほど多用途性も兼ね備えています。初心者ランナーや、クッション性のあるシューズをあらゆる用途に使いたいランナーにとって優れたオールラウンダーとなるでしょう。複数のシューズを使い分けるランナーには、イージーマイル用として理想的で、スピードセッションにはNike Zoom Fly 6のようなより速いシューズとの組み合わせが推奨されます。\",\n    \"pros\": [\n      \"Nikeレンジで最もお気に入りのトレーニングシューズ\",\n      \"あらゆるブランドの中でも最高のクッション性\",\n      \"ZoomXフォームによる非常に快適で弾むような履き心地\",\n      \"イージーペースやマラソントレーニングのロングランに最適\",\n      \"驚くほど多用途性があり、初心者ランナーにも適したオールラウンダー\"\n    ],\n    \"cons\": [],\n    \"comparable_shoes\": [\n      \"Nike Zoom Fly 6\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 95,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のイージーラン、ロングラン、マラソントレーニング、初心者向けオールラウンド\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 14:01:06",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "site:theruntesters.com Nike running shoes",
+    "query_type": "review",
+    "url": "https://theruntesters.com/nike-zoom-fly-6-review/",
+    "article_length": 4943,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Nike\",\n    \"model_name\": \"Zoom Fly 6\",\n    \"category\": \"Speed/Tempo\",\n    \"release_year\": null,\n    \"price_usd\": 170\n  },\n  \"specs\": {\n    \"weight_g\": 266,\n    \"drop_mm\": 8,\n    \"stack_height_heel_mm\": 42,\n    \"stack_height_forefoot_mm\": 34\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Nike Zoom Fly 6は、前作Zoom Fly 5から大幅にアップグレードされたプレート入りスーパー・トレーナーです。より軽量になり、ミッドソールにはNikeの反発性に優れたZoomXフォームが豊富に搭載されています。主に速いトレーニングセッション向けに設計されていますが、オールラウンダーやレースシューズとしても機能し、今年テストした中でも最高のランニングシューズの一つと評価されています。快適性と安定性も高く、イージーランから速いペースのセッション、マラソントレーニング、長距離レースまで幅広く対応できる汎用性が最大の特長です。ただし、一部の軽量スーパー・トレーナーに比べると、最速ではない点や機敏さに欠ける点、走行音が大きい点が挙げられます。\",\n    \"pros\": [\n      \"優れた汎用性：イージーランから速いペースのセッションまで快適に対応可能\",\n      \"高い快適性：パッド入りアッパーと豊富なZoomXフォームによる優れたクッション性\",\n      \"安定性：高スタックながらテスト中に安定した走行感を提供\",\n      \"マラソントレーニングや長距離レースに適しており、カーボンプレートシューズの代替にもなり得る\",\n      \"Nikeのトレーニングシューズの中で際立った性能とコストパフォーマンス\"\n    ],\n    \"cons\": [\n      \"一部の軽量スーパー・トレーナー（Saucony Endorphin Speed 4、Hoka Mach X2）に比べて、最速ではなく、機敏さに欠ける\",\n      \"走行音が大きい（Nike Alphafly 3と同様の問題）\",\n      \"最高のスーパーシューズほどの絶対的なスピードはない\"\n    ],\n    \"comparable_shoes\": [\n      \"Saucony Endorphin Speed 4\",\n      \"Hoka Mach X2\",\n      \"New Balance SC Trainer v3\",\n      \"Asics Superblast 2\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 90,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"速いトレーニングセッション、長距離レース、マラソントレーニング、日常のあらゆるランニング\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 14:01:20",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "site:theruntesters.com Nike running shoes",
+    "query_type": "review",
+    "url": "https://theruntesters.com/nike-vaporfly-4-review/",
+    "article_length": 3723,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Nike\",\n    \"model_name\": \"Vaporfly 4\",\n    \"category\": \"Race/Carbon\",\n    \"release_year\": null,\n    \"price_usd\": 260\n  },\n  \"specs\": {\n    \"weight_g\": 190,\n    \"drop_mm\": 6,\n    \"stack_height_heel_mm\": 35,\n    \"stack_height_forefoot_mm\": 29\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Nike Vaporfly 4は、前作Vaporfly 3からスタックハイトを低くし、よりアグレッシブなデザインへと大幅にアップデートされたカーボンプレート搭載のレーシングシューズです。マラソンよりも短距離イベントに適した特性を持ち、Nike Alphafly 3や他の多くのカーボン製スーパーシューズとは異なる、よりダイレクトでしっかりとした履き心地を提供します。軽量で反発性に優れ、初期のVaporflyモデルに近い感覚を求めるランナーや、低スタックシューズを好むランナーに特に推奨されます。フィット感は標準的ですが、一部でかかとのわずかな滑りが報告されています。耐久性はVaporfly 3から改善されていますが、長距離でのクッション性には好みが分かれる可能性があります。\",\n    \"pros\": [\n      \"Vaporfly 3よりもアグレッシブでダイレクトなレーシングシューズ\",\n      \"非常に軽量で反発性に優れ、初期モデルのようなしっかりとした履き心地\",\n      \"低スタックでミニマルなデザインがAlphafly 3や他社スーパーシューズとの差別化に成功\",\n      \"短距離イベントに最適で、低スタックを好むランナーにはマラソンにも良い選択肢\",\n      \"丘陵コースでも速くダイレクトな走りを実現し、十分な保護性を提供\",\n      \"安定性が良好で、Vaporfly 3と比較して耐久性が向上\"\n    ],\n    \"cons\": [\n      \"ハーフマラソン以上の長距離ではクッション性が不足し、よりクッション性のあるスーパーシューズが好まれる可能性\",\n      \"長距離イベントにおいて、より多くのクッションを好むランナーにはミッドソールの薄さが不十分と感じられる\",\n      \"一部のテスターでかかとにわずかな滑りが見られた（軽微だが注意点）\",\n      \"Asics Metaspeed Sky ParisやAdidas Adizero Adios Pro 4のような高スタック・高反発の競合シューズほどの「パンチ力」はない\"\n    ],\n    \"comparable_shoes\": [\n      \"Nike Vaporfly 3\",\n      \"Nike Alphafly 3\",\n      \"Adidas Takumi Sen 10\",\n      \"Asics Metaspeed Sky Paris\",\n      \"Adidas Adizero Adios Pro 4\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 80,\n    \"recommended_runner_level\": \"Advanced\",\n    \"best_for\": \"短距離レース、低スタックを好むランナーのマラソン\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 14:01:33",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "site:theruntesters.com Nike running shoes",
+    "query_type": "review",
+    "url": "https://theruntesters.com/nike-vomero-premium-review/",
+    "article_length": 4117,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Nike\",\n    \"model_name\": \"Vomero Premium\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": 230\n  },\n  \"specs\": {\n    \"weight_g\": 355,\n    \"drop_mm\": 10,\n    \"stack_height_heel_mm\": 55.5,\n    \"stack_height_forefoot_mm\": 45.5\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Nike Vomero Premiumは、これまでにないレベルのクッション性、快適性、反発性を提供するランニングシューズです。イージーランやロングラン、特にハードなワークアウト後のリカバリーランに最適で、リラックスしたペースでの走行に夢のような体験をもたらします。非常に高価で汎用性には欠けるため、万能な一足とは言えませんが、最高のクッション性と快適性を求めるランナーには検討する価値があります。他のマックスクッションシューズと比較しても、快適性、サポート、反発性において一歩抜きん出ており、ユニークな走行体験を提供します。\",\n    \"pros\": [\n      \"これまでにないレベルのクッション性、快適性、反発性を提供し、イージーランやロングランに最適\",\n      \"特にハードなワークアウト後のリカバリーランに理想的で、体への衝撃を効果的に保護\",\n      \"ミッドソールの緩やかなロッカー形状により、スムーズな走行感を実現\",\n      \"高いスタックハイトにもかかわらず、幅広のベースにより優れた安定性とサポート性を提供\",\n      \"他のマックスクッションシューズよりも高いレベルの快適性、サポート、反発性を持つ\"\n    ],\n    \"cons\": [\n      \"非常に高価であり、汎用性に欠けるため、日常のあらゆるトレーニングには不向き\",\n      \"シューズのサイズが大きく、時には扱いにくく感じることがある\",\n      \"高速走行には適しておらず、不均一な路面では機敏性に欠け、走りにくさを感じることがある\",\n      \"軽量で速いシューズとの併用が推奨され、この一足で全てをこなすことはできない\"\n    ],\n    \"comparable_shoes\": [\n      \"Nike Vomero Plus\",\n      \"Asics Novablast 5\",\n      \"Brooks Glycerin Max\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 80,\n    \"recommended_runner_level\": \"Intermediate\",\n    \"best_for\": \"イージーラン、ロングラン、リカバリーラン、マラソントレーニングの走行距離が多い週\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 14:01:45",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "site:theruntesters.com Nike running shoes",
+    "query_type": "review",
+    "url": "https://theruntesters.com/nike-vomero-plus-review/",
+    "article_length": 4790,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Nike\",\n    \"model_name\": \"Vomero Plus\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": 2025,\n    \"price_usd\": 180\n  },\n  \"specs\": {\n    \"weight_g\": 300,\n    \"drop_mm\": 10,\n    \"stack_height_heel_mm\": 45,\n    \"stack_height_forefoot_mm\": 35\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Nike Vomero Plusは、2025年のベストランニングシューズの一つと評される、非常に快適で反発性に優れたマックスクッションシューズです。イージーランやロングランに最適ですが、速いペースにも対応できる汎用性も持ち合わせています。ZoomXフォームの厚いミッドソールが特徴で、Nike Invincibleシリーズのような弾む感覚と、それ以上の安定性を提供します。初心者ランナーや、日常のジョグから初のマラソンまで、あらゆる用途に対応できる一足として推奨されています。\",\n    \"pros\": [\n      \"非常に快適で反発性に優れた履き心地で、幅広いペースに対応可能\",\n      \"イージーランやロングランで脚をしっかり保護し、日々のランニングをより楽しくする\",\n      \"Nike Invincible 1および2よりも安定性が高く、イージーランやロングランに適している\",\n      \"スムーズなロッカー構造により、大きなシューズにもかかわらず軽快な足運びを実現\",\n      \"耐久性が高く、100km走行後もアウトソールに摩耗が見られず、ミッドソールの反発性も維持されている\",\n      \"UKでは同クラスのハイエンドクッションシューズと比較して価格が手頃\"\n    ],\n    \"cons\": [\n      \"大きなシューズであるため、より路面感覚を求めるランナーには不向きな場合がある\",\n      \"高いスタックと柔らかさから、特にサポートを必要とするランナーには日常使いで安定性が不足する可能性\",\n      \"アッパーの通気性が最高ではないため、暑い環境でのランニングにはあまり適さない\"\n    ],\n    \"comparable_shoes\": [\n      \"Brooks Glycerin Max\",\n      \"Asics Gel-Nimbus 27\",\n      \"Puma Magnify Nitro 3\",\n      \"Asics Novablast 5\",\n      \"Asics Megablast\",\n      \"Nike Invincible 1\",\n      \"Nike Invincible 2\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 92,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のジョグ, ロングラン, マラソン練習, 初マラソン\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 14:01:56",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "site:theruntesters.com Nike running shoes",
+    "query_type": "review",
+    "url": "https://theruntesters.com/the-best-marathon-running-shoes/",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Hoka\",\n    \"model_name\": \"Mach X3\",\n    \"category\": \"Speed/Tempo\",\n    \"release_year\": null,\n    \"price_usd\": 190\n  },\n  \"specs\": {\n    \"weight_g\": 274,\n    \"drop_mm\": 5,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Hoka Mach X3は、トレーニングとレースの両方に対応する「スーパー・トレーナー」カテゴリのトップピックです。カーボンレーサーのスピードを持ちながら、より優れた耐久性と安定性を兼ね備えたプレート入りトレーニングシューズとして設計されています。プラスチックプレートと、弾力性のあるPEBAトップ層と安定したボトム層からなるデュアルデンシティミッドソールが特徴で、前作Mach X2からフィット感が向上しています。\",\n    \"pros\": [\n      \"カーボンレーサーに匹敵するスピード\",\n      \"優れた耐久性\",\n      \"高い安定性\",\n      \"トレーニングとレースの両方に使える汎用性\",\n      \"弾力性と安定性を両立するデュアルデンシティミッドソール\",\n      \"フィット感の向上\"\n    ],\n    \"cons\": [],\n    \"comparable_shoes\": [\n      \"Hoka Mach X2\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 90,\n    \"recommended_runner_level\": \"Intermediate, Advanced\",\n    \"best_for\": \"トレーニングとレースの両方、特に速いペースでの走行\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 14:02:09",
+    "from_cache": false,
+    "service": "Dify"
+  }
+]

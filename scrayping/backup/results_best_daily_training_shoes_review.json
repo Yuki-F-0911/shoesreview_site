@@ -1,0 +1,20 @@
+[
+  {
+    "query": "best daily training shoes review",
+    "url": "https://runrepeat.com/guides/best-daily-running-running-shoes",
+    "article_length": 31389,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"ASICS\",\n    \"model_name\": \"Novablast 5\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": 254,\n    \"drop_mm\": 7.4,\n    \"stack_height_heel_mm\": 40.9,\n    \"stack_height_forefoot_mm\": 33.5\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Novablast 5は、あらゆる距離やペースに対応する軽量なデイリートレーナーで、快適性、耐久性、サポート性に優れています。非常に柔らかく高いスタックハイトのミッドソールが特徴で、安定した広いプラットフォームは快適な長距離走行を可能にします。前作より軽量で柔軟性も向上していますが、通気性は平均的で涼しい季節に適しています。\",\n    \"pros\": [\n      \"FF Blast MAXフォームによるエネルギーリターンの向上\",\n      \"これまでで最もクッション性のあるNovablastフォーム\",\n      \"v4と同じ価格を維持\",\n      \"クッション性を高めるための高いスタックハイト\",\n      \"柔軟性の向上\",\n      \"前作よりも軽量\",\n      \"幅広の足に最適なNovablast\",\n      \"重量とクッションの優れたバランス\",\n      \"短距離、中距離、長距離ランに対応\"\n    ],\n    \"cons\": [\n      \"通気性の改善の余地あり\",\n      \"トウボックスの耐久性\"\n    ],\n    \"comparable_shoes\": []\n  },\n  \"analysis\": {\n    \"sentiment_score\": 95,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のジョグ, 短距離走, 中距離走, 長距離走, 回復走\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 10:27:07"
+  },
+  {
+    "query": "best daily training shoes review",
+    "url": "https://www.runnersworld.com/gear/a19663621/best-running-shoes/",
+    "article_length": 15429,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Adidas\",\n    \"model_name\": \"Adizero Evo SL\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Runner's Worldのチーフエディター、ジェフ・デンゲートが「今年のベストシューズ」と評した高評価モデル。アディダスのマラソンシューズ「Adios Pro 4」と同じLightstrike Proフォームを採用し、軽量性と優れたクッション性を両立しています。カーボンプレートはないものの、ミッドフットにナイロンシャンクが配され安定性を提供。デイリートレーナーとレーシングシューズの両方の要素を持つ多用途性が特徴です。一部のテスターからはトゥボックスの狭さやシュータンのずれが指摘されたものの、その弾むような走り心地と多様な用途で高い支持を得ています。\",\n    \"pros\": [\n      \"軽量でありながらクッション性を損なわない\",\n      \"弾むような走り心地\",\n      \"デイリートレーナーとレーシングシューズの要素を併せ持つ高い汎用性\",\n      \"ミッドフットのナイロンシャンクによる安定性\",\n      \"効率的なストライドをサポート\"\n    ],\n    \"cons\": [\n      \"トゥボックスがやや狭いと感じるテスターがいた\",\n      \"ミッドフットが少し広いと感じるテスターがいた\",\n      \"ランニング中にシュータンがずれることがあった\"\n    ],\n    \"comparable_shoes\": [\n      \"Adidas Adios Pro 4\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 95,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のトレーニング、スピード練習、レース、汎用的なランニング\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 10:27:20"
+  }
+]

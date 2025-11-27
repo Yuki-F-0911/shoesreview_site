@@ -1,0 +1,20 @@
+[
+  {
+    "query": "Brooks running shoe review",
+    "url": "https://runrepeat.com/guides/best-brooks-running-shoes",
+    "article_length": 28489,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Brooks\",\n    \"model_name\": \"Glycerin 22\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": 10.3,\n    \"stack_height_heel_mm\": 38.5,\n    \"stack_height_forefoot_mm\": 28.2\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Glycerin 22は、その22代目モデルとしてBrooksの総合的に最高のランニングシューズに選ばれました。あらゆるフットストライクや距離に対応する、安定しながらも非常に快適な履き心地が特徴です。ラボテストでは、優れたミッドソールに加え、豪華で通気性の高いアッパーと耐久性のあるアウトソールが評価されました。高いスタックハイトが衝撃から足を保護し、2層のフォーム密度が安定した足元を提供。特に長距離ランの後半での疲労軽減に効果を発揮します。優れた通気性と耐久性も兼ね備えていますが、ドロップが10.3mmと高めであるため、主にヒールストライカーに推奨されます。\",\n    \"pros\": [\n      \"DNA Tunedが衝撃吸収性を向上\",\n      \"安定した履き心地\",\n      \"通気性の高いアッパー\",\n      \"スタックハイトが増加\",\n      \"オールラウンドな快適性\",\n      \"最高クラスの耐久性\",\n      \"普段使いのランニングに最適\",\n      \"ヒールストライカーに非常に良い\",\n      \"日常使いのシューズとして優れている\"\n    ],\n    \"cons\": [\n      \"もう少し軽量化が必要\",\n      \"つま先部分の高さが低い\",\n      \"価格が上昇した\",\n      \"最もエネルギッシュな走りではない\"\n    ],\n    \"comparable_shoes\": []\n  },\n  \"analysis\": {\n    \"sentiment_score\": 85,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のジョグ, 長距離ラン, 日常使い\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 10:32:36"
+  },
+  {
+    "query": "Brooks running shoe review",
+    "url": "https://www.brooksrunning.com/en_us/featured/best-sellers/",
+    "article_length": 6653,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Brooks\",\n    \"model_name\": null,\n    \"category\": \"Unknown\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Brooks Runningのベストセラーシューズとギアを紹介する公式ページです。Adrenaline GTS 25、Glycerin 22、Ghost Max 2、Adrenaline GTS 24、Ghost 17、Ghost Max 3、Glycerin GTS 22といった人気のランニングシューズが多数掲載されており、一部商品は割引価格で提供されています。ユーザーは性別、シューズタイプ、サイズ、幅、サポートタイプ（ニュートラル、サポート、マックスサポート）、色、評価などの多様なフィルターオプションを使って、自分に合ったシューズを検索できます。また、150ドル以上の購入で無料ギフトがもらえる期間限定プロモーションも実施中です。\",\n    \"pros\": [\n      \"Brooksの人気ベストセラーモデルを一覧で確認できる\",\n      \"多様なフィルターオプションにより、ニーズに合ったシューズを見つけやすい\",\n      \"幅広い足幅（ナロー、ミディアム、ワイド、エクストラワイド）に対応したモデルが豊富\",\n      \"サポートタイプ（ニュートラル、サポート、マックスサポート）で選べる\",\n      \"一部商品が割引価格で提供されている\"\n    ],\n    \"cons\": [\n      \"個々のシューズに関する詳細なスペック情報（重量、ドロップ、スタックハイトなど）がリストページでは提供されていない\",\n      \"各シューズの具体的なレビューや走行感に関する情報が不足している\",\n      \"特定のシューズのメリット・デメリットをこのページから判断するのは難しい\"\n    ],\n    \"comparable_shoes\": [\n      \"Adrenaline GTS 25\",\n      \"Glycerin 22\",\n      \"Ghost Max 2\",\n      \"Adrenaline GTS 24\",\n      \"Ghost 17\",\n      \"Ghost Max 3\",\n      \"Glycerin GTS 22\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 80,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のジョグ、ウォーキング、様々なトレーニング（幅広いランナー向け）\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 10:32:56"
+  }
+]

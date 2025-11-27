@@ -1,0 +1,65 @@
+[
+  {
+    "query": "Adidas Boston running shoe review",
+    "query_type": "review",
+    "url": "https://www.reddit.com/r/RunningShoeGeeks/comments/15xqy01/adidas_boston_12_review/",
+    "article_length": 1827,
+    "analysis": {
+      "id": "ebb5147b-1db2-4e89-924e-f8bf9e37597c",
+      "workflow_id": "d8e4ab0e-4d3d-4616-836f-8d0a5e5cf987",
+      "status": "failed",
+      "outputs": {},
+      "error": "[google] Error: PluginInvokeError: {\"args\":{},\"error_type\":\"ClientError\",\"message\":\"404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-2.5-flash-lite-preview-06-17 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}\"}",
+      "elapsed_time": 0.285641,
+      "total_tokens": 0,
+      "total_steps": 2,
+      "created_at": 1764047877,
+      "finished_at": 1764047877
+    },
+    "processed_at": "2025-11-25 14:17:57",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Adidas Boston running shoe review",
+    "query_type": "review",
+    "url": "https://believeintherun.com/shoe-reviews/adidas-boston-12-review/",
+    "article_length": 8000,
+    "analysis": {
+      "id": "ada55776-a9db-42d9-b5f0-52d56cc659dd",
+      "workflow_id": "d8e4ab0e-4d3d-4616-836f-8d0a5e5cf987",
+      "status": "failed",
+      "outputs": {},
+      "error": "[google] Error: PluginInvokeError: {\"args\":{},\"error_type\":\"ClientError\",\"message\":\"404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-2.5-flash-lite-preview-06-17 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}\"}",
+      "elapsed_time": 0.831265,
+      "total_tokens": 0,
+      "total_steps": 2,
+      "created_at": 1764047881,
+      "finished_at": 1764047881
+    },
+    "processed_at": "2025-11-25 14:18:01",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Adidas Boston running shoe review",
+    "query_type": "review",
+    "url": "https://runrepeat.com/adidas-adizero-boston-12",
+    "article_length": 8000,
+    "analysis": {
+      "id": "78588a58-89d9-42c1-966d-21d431f5134c",
+      "workflow_id": "d8e4ab0e-4d3d-4616-836f-8d0a5e5cf987",
+      "status": "failed",
+      "outputs": {},
+      "error": "[google] Error: PluginInvokeError: {\"args\":{},\"error_type\":\"ClientError\",\"message\":\"404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-2.5-flash-lite-preview-06-17 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}\"}",
+      "elapsed_time": 0.254995,
+      "total_tokens": 0,
+      "total_steps": 2,
+      "created_at": 1764047885,
+      "finished_at": 1764047885
+    },
+    "processed_at": "2025-11-25 14:18:05",
+    "from_cache": false,
+    "service": "Dify"
+  }
+]

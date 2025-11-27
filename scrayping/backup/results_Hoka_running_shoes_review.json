@@ -1,0 +1,50 @@
+[
+  {
+    "query": "Hoka running shoes review",
+    "query_type": "review",
+    "url": "https://www.runnersworld.com/gear/a22515179/the-10-best-hoka-one-one-running-shoes/",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Hoka\",\n    \"model_name\": \"Mach 6\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Hoka Mach 6は、ブランドの伝統的なクッション性を保ちつつ、驚くほど軽量化された多用途ランニングシューズです。Hoka独自のProfly+超臨界EVAフォームが、長距離走やリカバリーランでは優れたサポートとクッション性を提供し、テンポ走やインターバル走では十分な反発性と軽さを発揮します。新しいクレールジャカードアッパーとデュアル内部ガセットフラットタンにより、快適なフィット感と走行中のズレ防止を実現。カーボンプレート非搭載ながらもスピード感があり、ヒールクッションが丘でのワークアウトにも適しています。耐久性も高く、あらゆるタイプのランナーにおすすめできる「何でもこなせる」一足です。\",\n    \"pros\": [\n      \"Hokaらしからぬ軽量性と、Hokaらしいクッション性を両立している\",\n      \"Profly+フォームにより、長距離走、リカバリーラン、テンポ走、インターバル走と幅広い用途に対応可能\",\n      \"反発性があり、カーボンプレート非搭載ながらもスピード感を感じられる\",\n      \"ヒールクッションが優れており、ヒルワークアウトにも適している\",\n      \"新しいアッパーとタンの構造により、フィット感が向上し、走行中のズレを防ぐ\",\n      \"履き心地が非常に快適で、カラーの耐久性も高い\"\n    ],\n    \"cons\": [\n      \"カーボンプレート搭載のスピードシューズほどの絶対的な速さはない\"\n    ],\n    \"comparable_shoes\": [\n      \"Hoka Rincon 4\",\n      \"Asics Magic Speed\",\n      \"Saucony Endorphin Pro 3\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 95,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のジョグ、長距離走、リカバリーラン、テンポ走、インターバル走、ヒルワークアウト\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:22:13",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Hoka running shoes review",
+    "query_type": "review",
+    "url": "http://www.lazygirlrunning.com/2023/03/running-shoe-review-hoka-bondi-8.html",
+    "article_length": 4098,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Hoka\",\n    \"model_name\": \"Bondi 8\",\n    \"category\": \"Recovery\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": 252,\n    \"drop_mm\": 4,\n    \"stack_height_heel_mm\": 31,\n    \"stack_height_forefoot_mm\": 27\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Hoka Bondi 8は、ブランドで最もクッション性の高いシューズラインの最新作です。見た目のボリューム感と厚いアッパーが快適性を強くアピールしており、前作Bondi 7よりも軽量化され、フォームもより柔らかく反発性のあるものにアップデートされています。ヒールストライカーを意識したヒール形状も特徴です。スピードよりも快適性を重視するランナー、初心者、ヒールストライカー、そしてリカバリーラン用のシューズを探しているランナーに最適です。履き始めは見た目よりも硬く感じるかもしれませんが、走り続けると柔らかさが増し、イージーランやリカバリーランにおいて、ランナーが適切なペースを維持するのに役立ちます。前足部はやや狭いですが、ワイドフィットオプションも用意されています。\",\n    \"pros\": [\n      \"豪華でパッド入りのアッパーが非常に快適\",\n      \"イージーランを確実にイージーペースにさせる効果がある\"\n    ],\n    \"cons\": [\n      \"見た目ほど弾むような柔らかさはない\",\n      \"イージー/リカバリーシューズであり、速いペースのランニングには不向き\",\n      \"前足部がやや狭い（ワイドフィットオプションあり）\"\n    ],\n    \"comparable_shoes\": [\n      \"Hoka Mach 5\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 75,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のジョグ, リカバリーラン\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:22:31",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Hoka running shoes review",
+    "query_type": "review",
+    "url": "https://www.prevention.com/fitness/workout-clothes-gear/a62859399/hoka-vs-asics/",
+    "article_length": 6829,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Hoka\",\n    \"model_name\": \"Bondi 8\",\n    \"category\": \"Recovery\",\n    \"release_year\": null,\n    \"price_usd\": 165\n  },\n  \"specs\": {\n    \"weight_g\": 252.315,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": 37,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Hoka Bondi 8は、厚いクッションとロッカーボトムが特徴のニュートラル安定性シューズです。APMA（米国足病医学協会）の認定を受けており、足の健康をサポートします。特にゆったりとしたつま先ボックスと豊富なカラーオプションが魅力で、ファッション性も高いと評価されています。ウォーキングやダンスカーディオなどの低負荷活動、日常使い、リカバリーに最適ですが、長距離ランニングでは水ぶくれが発生する可能性があり、Asics Gel Nimbus 26とは異なる用途で使い分けが推奨されています。\",\n    \"pros\": [\n      \"厚く、雲のようなクッション性で快適な履き心地\",\n      \"ロッカーボトムがスムーズな重心移動と推進力を提供\",\n      \"APMA認定により足の健康改善が実証済み\",\n      \"広いつま先ボックスでゆったりとしたフィット感\",\n      \"豊富なカラーオプションがあり、ファッション性が高い\",\n      \"ウォーキングや低負荷活動では長距離でも水ぶくれができにくい\",\n      \"関節への負担を軽減し、足の疲労を和らげる\"\n    ],\n    \"cons\": [\n      \"ランニング時に足裏に水ぶくれができることがある（筆者の経験）\",\n      \"Asics Gel Nimbus 26と比較して、より「チャンキー」に見えるデザイン\",\n      \"長距離ランニングや本格的なトレーニングには不向き\",\n      \"ウェイトリフティングには適さない\"\n    ],\n    \"comparable_shoes\": [\n      \"Asics Gel Nimbus 26\",\n      \"Brooks\",\n      \"On\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 85,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"カジュアルなウォーキング, ダンスカーディオ, 日常活動, リカバリー\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:22:45",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Hoka running shoes review",
+    "query_type": "review",
+    "url": "https://believeintherun.com/shoe-reviews/hoka-clifton-review/",
+    "article_length": 6064,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Hoka\",\n    \"model_name\": \"Clifton\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": 218.3,\n    \"drop_mm\": 5,\n    \"stack_height_heel_mm\": 29,\n    \"stack_height_forefoot_mm\": 24\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Hoka Cliftonは、軽量性と驚異的なクッション性を両立したシューズ。長距離走やリカバリーランに最適で、重さを感じさせない。40代になり走行距離が増えた筆者にとって、疲労軽減に貢献。Bondiの重さを解消し、スピードも出しやすい。クッション性は高いが柔らかすぎず、汎用性が高い。しかし、足のボリュームが少ないとフィット感が緩く、マメができる可能性や、クッション性による効率のわずかな低下、15マイル以上の長距離で足の疲労を感じる点が課題。それでも、イージーラン、ファルトレク、テンポ走、ロングランなど、あらゆるトレーニングに対応できる万能シューズとして高く評価されている。\",\n    \"pros\": [\n      \"非常に軽量で、重さを感じさせない\",\n      \"高いクッション性がありながら、スピードを出しやすい\",\n      \"長距離走、リカバリーラン、テンポ走など幅広い用途に対応する汎用性\",\n      \"アッパーが軽くて快適\",\n      \"（コメント欄より）アキレス腱炎や骨棘の痛みを軽減し、安定性と快適性が高い\"\n    ],\n    \"cons\": [\n      \"足のボリュームが少ないとフィット感が緩く、マメができる可能性がある\",\n      \"高いクッション性により、わずかに効率が失われると感じる\",\n      \"15マイル以上の長距離で足の疲労を感じることがある\",\n      \"イージーランで意図せずペースが速くなりがち\",\n      \"（コメント欄より）アウトソールの耐久性に懸念があるケースが見られる\"\n    ],\n    \"comparable_shoes\": [\n      \"Hoka One One Bondi\",\n      \"New Balance 890\",\n      \"Newtons\",\n      \"Huaka\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 88,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"長距離走、リカバリーラン、イージーラン、テンポ走、ファルトレク走\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:23:08",
+    "from_cache": false,
+    "service": "Dify"
+  }
+]

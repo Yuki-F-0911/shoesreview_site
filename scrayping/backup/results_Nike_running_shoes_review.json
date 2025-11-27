@@ -1,0 +1,50 @@
+[
+  {
+    "query": "Nike running shoes review",
+    "query_type": "review",
+    "url": "https://runrepeat.com/guides/best-nike-running-shoes",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Nike\",\n    \"model_name\": \"Pegasus 41\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": 2025,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": 11.4,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Nike Pegasus 41は、ReactXフォームとAir Zoomテクノロジーを組み合わせることで、クッション性とエネルギーリターンのバランスが取れた、高い汎用性を持つランニングシューズです。様々なペースや距離に対応する「ワークホース」として、日常のトレーニングに最適。新設計のロッカーとベベルにより、スムーズな重心移動と弾むような蹴り出しを実現し、ミッドソールサイドウォールとアウトソールのガイドが安定性を高めます。特にヒールストライカーに適していますが、ドロップが11.4mmと高いため、フォアフットストライカーには不向きかもしれません。前作のv40と比較して、価格が10ドル上昇し、寒冷地での性能が劣る点、グリップ性能が低い点が挙げられます。\",\n    \"pros\": [\n      \"ヒールストライカー向けに強化されている\",\n      \"新しいReactXフォームを搭載\",\n      \"通気性が向上している\",\n      \"快適なアッパー\",\n      \"優れた耐久性\",\n      \"複数の安定性強化機能\",\n      \"新設計のロッカーとベベル\",\n      \"確かなパフォーマンス\",\n      \"優れたフィット感とホールド性\",\n      \"サステナブルな特徴\"\n    ],\n    \"cons\": [\n      \"価格が10ドル上昇した\",\n      \"寒冷地での性能がv40より劣る\",\n      \"グリップ性能が低い\"\n    ],\n    \"comparable_shoes\": [\n      \"Pegasus 40\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 85,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のジョグ, テンポ走, 長距離走\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 13:53:21",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Nike running shoes review",
+    "query_type": "review",
+    "url": "https://www.runnersworld.com/uk/gear/shoes/a32613535/best-nike-running-shoes/",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Nike\",\n    \"model_name\": \"Vomero Plus\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Nike Vomero Plusは、Vomero 18の代替というよりは選択肢の一つとして登場したモデルです。Vomero 18とほぼ同じスタックハイト、ドロップ、ロッカー形状を持ちながら、より軽量で通気性の高いアッパーを採用しています。ミッドソールには100% ZoomXフォームを使用しており、Vomero 18のZoomXとReactXの組み合わせと比較して、より軽快で「空気のような」走り心地を提供します。イージーランやリカバリーランに最適とされていますが、推進力のあるロッカー形状により速いペースにも対応可能で、あらゆるランナーに適した中毒性のあるデイリートレーナーとして評価されています。\",\n    \"pros\": [\n      \"Vomero 18よりも軽量で通気性に優れる\",\n      \"100% ZoomXミッドソールにより、軽快で「空気のような」走り心地\",\n      \"イージーランから速いペースまで対応する高い汎用性\",\n      \"広いプラットフォームによる優れた安定性\",\n      \"スムーズなヒールトゥートランジションと推進力のあるロッカー形状\",\n      \"あらゆる足の形、目標、経験レベルのランナーに適している\"\n    ],\n    \"cons\": [],\n    \"comparable_shoes\": [\n      \"Nike Vomero 18\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 92,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"イージーラン, リカバリーラン, テンポ走, 毎日のトレーニング\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 13:53:32",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Nike running shoes review",
+    "query_type": "review",
+    "url": "https://believeintherun.com/shoe-reviews/best-nike-running-shoes-right-now/",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Nike\",\n    \"model_name\": \"Alphafly 3\",\n    \"category\": \"Race/Carbon\",\n    \"release_year\": null,\n    \"price_usd\": 285\n  },\n  \"specs\": {\n    \"weight_g\": 221,\n    \"drop_mm\": 8,\n    \"stack_height_heel_mm\": 40,\n    \"stack_height_forefoot_mm\": 32\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Nike Alphafly 3は、前作から大幅な進化を遂げたマラソン向けレーシングシューズです。ミッドソールの形状が刷新され、Zoom Airポッド後方の隙間が解消されたことで、軽量化と走行時のトランジションが劇的に改善されました。アッパーにはさらに軽量なAtomknit 3.0メッシュが採用され、全体的にスリムで洗練されたデザインになっています。前作の不評を覆し、非常に高い評価を受けており、マラソンでの自己ベスト更新を目指すランナーに最適な一足です。\",\n    \"pros\": [\n      \"大幅な軽量化とスリムなデザイン\",\n      \"ミッドソールの隙間解消によるスムーズなトランジション\",\n      \"走行時の足音が静かになった\",\n      \"軽量で通気性に優れたAtomknit 3.0アッパー\"\n    ],\n    \"cons\": [],\n    \"comparable_shoes\": []\n  },\n  \"analysis\": {\n    \"sentiment_score\": 95,\n    \"recommended_runner_level\": \"Elite\",\n    \"best_for\": \"マラソンでの自己ベスト更新\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 13:53:45",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Nike running shoes review",
+    "query_type": "review",
+    "url": "https://theruntesters.com/the-best-nike-running-shoes/",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Nike\",\n    \"model_name\": \"Vomero Plus\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": 2025,\n    \"price_usd\": 180\n  },\n  \"specs\": {\n    \"weight_g\": 300,\n    \"drop_mm\": 10,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Nike Vomero Plusは、Nikeのトレーニングシューズラインナップで最も評価されており、あらゆるブランドの中でも最高のクッション性を持つランニングシューズの一つです。ミッドソールに搭載されたZoomXフォームが非常に快適で弾むような履き心地を提供し、ランニングへの意欲を高めます。イージーペースでのランニングやマラソントレーニングのロングランに最適ですが、その弾むようなライド感により驚くほど多用途に使えます。初心者ランナーや、クッション性を重視してあらゆる用途に使えるシューズを求めるランナーのオールラウンダーとして、また、シューズを使い分けるランナーのイージーマイル用としても理想的です。\",\n    \"pros\": [\n      \"Nikeレンジで最もお気に入りのトレーニングシューズ\",\n      \"あらゆるブランドの中でも最高のクッション性を持つランニングシューズの一つ\",\n      \"ZoomXフォームによる非常に快適で弾むような履き心地\",\n      \"イージーペースやマラソントレーニングのロングランに最適\",\n      \"初心者ランナーのオールラウンダーとしても使える多用途性\"\n    ],\n    \"cons\": [],\n    \"comparable_shoes\": [\n      \"Nike Zoom Fly 6\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 95,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のイージーラン、長距離走、マラソントレーニング、初心者ランナーのオールラウンド\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 13:54:02",
+    "from_cache": false,
+    "service": "Dify"
+  }
+]

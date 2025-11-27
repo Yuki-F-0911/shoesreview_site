@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Nike Pegasus running shoe review",
+    "query_type": "review",
+    "url": "https://www.reddit.com/r/RunningShoeGeeks/comments/1hdstmp/550mi_nike_pegasus_40_shoe_review/",
+    "article_length": 1429,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Nike\",\n    \"model_name\": \"Pegasus 40\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Nike Pegasus 40は、レビューア（身長173cm、体重63.5kg、ミッドフット〜フォアフットストライカー）にとって、ブレイクインに時間を要するシューズでした。最初の100マイルは硬く、特に最初の50マイルでは水ぶくれが発生したとのこと。しかし、150マイルから400マイルの間は非常に快適に感じられ、500マイルを超えるとソールのクッション性が低下し始め、550マイルで引退となりました。耐久性は高く、ソールにはまだ十分なラバーが残っていましたが、ヒールカップに破れが見られました。前作のPegasus 39とライド感（重さ、エネルギーリターン）が似ており、多用途に使えるワークホースシューズとして評価されています。後継のPegasus 41は箱から出してすぐに快適でブレイクイン不要、エネルギーリターンも優れているため、40よりも推奨されていますが、お得な価格であれば40も良い選択肢とされています。\",\n    \"pros\": [\n      \"非常に高い耐久性\",\n      \"優れたヒールロックとフィット感\",\n      \"多用途性（ロード、軽いトレイル、様々なワークアウトに対応）\"\n    ],\n    \"cons\": [\n      \"やや重い\",\n      \"ブレイクインに時間がかかる（最初の100マイルは硬く、50マイルで水ぶくれが発生）\",\n      \"やや退屈なライド感（妥当なエネルギーリターンだが、刺激に欠ける）\",\n      \"ヒールカップの破れ\"\n    ],\n    \"comparable_shoes\": [\n      \"Nike Pegasus 39\",\n      \"Nike Pegasus 38\",\n      \"Nike Pegasus 41\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 65,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のジョグ, 多様なワークアウト, ロードランニング, 軽いトレイル\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 14:02:29",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Nike Pegasus running shoe review",
+    "query_type": "review",
+    "url": "https://runrepeat.com/nike-pegasus-41",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Nike\",\n    \"model_name\": \"Air Zoom Pegasus 41\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": 140\n  },\n  \"specs\": {\n    \"weight_g\": 281,\n    \"drop_mm\": 11.4,\n    \"stack_height_heel_mm\": 33.6,\n    \"stack_height_forefoot_mm\": 22.2\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Nike Pegasus 41は、新ReactXフォームと改良されたロッカーデザインにより、特にヒールストライカーやPegasusの長年のファンにとって優れたデイリートレーナーとして進化しました。耐久性が高く、安定性も向上していますが、前作より価格が上がり、低温での性能やグリップには課題があります。初心者から中距離・長距離を走るランナーに適しており、特にReactフォームのエネルギーリターンに不満があったランナーには良い選択肢となるでしょう。ただし、フォアフットストライカーや軽量シューズを求めるランナーには不向きです。\",\n    \"pros\": [\n      \"ヒールストライカー向けに強化されている\",\n      \"新しいReactXフォームを採用している\",\n      \"通気性が向上している\",\n      \"豪華なアッパー\",\n      \"耐久性が高い\",\n      \"安定性が複数強化されている\",\n      \"新設計のロッカーとベベル\",\n      \"堅実なパフォーマンス\",\n      \"優れたロックダウン\",\n      \"持続可能な特徴がある\"\n    ],\n    \"cons\": [\n      \"価格が10ドル上がった\",\n      \"低温環境での性能がv40よりも劣る\",\n      \"グリップが悪い\"\n    ],\n    \"comparable_shoes\": [\n      \"Saucony Ride 17\",\n      \"Hoka Clifton 9\",\n      \"ASICS Novablast 4\",\n      \"New Balance FuelCell Rebel v4\",\n      \"Nike Vomero 18\",\n      \"Nike Vomero 17\",\n      \"Hoka Cielo X1\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 95,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のジョグ、中距離走、長距離走、ウォーキング、ヒールストライカー向け\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 14:02:46",
+    "from_cache": false,
+    "service": "Dify"
+  }
+]

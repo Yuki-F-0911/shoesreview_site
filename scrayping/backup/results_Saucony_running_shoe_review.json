@@ -1,0 +1,20 @@
+[
+  {
+    "query": "Saucony running shoe review",
+    "url": "https://runrepeat.com/guides/best-saucony-running-shoes",
+    "article_length": 21384,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Saucony\",\n    \"model_name\": \"Endorphin Pro 4\",\n    \"category\": \"Race/Carbon\",\n    \"release_year\": null,\n    \"price_usd\": 225\n  },\n  \"specs\": {\n    \"weight_g\": 220,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": 38.1,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Sauconyのラインナップで最高評価のEndorphin Pro 4は、豊富なクッション性とエネルギーリターンを軽量性と両立させたレーシングシューズです。長距離レースでは高い保護性能を発揮し、短距離レースでは優れた反応性を提供し、あらゆる距離で活躍します。S字型カーボンプレートとSpeedrollテクノロジーにより、効率的な推進力を生み出し、ラボテストでは平均より71.3%硬いことが示されました。38.1mmのヒールフォームは着地衝撃を効果的に軽減し、高いクッション性と反発性を両立しています。前作よりわずかに重くなりましたが、安定性が向上し、ヒールストライカーに特に適しています。優れた通気性と耐久性を持つアッパーも特徴です。\",\n    \"pros\": [\n      \"優れたアッパーとアウトソールの耐久性\",\n      \"ゆったりとしたアッパーフィット\",\n      \"向上したミッドソールの快適性\",\n      \"スーパーシューズとして225ドルという優れた価格\",\n      \"あらゆるペースに対応する汎用性\",\n      \"ヒールストライカーに最適\",\n      \"過去最高の安定性\"\n    ],\n    \"cons\": [\n      \"v3よりわずかに重い\",\n      \"フォアフットストライカーにはあまり適さない\",\n      \"競合他社製品の方が速く感じる可能性がある\"\n    ],\n    \"comparable_shoes\": []\n  },\n  \"analysis\": {\n    \"sentiment_score\": 90,\n    \"recommended_runner_level\": \"Advanced\",\n    \"best_for\": \"あらゆる距離のレース、長距離トレーニング、マラソン\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 10:31:43"
+  },
+  {
+    "query": "Saucony running shoe review",
+    "url": "https://believeintherun.com/shoe-reviews/best-saucony-running-shoes/",
+    "article_length": 18532,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Saucony\",\n    \"model_name\": \"Endorphin Elite 2\",\n    \"category\": \"Race/Carbon\",\n    \"release_year\": null,\n    \"price_usd\": 275.0\n  },\n  \"specs\": {\n    \"weight_g\": 199.0,\n    \"drop_mm\": 8.0,\n    \"stack_height_heel_mm\": 39.5,\n    \"stack_height_forefoot_mm\": 31.5\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Saucony Endorphin Elite 2は、同ブランド最新のスーパーフォーム「incrediRun」を搭載し、レースシューズの基準を大きく引き上げました。触れると柔らかく、足を入れるとマシュマロのような反発力を持つユニークなTPEEフォームが特徴です。軽量なTPEヤーンアッパーとフラットニットのシュータンが快適なフィット感を提供し、PWRTRACアウトソールが高いグリップ力を発揮。カーボンファイバープレートとSpeedrollロッカーが推進力を高め、あらゆるレベルのランナーがマラソンでの自己ベスト更新を目指せる一足です。\",\n    \"pros\": [\n      \"他に類を見ない柔らかさと反発性のユニークなブレンド\",\n      \"軽量で通気性の高いアッパー構造\",\n      \"優れたグリップ力を提供するPWRTRACアウトソール\",\n      \"カーボンプレートとSpeedrollロッカーによる推進力の向上\"\n    ],\n    \"cons\": [\n      \"安定性を必要とするランナーには不向きな可能性\",\n      \"幅広の足には合わない可能性\"\n    ],\n    \"comparable_shoes\": []\n  },\n  \"analysis\": {\n    \"sentiment_score\": 93,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"レース日（マラソン距離まで）、幅広いペースでのランニング\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 10:32:10"
+  }
+]

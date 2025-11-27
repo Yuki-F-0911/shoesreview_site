@@ -1,0 +1,128 @@
+[
+  {
+    "query": "site:runnersworld.com Adidas running shoes",
+    "query_type": "review",
+    "url": "https://www.runnersworld.com/uk/gear/shoes/g43778084/the-best-adidas-running-shoes/",
+    "article_length": 3623,
+    "analysis": {
+      "id": "fb24b650-343c-4409-8eea-2b7b69f6eb96",
+      "workflow_id": "d8e4ab0e-4d3d-4616-836f-8d0a5e5cf987",
+      "status": "failed",
+      "outputs": {},
+      "error": "[google] Error: PluginInvokeError: {\"args\":{},\"error_type\":\"ClientError\",\"message\":\"404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-2.5-flash-lite-preview-06-17 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}\"}",
+      "elapsed_time": 0.338142,
+      "total_tokens": 0,
+      "total_steps": 2,
+      "created_at": 1764047765,
+      "finished_at": 1764047765
+    },
+    "processed_at": "2025-11-25 14:16:05",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "site:runnersworld.com Adidas running shoes",
+    "query_type": "review",
+    "url": "https://www.runnersworld.com/gear/a22170339/best-adidas-shoes/",
+    "article_length": 8000,
+    "analysis": {
+      "id": "95374cf6-cf75-41ef-b95d-c7d6cf437537",
+      "workflow_id": "d8e4ab0e-4d3d-4616-836f-8d0a5e5cf987",
+      "status": "failed",
+      "outputs": {},
+      "error": "[google] Error: PluginInvokeError: {\"args\":{},\"error_type\":\"ClientError\",\"message\":\"404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-2.5-flash-lite-preview-06-17 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}\"}",
+      "elapsed_time": 0.279373,
+      "total_tokens": 0,
+      "total_steps": 2,
+      "created_at": 1764047768,
+      "finished_at": 1764047769
+    },
+    "processed_at": "2025-11-25 14:16:08",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "site:runnersworld.com Adidas running shoes",
+    "query_type": "review",
+    "url": "https://www.runnersworld.com/gear/a27556231/best-adidas-shoes-for-women/",
+    "article_length": 8000,
+    "analysis": {
+      "id": "a1cc6faa-e643-4411-a044-5361e279dd53",
+      "workflow_id": "d8e4ab0e-4d3d-4616-836f-8d0a5e5cf987",
+      "status": "failed",
+      "outputs": {},
+      "error": "[google] Error: PluginInvokeError: {\"args\":{},\"error_type\":\"ClientError\",\"message\":\"404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-2.5-flash-lite-preview-06-17 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}\"}",
+      "elapsed_time": 0.346365,
+      "total_tokens": 0,
+      "total_steps": 2,
+      "created_at": 1764047772,
+      "finished_at": 1764047773
+    },
+    "processed_at": "2025-11-25 14:16:12",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "site:runnersworld.com Adidas running shoes",
+    "query_type": "review",
+    "url": "https://www.runnersworld.com/gear/a46341697/adidas-vs-nike-running-shoes/",
+    "article_length": 8000,
+    "analysis": {
+      "id": "a5bea500-a009-4123-94c2-d6b6deb8b699",
+      "workflow_id": "d8e4ab0e-4d3d-4616-836f-8d0a5e5cf987",
+      "status": "failed",
+      "outputs": {},
+      "error": "[google] Error: PluginInvokeError: {\"args\":{},\"error_type\":\"ClientError\",\"message\":\"404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-2.5-flash-lite-preview-06-17 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}\"}",
+      "elapsed_time": 0.271851,
+      "total_tokens": 0,
+      "total_steps": 2,
+      "created_at": 1764047775,
+      "finished_at": 1764047776
+    },
+    "processed_at": "2025-11-25 14:16:15",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "site:runnersworld.com Adidas running shoes",
+    "query_type": "review",
+    "url": "https://www.runnersworld.com/uk/gear/shoes/a46441903/adidas-vs-nike-running-shoes/",
+    "article_length": 8000,
+    "analysis": {
+      "id": "9bd64174-ead6-48b3-9de2-ff731cd974ff",
+      "workflow_id": "d8e4ab0e-4d3d-4616-836f-8d0a5e5cf987",
+      "status": "failed",
+      "outputs": {},
+      "error": "[google] Error: PluginInvokeError: {\"args\":{},\"error_type\":\"ClientError\",\"message\":\"404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-2.5-flash-lite-preview-06-17 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}\"}",
+      "elapsed_time": 0.293888,
+      "total_tokens": 0,
+      "total_steps": 2,
+      "created_at": 1764047779,
+      "finished_at": 1764047779
+    },
+    "processed_at": "2025-11-25 14:16:18",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "site:runnersworld.com Adidas running shoes",
+    "query_type": "review",
+    "url": "https://www.runnersworld.com/uk/gear/shoes/a69406050/adidas-adizero-shoes/",
+    "article_length": 2586,
+    "analysis": {
+      "id": "a6f0c9fe-dbfb-49bc-9f83-f12092a20424",
+      "workflow_id": "d8e4ab0e-4d3d-4616-836f-8d0a5e5cf987",
+      "status": "failed",
+      "outputs": {},
+      "error": "[google] Error: PluginInvokeError: {\"args\":{},\"error_type\":\"ClientError\",\"message\":\"404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/gemini-2.5-flash-lite-preview-06-17 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}\"}",
+      "elapsed_time": 0.290564,
+      "total_tokens": 0,
+      "total_steps": 2,
+      "created_at": 1764047782,
+      "finished_at": 1764047782
+    },
+    "processed_at": "2025-11-25 14:16:22",
+    "from_cache": false,
+    "service": "Dify"
+  }
+]

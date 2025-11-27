@@ -1,0 +1,38 @@
+[
+  {
+    "query": "Mizuno running shoes review",
+    "query_type": "review",
+    "url": "https://www.reddit.com/r/running/comments/lkg1m7/people_who_have_used_mizuno_running_shoes_or_are/",
+    "article_length": 557,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Mizuno\",\n    \"model_name\": \"Wave Polaris EZ2\",\n    \"category\": \"Unknown\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"投稿者は、普段使いのシューズのソールがすり減ってきたため、専用のランニングシューズを探しています。現在、Mizuno Wave Polaris EZ2に注目していますが、このモデルに関する情報やレビューが見つからないため、Mizunoシューズ全般のユーザー意見を求めています。他のMizunoシューズのレビューは有望に見えるものの、実際に使用している人々の意見を聞きたいと考えています。\",\n    \"pros\": [],\n    \"cons\": [],\n    \"comparable_shoes\": []\n  },\n  \"analysis\": {\n    \"sentiment_score\": null,\n    \"recommended_runner_level\": null,\n    \"best_for\": null\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:21:09",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Mizuno running shoes review",
+    "query_type": "review",
+    "url": "https://believeintherun.com/shoe-reviews/mizuno-wave-rider-26-review/",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Mizuno\",\n    \"model_name\": \"Wave Rider 26\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": 140\n  },\n  \"specs\": {\n    \"weight_g\": 283,\n    \"drop_mm\": 12,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Mizuno Wave Rider 26は、控えめなデザインながらもブランドの伝統を受け継ぐクラシックなデイリートレーナーです。Wave PlateとEnerzyフォームの組み合わせにより、着地時の安定性と適度な反発性を提供し、スムーズな走行感を実現します。リサイクル素材を使用したアッパーは快適でフィット感に優れ、アウトソールは優れたトラクションと耐久性を誇ります。一方で、硬めの履き心地やスタックハイトの不足、アグレッシブな12mmドロップ、つま先部分の狭さ、歩行時の違和感が指摘されており、特に伝統的な高ドロップシューズを好むランナーに適しています。\",\n    \"pros\": [\n      \"快適で安全なリサイクルメッシュアッパーと十分なパッド\",\n      \"Wave Plateによる着地時の安定性とスムーズな移行\",\n      \"優れたトラクションと高い耐久性を持つラバーアウトソール\",\n      \"Enerzyフォームとの組み合わせで応答性の高い走り心地\",\n      \"環境に配慮した素材と性能の両立\",\n      \"同カテゴリーのデイリートレーナーの中では比較的軽量\",\n      \"優れたヒールホールドと柔軟なつま先離れ\",\n      \"舗装路、砂利道、整備されたトレイルなど多様な路面での汎用性\"\n    ],\n    \"cons\": [\n      \"Enerzyフォームによる硬めの履き心地で、路面との接触が顕著\",\n      \"つま先（特に親指周り）の不快感や狭さの可能性\",\n      \"スタックハイトの不足により、同カテゴリーの競合に比べてクッション性が劣る\",\n      \"アグレッシブな12mmドロップは、特定のランナー層（アキレス腱の怪我やヒールストライカー）に限定される\",\n      \"歩行時にヒールがブロック状に感じられ、違和感がある\",\n      \"箱から出した直後のアッパーが緩く、調整が必要\"\n    ],\n    \"comparable_shoes\": [\n      \"On Cloudsurfer\",\n      \"Brooks Ghost\",\n      \"Asics Gel-Kayano\",\n      \"Nike Pegasus\",\n      \"Brooks Glycerin 20\",\n      \"Asics Gel Nimbus 24\",\n      \"Wave Rider 25\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 65,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のジョグ、多様な路面でのトレーニング\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:21:31",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Mizuno running shoes review",
+    "query_type": "review",
+    "url": "https://www.runnersworld.com/gear/a23129470/best-mizuno-running-shoes/",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Mizuno\",\n    \"model_name\": \"Neo Zen\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": 2025,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Mizuno Neo Zenは、ブランドの最新技術を駆使した革新的なトレーニングシューズで、2025年のRWシューズアワードを受賞しました。TPUベースのEnerzy NXTフォームが「マシュマロの上を走るよう」と評されるほどの非常に柔らかいクッション性と高い反発性を提供し、軽量性も兼ね備えています。これにより、リカバリージョグからロングランの終盤でのペースアップまで、幅広い用途に対応する高い汎用性を実現しています。ロッカー形状のソールと通気性の良いニットアッパーが特徴ですが、一体型タンのフィット感についてはテスター間で意見が分かれました。最新のトレンドである弾むような高スタックミッドソールを採用しており、クッション性と軽快な履き心地を両立したいランナーに強く推奨される一足です。\",\n    \"pros\": [\n      \"柔らかいクッション性と軽量性の優れたバランス\",\n      \"スムーズなライド感\",\n      \"TPUベースのEnerzy NXTフォームによる非常に高いクッション性とエネルギーリターン\",\n      \"リカバリージョグからペースアップまで対応できる高い汎用性\",\n      \"通気性の良いニットアッパー\"\n    ],\n    \"cons\": [\n      \"一体型タンのフィット感がテスター間で意見が分かれた\"\n    ],\n    \"comparable_shoes\": []\n  },\n  \"analysis\": {\n    \"sentiment_score\": 95,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のトレーニング、リカバリージョグ、ロングラン\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:21:42",
+    "from_cache": false,
+    "service": "Dify"
+  }
+]

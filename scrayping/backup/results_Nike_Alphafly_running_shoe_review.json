@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Nike Alphafly running shoe review",
+    "query_type": "review",
+    "url": "https://www.reddit.com/r/RunningShoeGeeks/comments/1ip01hr/nike_alphafly_3_review_after_220_miles/",
+    "article_length": 1408,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Nike\",\n    \"model_name\": \"Alphafly 3\",\n    \"category\": \"Race/Carbon\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Nike Alphafly 3は、220マイル（約350km）の走行を経て、レビューアーのマラソントレーニングにおける質の高いセッション（インターバル、閾値走、ロングランなど）で非常に高く評価されています。最初は慣れが必要でしたが、幅広いワークアウトで優れた性能を発揮し、特に他のカーボンプレートシューズと比較して、翌日の脚の疲労感が少ない点が強調されています。200マイル走行後もエネルギーリターンの劣化は感じられず、さらに100〜150マイルは質の高いランニングに使えると期待されています。\",\n    \"pros\": [\n      \"安定したプラットフォーム\",\n      \"非常に快適なアッパー\",\n      \"優れたフィット感とホールド性\",\n      \"驚異的なエネルギーリターン\"\n    ],\n    \"cons\": [\n      \"他のシューズと比較してアウトソールの耐久性が低い\",\n      \"アウトソールの切り抜き部分に小石が挟まりやすい\"\n    ],\n    \"comparable_shoes\": [\n      \"Adios Pro 3\",\n      \"Prime X Strung v1\",\n      \"Endorphin Pro 4\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 90,\n    \"recommended_runner_level\": \"Advanced\",\n    \"best_for\": \"フルマラソン、ハーフマラソン、スピード練習、ロングラン\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 14:03:50",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "Nike Alphafly running shoe review",
+    "query_type": "review",
+    "url": "https://runrepeat.com/nike-alphafly-3",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"Nike\",\n    \"model_name\": \"Alphafly 3\",\n    \"category\": \"Race/Carbon\",\n    \"release_year\": null,\n    \"price_usd\": 285\n  },\n  \"specs\": {\n    \"weight_g\": 201,\n    \"drop_mm\": 8.5,\n    \"stack_height_heel_mm\": 38.1,\n    \"stack_height_forefoot_mm\": 29.6\n  },\n  \"review_content\": {\n    \"summary_ja\": \"Nike Alphafly 3は、前作の課題を克服し、幅広いランナーにとって優れた選択肢となったマラソン向けレーシングシューズです。驚くほどの軽量性とクラス最高の通気性を持ち、再配置されたAir PodsとZoomXフォームが圧倒的なエネルギーリターンとスムーズなトランジションを提供します。特にマラソンで優れた性能を発揮し、脚が疲労しても前方への推進力をサポート。5K/10Kといった短距離レースにもこれまで以上に適しており、前作でアーチの問題があったランナーや、Alphafly 2の重さを感じていたランナーにもおすすめです。\",\n    \"pros\": [\n      \"幅広いサイズにもかかわらず驚くほど軽量\",\n      \"クラス最高の通気性\",\n      \"マラソン距離で優れた性能を発揮\",\n      \"再配置されたAir Podsによりv2よりも優れたライド感\",\n      \"ZoomXフォームが圧倒的なエネルギーリターンを提供\",\n      \"脚が疲れてきた時でも前方への推進力をサポート\",\n      \"5K/10Kレースにもこれまで以上に適している\",\n      \"ついにスムーズなトランジションを実現\"\n    ],\n    \"cons\": [\n      \"ヒールストライカーはアウトソールが早く摩耗する可能性\",\n      \"アーチ部分が一部のランナーには依然として課題となる可能性\",\n      \"ソックスのようなタンが全ての人に合うとは限らない\"\n    ],\n    \"comparable_shoes\": [\n      \"Adidas Adizero Adios Pro 3\",\n      \"Hoka Rocket X 2\",\n      \"Nike Vaporfly 3\",\n      \"Saucony Endorphin Elite\",\n      \"On Cloudboom Echo 3\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 93,\n    \"recommended_runner_level\": \"Advanced\",\n    \"best_for\": \"フルマラソン、5K/10Kレース\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 14:04:06",
+    "from_cache": false,
+    "service": "Dify"
+  }
+]

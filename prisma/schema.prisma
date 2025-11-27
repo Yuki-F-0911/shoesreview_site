@@ -1,0 +1,165 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  username    String   @unique
+  displayName String
+  password    String
+  avatarUrl   String?
+  bio         String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reviews  Review[]
+  comments Comment[]
+  likes    Like[]
+  accounts Account[]
+  sessions Session[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Shoe {
+  id           String    @id @default(cuid())
+  brand        String
+  modelName    String
+  category     String
+  releaseYear  Int?
+  officialPrice Int?
+  imageUrls    String[]
+  description  String?   @db.Text
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  reviews Review[]
+
+  @@map("shoes")
+}
+
+model Review {
+  id               String   @id @default(cuid())
+  shoeId           String
+  userId           String?  // AI要約の場合はnull
+  type             String   @default("USER") // USER or AI_SUMMARY
+  overallRating    Decimal  @db.Decimal(3, 1) // 0.0-10.0
+  comfortRating    Decimal? @db.Decimal(3, 1) // 0.0-10.0
+  designRating     Decimal? @db.Decimal(3, 1) // 0.0-10.0
+  durabilityRating Decimal? @db.Decimal(3, 1) // 0.0-10.0
+  title            String
+  content          String   @db.Text
+  imageUrls        String[]
+  usagePeriod      String?
+  usageScene       String[]
+  pros             String[]
+  cons             String[]
+  recommendedFor  String?  // 推奨ランナータイプ（AI要約の場合）
+  sourceCount      Int      @default(0) // 情報源の数
+  isPublished      Boolean  @default(true)
+  isDraft          Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  shoe     Shoe      @relation(fields: [shoeId], references: [id], onDelete: Cascade)
+  user     User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  comments Comment[]
+  likes    Like[]
+  aiSources AISource[]
+
+  @@map("reviews")
+}
+
+model AISource {
+  id              String   @id @default(cuid())
+  reviewId        String
+  sourceType      String   // WEB_ARTICLE, YOUTUBE_VIDEO, MANUAL
+  sourceUrl       String   @db.Text
+  sourceTitle     String?  // 記事タイトルまたは動画タイトル
+  sourceAuthor    String?  // 記事著者またはチャンネル名
+  youtubeVideoId  String?  // YouTube動画ID（埋め込み用）
+  summary         String?  @db.Text // 個別の要約（YouTube動画の場合）
+  rawData         Json?    // 収集した生データ
+  scrapedAt       DateTime @default(now())
+  reliability     Float    @default(0.5)
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@map("ai_sources")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  reviewId  String
+  userId    String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  reviewId  String
+  userId    String
+  createdAt DateTime @default(now())
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, userId])
+  @@map("likes")
+}
+

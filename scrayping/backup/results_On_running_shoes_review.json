@@ -1,0 +1,38 @@
+[
+  {
+    "query": "On running shoes review",
+    "query_type": "review",
+    "url": "https://www.reddit.com/r/RunningShoeGeeks/comments/1c9jwge/i_bought_my_first_on_running_and_its_not_what_i/",
+    "article_length": 685,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"On\",\n    \"model_name\": \"CloudUltra 2\",\n    \"category\": \"Trail\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"筆者は長距離ランナーではなく長距離ウォーキング愛好家だが、初めて購入したOn CloudUltra 2に期待外れの評価を下している。シューズは古いAdidas Boostの劣化版のように感じられ、サポートとエネルギーリターンがほとんどないと指摘。New Balance 993やAsics Sonomaよりもサポートが劣ると感じ、ランニング用としては不適切と結論付け、最終的に返品した。一方で、長時間立ち仕事をする医師の友人には好評だったという。\",\n    \"pros\": [],\n    \"cons\": [\n      \"古いAdidas Boostの劣化版のような感触\",\n      \"サポートがほとんどなく、エネルギーリターンもほぼない\",\n      \"New Balance 993やAsics Sonomaよりもサポートが劣る\",\n      \"ランニング用としては不適切と感じ、最終的に返品した\"\n    ],\n    \"comparable_shoes\": [\n      \"Adidas Boost\",\n      \"New Balance 993\",\n      \"Asics Sonoma\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 20,\n    \"recommended_runner_level\": \"Unknown\",\n    \"best_for\": \"Unknown\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:23:40",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "On running shoes review",
+    "query_type": "review",
+    "url": "https://www.runnersworld.com/gear/a22739511/best-on-running-shoes/",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"On\",\n    \"model_name\": \"Cloudsurfer Next\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": null\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"On Cloudsurfer Nextは、On独自のCloudTec PhaseとHelionフォームを組み合わせたミディアムクッションのプラットフォームにより、ソフトでサポート力のある軽量な履き心地を提供するデイリートレーナーです。ロッカー形状が特徴で、イージーラン、ロングラン、リカバリーランなど、あらゆる種類のワークアウトやコンディションに対応できる高い汎用性を持ちます。スムーズなヒールトゥトランジションと優れたサポート力があり、長距離でも快適さを維持しつつ、様々なペースで安定した走りを提供すると評価されています。\",\n    \"pros\": [\n      \"ソフトでサポート力のある軽量な履き心地\",\n      \"スムーズなヒールトゥトランジション\",\n      \"あらゆるペース、距離、コンディションに対応する高い汎用性\",\n      \"ロッカープロファイルによる優れた反発性と応答性\",\n      \"雨天時でも滑りにくいアウトソールのラバーパッド\"\n    ],\n    \"cons\": [],\n    \"comparable_shoes\": [\n      \"New Balance 1080\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 90,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"毎日のジョグ, ロングラン, リカバリーラン, 様々なペースでのトレーニング\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:23:52",
+    "from_cache": false,
+    "service": "Dify"
+  },
+  {
+    "query": "On running shoes review",
+    "query_type": "review",
+    "url": "https://www.thegoodtrade.com/features/on-running-cloud-shoes-review/",
+    "article_length": 8000,
+    "analysis": {
+      "text": "```json\n{\n  \"product_info\": {\n    \"brand_name\": \"On\",\n    \"model_name\": \"Cloudmonster 2\",\n    \"category\": \"Daily Trainer\",\n    \"release_year\": null,\n    \"price_usd\": 180\n  },\n  \"specs\": {\n    \"weight_g\": null,\n    \"drop_mm\": null,\n    \"stack_height_heel_mm\": null,\n    \"stack_height_forefoot_mm\": null\n  },\n  \"review_content\": {\n    \"summary_ja\": \"元熱心なランナーである著者がOn Cloudmonster 2を2ヶ月間テストし、その優れた快適性とサポート性を高く評価しています。特に都市部の硬いコンクリート路面での衝撃吸収性が高く、膝への負担軽減効果を実感しました。軽量で浮遊感のある履き心地は「雲の上を走るよう」と表現され、前作Cloudmonsterからさらにサポートとクッション性が向上しています。価格は180ドルと高めですが、その性能を考慮すれば真剣なランナーにとって価値ある投資とされています。細身の足にフィットし、ややリフト感があるため、足幅が広い人や足首の不安がある人は注意が必要です。Onのサステナビリティへの取り組みも評価されています。\",\n    \"pros\": [\n      \"軽量で浮遊感があり、余計な力を使わずに軽快に走れる。\",\n      \"都市部の硬いコンクリート路面からの衝撃を効果的に軽減し、膝の痛みを和らげる。\",\n      \"サイズは実寸通りで、非常に快適な履き心地で、履いていることを忘れるほど。\",\n      \"ミニマリストデザインで、ランニングだけでなく普段使いにも適している。\",\n      \"Onの継続的なサステナビリティへの取り組みが評価できる。\"\n    ],\n    \"cons\": [\n      \"価格が180ドルと高価で、予算重視のランナーには不向きな場合がある。\",\n      \"ややリフト感があり、足幅が狭い人にフィットしやすい。足幅が広い人や足首をひねる懸念がある場合は、他のモデルを検討する必要がある。\"\n    ],\n    \"comparable_shoes\": [\n      \"Mizunos\",\n      \"Allbirds\",\n      \"Cloudmonster\",\n      \"New Balances\",\n      \"Cloudnova\"\n    ]\n  },\n  \"analysis\": {\n    \"sentiment_score\": 90,\n    \"recommended_runner_level\": \"All\",\n    \"best_for\": \"都市部のランニング、毎日のジョグ、クッション性とサポート性を求めるランナー、膝への負担を軽減したいランナー\"\n  }\n}\n```"
+    },
+    "processed_at": "2025-11-25 11:24:09",
+    "from_cache": false,
+    "service": "Dify"
+  }
+]
