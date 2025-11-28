@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -33,11 +33,7 @@ export default function ShoeImagesPage() {
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState<string>('')
 
-  useEffect(() => {
-    fetchData()
-  }, [shoeId])
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true)
     try {
       // シューズ情報を取得
@@ -54,7 +50,11 @@ export default function ShoeImagesPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [shoeId])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
