@@ -19,7 +19,12 @@ const curatedTypeOptions = Object.values(CuratedSourceType)
 export function CurationAdminPanel({ shoes }: CurationAdminPanelProps) {
   const defaultShoeId = useMemo(() => shoes[0]?.id ?? '', [shoes])
   const [selectedShoe, setSelectedShoe] = useState(defaultShoeId)
-  const [manualPayload, setManualPayload] = useState({
+  const [manualPayload, setManualPayload] = useState<{
+    title: string
+    url: string
+    type: CuratedSourceType
+    excerpt: string
+  }>({
     title: '',
     url: '',
     type: CuratedSourceType.ARTICLE,
