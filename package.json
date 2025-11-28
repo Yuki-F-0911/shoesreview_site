@@ -14,7 +14,9 @@
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
     "import:reviews": "tsx src/scripts/import-scraped-reviews.ts",
-    "import:backup": "tsx src/scripts/import-all-backup-reviews.ts"
+    "import:backup": "tsx src/scripts/import-all-backup-reviews.ts",
+    "check:reviews": "tsx check-reviews.ts",
+    "update:reviews-publish": "tsx update-reviews-publish.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
