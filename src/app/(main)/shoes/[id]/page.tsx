@@ -1,11 +1,92 @@
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import Image from 'next/image'
+import Link from 'next/link'
 import { prisma } from '@/lib/prisma/client'
 import { ReviewCard } from '@/components/reviews/ReviewCard'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
+import { generateProductSchema, generateBreadcrumbSchema, combineSchemas } from '@/lib/seo/structured-data'
+import { generateShoeMetadata } from '@/lib/seo/metadata'
+import { generatePriceComparisonLinks } from '@/lib/curation/price-comparison'
+import type { Prisma } from '@prisma/client'
 
-async function getShoe(id: string) {
+// メタデータ生成
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: { id: string } 
+}): Promise<Metadata> {
+  const shoe = await prisma.shoe.findUnique({
+    where: { id: params.id },
+    select: {
+      id: true,
+      brand: true,
+      modelName: true,
+      category: true,
+      description: true,
+      imageUrls: true,
+      officialPrice: true,
+    },
+  })
+
+  if (!shoe) {
+    return { title: 'シューズが見つかりません' }
+  }
+
+  return generateShoeMetadata(shoe)
+}
+
+// Prismaから返される型
+type ShoeWithReviews = Prisma.ShoeGetPayload<{
+  include: {
+    reviews: {
+      include: {
+        user: {
+          select: {
+            id: true
+            username: true
+            displayName: true
+            avatarUrl: true
+          }
+        }
+        shoe: {
+          select: {
+            id: true
+            brand: true
+            modelName: true
+            category: true
+            imageUrls: true
+          }
+        }
+        _count: {
+          select: {
+            likes: true
+            comments: true
+          }
+        }
+      }
+    }
+    _count: {
+      select: {
+        reviews: true
+      }
+    }
+  }
+}>
+
+interface ShoeMedia {
+  id: string
+  publicUrl: string
+  isPrimary: boolean
+}
+
+interface ShoeWithRelations extends ShoeWithReviews {
+  media: ShoeMedia[]
+}
+
+async function getShoe(id: string): Promise<ShoeWithRelations | null> {
   try {
+    // 靴の基本情報とレビューを取得
     const shoe = await prisma.shoe.findUnique({
       where: { id },
       include: {
@@ -51,7 +132,36 @@ async function getShoe(id: string) {
       },
     })
 
-    return shoe
+    if (!shoe) return null
+
+    // メディアを別途取得（ShoeMediaモデルがある場合）
+    let media: ShoeMedia[] = []
+    try {
+      const mediaResults = await (prisma as any).shoeMedia.findMany({
+        where: {
+          shoeId: id,
+          status: 'APPROVED',
+        },
+        orderBy: [
+          { isPrimary: 'desc' },
+          { createdAt: 'desc' },
+        ],
+        take: 10,
+        select: {
+          id: true,
+          publicUrl: true,
+          isPrimary: true,
+        },
+      })
+      media = mediaResults
+    } catch {
+      // ShoeMediaモデルが存在しない場合は空配列
+    }
+
+    return {
+      ...shoe,
+      media,
+    }
   } catch (error) {
     console.error('Failed to fetch shoe:', error)
     return null
@@ -67,78 +177,246 @@ export default async function ShoeDetailPage({ params }: { params: { id: string 
 
   const averageRating =
     shoe.reviews.length > 0
-      ? shoe.reviews.reduce((sum, review) => {
-          const rating = typeof review.overallRating === 'number' 
-            ? review.overallRating 
-            : parseFloat(String(review.overallRating)) || 0
+      ? shoe.reviews.reduce((sum: number, review) => {
+          const rating = parseFloat(String(review.overallRating)) || 0
           return sum + rating
         }, 0) / shoe.reviews.length
       : 0
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <Card className="mb-8">
-        <CardHeader>
-          <div className="flex items-start justify-between">
-            <div>
-              <CardTitle className="text-3xl">{shoe.brand}</CardTitle>
-              <p className="mt-2 text-xl text-gray-600">{shoe.modelName}</p>
-            </div>
-            <Badge variant="outline">{shoe.category}</Badge>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {shoe.releaseYear && (
-              <div>
-                <span className="text-sm font-medium text-gray-700">発売年</span>
-                <p className="text-gray-900">{shoe.releaseYear}</p>
-              </div>
-            )}
-            {shoe.officialPrice && (
-              <div>
-                <span className="text-sm font-medium text-gray-700">価格</span>
-                <p className="text-gray-900">¥{shoe.officialPrice.toLocaleString()}</p>
-              </div>
-            )}
-            {shoe._count && (
-              <div>
-                <span className="text-sm font-medium text-gray-700">レビュー数</span>
-                <p className="text-gray-900">{shoe._count.reviews}件</p>
-              </div>
-            )}
-            {averageRating > 0 && (
-              <div>
-                <span className="text-sm font-medium text-gray-700">平均評価</span>
-                <p className="text-gray-900">{averageRating.toFixed(1)} / 10.0</p>
-              </div>
-            )}
-          </div>
-          {shoe.description && (
-            <div className="mt-4">
-              <p className="text-gray-700">{shoe.description}</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+  // 画像を取得（メディアテーブルから、なければimageUrlsから）
+  const images: string[] = shoe.media.length > 0
+    ? shoe.media.map((m) => m.publicUrl)
+    : shoe.imageUrls || []
 
-      <div>
-        <h2 className="mb-6 text-2xl font-bold text-gray-900">レビュー</h2>
-        {shoe.reviews.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {shoe.reviews.map((review) => (
-              <ReviewCard key={review.id} review={review} />
-            ))}
+  const primaryImage = images[0] || '/placeholder-shoe.png'
+
+  // 構造化データ
+  const productSchema = generateProductSchema({
+    ...shoe,
+    imageUrls: images,
+    reviews: shoe.reviews.map((r) => ({ overallRating: r.overallRating })),
+  })
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'ホーム', url: '/' },
+    { name: 'シューズ', url: '/shoes' },
+    { name: `${shoe.brand} ${shoe.modelName}`, url: `/shoes/${shoe.id}` },
+  ])
+
+  // 価格比較リンク
+  const priceLinks = generatePriceComparisonLinks(shoe.brand, shoe.modelName)
+
+  return (
+    <>
+      {/* 構造化データ */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(combineSchemas(productSchema, breadcrumbSchema)),
+        }}
+      />
+
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+        <div className="container mx-auto px-4 py-8">
+          {/* パンくずリスト */}
+          <nav className="mb-6 text-sm text-slate-500">
+            <ol className="flex items-center gap-2">
+              <li><Link href="/" className="hover:text-indigo-600">ホーム</Link></li>
+              <li>/</li>
+              <li><Link href="/shoes" className="hover:text-indigo-600">シューズ</Link></li>
+              <li>/</li>
+              <li className="text-slate-700">{shoe.brand} {shoe.modelName}</li>
+            </ol>
+          </nav>
+
+          {/* メインコンテンツ */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            {/* 画像セクション */}
+            <div className="space-y-4">
+              {/* メイン画像 */}
+              <div className="relative aspect-square bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                {images.length > 0 ? (
+                  <Image
+                    src={primaryImage}
+                    alt={`${shoe.brand} ${shoe.modelName} - ランニングシューズ`}
+                    fill
+                    className="object-contain p-4"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    priority
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-slate-400">
+                    <svg className="w-24 h-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+
+              {/* サムネイル */}
+              {images.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  {images.slice(0, 6).map((img: string, index: number) => (
+                    <div
+                      key={index}
+                      className="relative w-20 h-20 flex-shrink-0 bg-white rounded-lg border border-slate-200 overflow-hidden"
+                    >
+                      <Image
+                        src={img}
+                        alt={`${shoe.brand} ${shoe.modelName} - 画像${index + 1}`}
+                        fill
+                        className="object-contain p-1"
+                        sizes="80px"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* 情報セクション */}
+            <div>
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                {/* ブランド・モデル名 */}
+                <div className="mb-4">
+                  <span className="text-indigo-600 font-medium">{shoe.brand}</span>
+                  <h1 className="text-3xl font-bold text-slate-800 mt-1">
+                    {shoe.modelName}
+                  </h1>
+                </div>
+
+                {/* バッジ */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  <Badge variant="outline">{shoe.category}</Badge>
+                  {shoe.releaseYear && (
+                    <Badge variant="secondary">{shoe.releaseYear}年発売</Badge>
+                  )}
+                </div>
+
+                {/* 評価 */}
+                {averageRating > 0 && (
+                  <div className="flex items-center gap-4 mb-6 p-4 bg-slate-50 rounded-xl">
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-indigo-600">
+                        {averageRating.toFixed(1)}
+                      </div>
+                      <div className="text-xs text-slate-500">/ 10.0</div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-1 mb-1">
+                        {[...Array(10)].map((_, i) => (
+                          <div
+                            key={i}
+                            className={`h-2 flex-1 rounded-full ${
+                              i < Math.round(averageRating)
+                                ? 'bg-yellow-400'
+                                : 'bg-slate-200'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-sm text-slate-600">
+                        {shoe._count.reviews}件のレビュー
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* 価格 */}
+                {shoe.officialPrice && (
+                  <div className="mb-6">
+                    <span className="text-sm text-slate-500">定価</span>
+                    <p className="text-2xl font-bold text-slate-800">
+                      ¥{shoe.officialPrice.toLocaleString()}
+                    </p>
+                  </div>
+                )}
+
+                {/* 説明 */}
+                {shoe.description && (
+                  <div className="mb-6">
+                    <p className="text-slate-600 leading-relaxed">
+                      {shoe.description}
+                    </p>
+                  </div>
+                )}
+
+                {/* レビュー投稿ボタン */}
+                <Link
+                  href={`/reviews/new?shoeId=${shoe.id}`}
+                  className="block w-full bg-indigo-600 text-white text-center font-medium py-3 rounded-xl hover:bg-indigo-700 transition-colors"
+                >
+                  レビューを投稿する
+                </Link>
+              </div>
+
+              {/* 価格比較リンク */}
+              <div className="mt-4 bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h2 className="text-lg font-bold text-slate-800 mb-4">
+                  価格を比較する
+                </h2>
+                <div className="grid grid-cols-2 gap-3">
+                  {priceLinks.map((link) => (
+                    <a
+                      key={link.siteName}
+                      href={link.searchUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-slate-700 text-sm font-medium transition-colors"
+                    >
+                      {link.siteName}
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  ))}
+                </div>
+                <p className="text-xs text-slate-400 mt-3 text-center">
+                  ※ 各サイトで最新の価格をご確認ください
+                </p>
+              </div>
+            </div>
           </div>
-        ) : (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <p className="text-gray-500">このシューズのレビューはまだありません</p>
-            </CardContent>
-          </Card>
-        )}
+
+          {/* レビューセクション */}
+          <section>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-slate-800">
+                レビュー
+                {shoe._count.reviews > 0 && (
+                  <span className="text-lg font-normal text-slate-500 ml-2">
+                    ({shoe._count.reviews}件)
+                  </span>
+                )}
+              </h2>
+            </div>
+
+            {shoe.reviews.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {shoe.reviews.map((review) => (
+                  <ReviewCard key={review.id} review={review} />
+                ))}
+              </div>
+            ) : (
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-12 text-center">
+                <div className="text-slate-400 mb-4">
+                  <svg className="w-16 h-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <p className="text-slate-600 mb-4">
+                  このシューズのレビューはまだありません
+                </p>
+                <Link
+                  href={`/reviews/new?shoeId=${shoe.id}`}
+                  className="inline-block bg-indigo-600 text-white font-medium px-6 py-2 rounded-xl hover:bg-indigo-700 transition-colors"
+                >
+                  最初のレビューを投稿
+                </Link>
+              </div>
+            )}
+          </section>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
-

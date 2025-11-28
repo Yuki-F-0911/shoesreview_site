@@ -1,21 +1,25 @@
 /**
- * スクレイピングで取得したレビューをデータベースに統合するスクリプト
+ * ⚠️ 警告: このスクリプトは廃止予定です
  * 
- * 使用方法:
+ * 著作権および利用規約の遵守について:
+ * 
+ * このスクリプトは元々スクレイピングで取得したレビューをインポートするために
+ * 作成されましたが、以下の理由から使用を控えてください：
+ * 
+ * 1. **著作権侵害のリスク**
+ *    - 他サイトのレビューを転載することは著作権侵害になる可能性があります
+ *    - レビューは著作物として保護されています
+ * 
+ * 2. **利用規約違反のリスク**
+ *    - ECサイトやレビューサイトの利用規約でスクレイピングは禁止されています
+ * 
+ * 3. **推奨される代替方法**
+ *    - サイト独自のユーザーレビュー機能を使用
+ *    - 公式APIを通じて取得した情報のみを使用
+ *    - 適切な引用（出典明記、必要最小限の範囲）
+ * 
+ * 元の使用方法（参考のみ、使用は非推奨）:
  *   tsx src/scripts/import-scraped-reviews.ts [jsonファイルのパス] [オプション]
- * 
- * オプション:
- *   --consolidate, -c  同じ靴の複数レビューを1つのレビューに統合（デフォルト: 個別に保存）
- * 
- * 例:
- *   # 個別モード（各レビューを個別に保存）
- *   tsx src/scripts/import-scraped-reviews.ts scrayping/results_all.json
- *   
- *   # 統合モード（同じ靴のレビューを1つに統合）
- *   tsx src/scripts/import-scraped-reviews.ts scrayping/results_all.json --consolidate
- *   
- *   # 特定のファイルを処理
- *   tsx src/scripts/import-scraped-reviews.ts scrayping/backup/results_Nike_Pegasus_running_shoe_review.json
  */
 
 import { PrismaClient, Prisma } from '@prisma/client'

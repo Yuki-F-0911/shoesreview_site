@@ -33,20 +33,72 @@ const nextConfig = {
   
   // 画像の最適化設定
   images: {
-    domains: ['res.cloudinary.com'],
     remotePatterns: [
+      // Cloudinary
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
       },
-      // シューズブランドの公式サイトなど、必要に応じて追加
-      // {
-      //   protocol: 'https',
-      //   hostname: 'example.com',
-      // },
+      // 楽天
+      {
+        protocol: 'https',
+        hostname: 'thumbnail.image.rakuten.co.jp',
+      },
+      {
+        protocol: 'https',
+        hostname: 'shop.r10s.jp',
+      },
+      // Amazon
+      {
+        protocol: 'https',
+        hostname: 'images-na.ssl-images-amazon.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'm.media-amazon.com',
+      },
+      // YouTube
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+      },
+      // Reddit
+      {
+        protocol: 'https',
+        hostname: 'i.redd.it',
+      },
+      {
+        protocol: 'https',
+        hostname: 'preview.redd.it',
+      },
+      // Imgur
+      {
+        protocol: 'https',
+        hostname: 'i.imgur.com',
+      },
+      // ブランド公式サイト
+      {
+        protocol: 'https',
+        hostname: '*.nike.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.adidas.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.asics.com',
+      },
     ],
     // 画像の最適化を有効化
     formats: ['image/avif', 'image/webp'],
+    // 画像サイズの設定
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
   // セキュリティヘッダー

@@ -1,12 +1,13 @@
 /**
  * レビュー収集API
- * Web記事またはYouTube動画からレビュー情報を収集
+ * YouTube動画からレビュー情報を収集
+ * 
+ * ⚠️ 注意: Web記事スクレイピング機能は著作権保護のため無効化されています
  */
 
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth/auth'
 import { prisma } from '@/lib/prisma/client'
-import { scrapeWebArticle } from '@/lib/ai/web-scraper'
 import { summarizeYouTubeVideo, extractYouTubeVideoId } from '@/lib/ai/youtube-summarizer'
 import { z } from 'zod'
 
@@ -48,22 +49,14 @@ export async function POST(request: Request) {
 
     // ソースタイプに応じて処理
     if (sourceType === 'WEB_ARTICLE') {
-      // Web記事をスクレイピング
-      const articleInfo = await scrapeWebArticle(sourceUrl)
-      aiSourceData = {
-        sourceType: 'WEB_ARTICLE',
-        sourceUrl: articleInfo.url,
-        sourceTitle: articleInfo.title,
-        sourceAuthor: articleInfo.author,
-        rawData: {
-          // 元データを詳細に保存
-          content: articleInfo.content,
-          publishedAt: articleInfo.publishedAt?.toISOString(),
-          rawHtml: articleInfo.rawHtml, // 元のHTML（必要に応じて）
-          metadata: articleInfo.metadata,
-          scrapedAt: new Date().toISOString(),
+      // Web記事スクレイピングは著作権保護のため無効化
+      return NextResponse.json(
+        { 
+          error: 'Web記事のスクレイピングは著作権保護のため無効化されています',
+          details: '他サイトの記事を転載することは著作権侵害になる可能性があります。代わりにYouTube動画の要約機能をご利用ください。'
         },
-      }
+        { status: 403 }
+      )
     } else if (sourceType === 'YOUTUBE_VIDEO') {
       // YouTube動画を要約
       const videoId = extractYouTubeVideoId(sourceUrl)

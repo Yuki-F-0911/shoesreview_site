@@ -1,11 +1,53 @@
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
 import { prisma } from '@/lib/prisma/client'
 import { ReviewRating } from '@/components/reviews/ReviewRating'
 import { Avatar } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Button } from '@/components/ui/Button'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { generateReviewSchema, generateBreadcrumbSchema } from '@/lib/seo/structured-data'
+import { generateReviewMetadata } from '@/lib/seo/metadata'
 import { formatDate } from '@/lib/utils/date'
-import Image from 'next/image'
+import { ArrowLeft, ExternalLink, ThumbsUp, MessageCircle, Share2 } from 'lucide-react'
+
+// メタデータ生成
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: { id: string } 
+}): Promise<Metadata> {
+  const review = await prisma.review.findUnique({
+    where: { id: params.id },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      type: true,
+      imageUrls: true,
+      shoe: {
+        select: {
+          brand: true,
+          modelName: true,
+        },
+      },
+      user: {
+        select: {
+          displayName: true,
+        },
+      },
+    },
+  })
+
+  if (!review) {
+    return { title: 'レビューが見つかりません' }
+  }
+
+  return generateReviewMetadata(review)
+}
 
 async function getReview(id: string) {
   try {
@@ -61,8 +103,50 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
   const shoe = review.shoe
   const user = review.user
 
+  // 構造化データ
+  const reviewSchema = generateReviewSchema(review)
+  const breadcrumbItems = [
+    { name: 'ホーム', url: '/' },
+    { name: 'レビュー', url: '/reviews' },
+  ]
+  if (shoe) {
+    breadcrumbItems.push({ name: `${shoe.brand} ${shoe.modelName}`, url: `/shoes/${shoe.id}` })
+  }
+  breadcrumbItems.push({ name: review.title, url: `/reviews/${review.id}` })
+  const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbItems)
+
   return (
-    <div className="container mx-auto px-4 py-8">
+    <>
+      <JsonLd data={reviewSchema} />
+      <JsonLd data={breadcrumbSchema} />
+
+      <div className="container mx-auto px-4 py-8">
+        {/* パンくずリスト */}
+        <nav className="mb-6 text-sm" aria-label="Breadcrumb">
+          <ol className="flex items-center space-x-2 text-gray-500">
+            <li><Link href="/" className="hover:text-gray-700">ホーム</Link></li>
+            <li>/</li>
+            <li><Link href="/reviews" className="hover:text-gray-700">レビュー</Link></li>
+            {shoe && (
+              <>
+                <li>/</li>
+                <li><Link href={`/shoes/${shoe.id}`} className="hover:text-gray-700">{shoe.brand} {shoe.modelName}</Link></li>
+              </>
+            )}
+            <li>/</li>
+            <li className="text-gray-900 font-medium truncate max-w-[200px]">{review.title}</li>
+          </ol>
+        </nav>
+
+        {/* 戻るボタン */}
+        <div className="mb-4">
+          <Link href={shoe ? `/shoes/${shoe.id}` : '/reviews'}>
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              {shoe ? `${shoe.brand} ${shoe.modelName}に戻る` : 'レビュー一覧に戻る'}
+            </Button>
+          </Link>
+        </div>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <Card>
@@ -300,7 +384,8 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </>
   )
 }
 

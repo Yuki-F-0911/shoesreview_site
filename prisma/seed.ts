@@ -39,6 +39,9 @@ async function main() {
       releaseYear: 2023,
       officialPrice: 12000,
       imageUrls: [],
+      keywords: ['ランニング', 'クッション'],
+      locale: 'ja-JP',
+      region: 'JP',
       description: 'クラシックなデザインのランニングシューズ',
     },
   })
@@ -51,6 +54,9 @@ async function main() {
       releaseYear: 2023,
       officialPrice: 15000,
       imageUrls: [],
+      keywords: ['マラソン', 'クッション'],
+      locale: 'ja-JP',
+      region: 'JP',
       description: '高クッション性のランニングシューズ',
     },
   })
@@ -63,6 +69,9 @@ async function main() {
       releaseYear: 2022,
       officialPrice: 6000,
       imageUrls: [],
+      keywords: ['カジュアル', 'キャンバス'],
+      locale: 'ja-JP',
+      region: 'JP',
       description: '定番のスニーカー',
     },
   })

@@ -62,6 +62,21 @@ SERPER_API_KEY="your-serper-api-key"  # Serper APIキー（Web検索用、推奨
 # または
 GOOGLE_SEARCH_API_KEY="your-google-search-api-key"  # Google Custom Search APIキー
 GOOGLE_SEARCH_ENGINE_ID="your-search-engine-id"  # Google Custom Search Engine ID
+
+# 楽天API（商品情報・レビュー取得用）
+RAKUTEN_APPLICATION_ID="your-rakuten-app-id"
+RAKUTEN_AFFILIATE_ID="your-rakuten-affiliate-id"  # オプション
+
+# Reddit API（コミュニティレビュー取得用）
+REDDIT_CLIENT_ID="your-reddit-client-id"
+REDDIT_CLIENT_SECRET="your-reddit-client-secret"
+REDDIT_USER_AGENT="ShoeReviewSite/1.0"
+
+# Twitter/X API（オプション）
+TWITTER_BEARER_TOKEN="your-twitter-bearer-token"
+
+# サイトURL（SEO用）
+NEXT_PUBLIC_SITE_URL="https://your-domain.com"
 ```
 
 `NEXTAUTH_SECRET`は以下のコマンドで生成できます：
@@ -106,11 +121,40 @@ pnpm dev
   - 複数ソースの統合レビュー生成
   - 外部サイトからの自動検索・収集機能
 
+### Phase 3: エンタープライズ機能（実装済み）
+
+- ✅ **マルチソースキュレーション**
+  - 楽天API連携（商品情報・レビュー取得）
+  - 価格.comスクレイピング（価格比較・口コミ）
+  - Reddit API連携（r/RunningShoeGeeks等）
+  - Twitter/X連携対応
+  - YouTube動画レビュー統合
+  
+- ✅ **画像アップロード機能**
+  - Cloudinary統合
+  - レビュー画像アップロード
+  - シューズ画像管理
+  - 画像最適化（WebP/AVIF自動変換）
+
+- ✅ **SEO最適化**
+  - 動的メタデータ生成
+  - JSON-LD構造化データ（Product, Review, FAQ等）
+  - 自動サイトマップ生成
+  - robots.txt設定
+  - Open Graph / Twitter Card対応
+
+- ✅ **日本向けローカルSEO**
+  - 日本語キーワード最適化
+  - 地域コンテンツ生成機能
+  - マラソン大会情報連携
+  - シーズン別コンテンツ
+
 ### 今後の実装予定
 
-- [ ] いいね・コメント機能（Phase 3）
-- [ ] フォロー機能（Phase 3）
-- [ ] ブックマーク機能（Phase 3）
+- [ ] いいね・コメント機能（Phase 4）
+- [ ] フォロー機能（Phase 4）
+- [ ] ブックマーク機能（Phase 4）
+- [ ] 価格アラート機能（Phase 4）
 
 ## プロジェクト構成
 

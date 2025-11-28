@@ -6,6 +6,9 @@ export interface Shoe {
   releaseYear?: number | null
   officialPrice?: number | null
   imageUrls: string[]
+  keywords?: string[]
+  locale?: string
+  region?: string
   description?: string | null
   createdAt: Date
   updatedAt: Date

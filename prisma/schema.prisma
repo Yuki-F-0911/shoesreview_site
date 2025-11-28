@@ -10,6 +10,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum CuratedSourceType {
+  OFFICIAL
+  MARKETPLACE
+  SNS
+  VIDEO
+  ARTICLE
+  COMMUNITY
+}
+
+enum CuratedSourceStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ShoeMediaSource {
+  ADMIN
+  USER
+  BRAND
+  EVENT
+}
+
+enum MediaStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id          String   @id @default(cuid())
   email       String   @unique
@@ -26,6 +54,8 @@ model User {
   likes    Like[]
   accounts Account[]
   sessions Session[]
+  curatedSources CuratedSource[]
+  uploadedMedia  ShoeMedia[]
 
   @@map("users")
 }
@@ -77,11 +107,16 @@ model Shoe {
   releaseYear  Int?
   officialPrice Int?
   imageUrls    String[]
+  keywords     String[]  @default([])
+  locale       String    @default("ja-JP")
+  region       String    @default("JP")
   description  String?   @db.Text
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
-  reviews Review[]
+  reviews         Review[]
+  media           ShoeMedia[]
+  curatedSources  CuratedSource[]
 
   @@map("shoes")
 }
@@ -116,6 +151,59 @@ model Review {
   aiSources AISource[]
 
   @@map("reviews")
+}
+
+model ShoeMedia {
+  id            String         @id @default(cuid())
+  shoeId        String
+  storagePath   String
+  publicUrl     String         @db.Text
+  altText       String?
+  sourceType    ShoeMediaSource @default(ADMIN)
+  status        MediaStatus     @default(PENDING)
+  width         Int?
+  height        Int?
+  fileSize      Int?
+  dominantColor String?
+  tags          String[]       @default([])
+  uploadedById  String?
+  isPrimary     Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  shoe       Shoe @relation(fields: [shoeId], references: [id], onDelete: Cascade)
+  uploadedBy User? @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  @@index([shoeId, status, isPrimary])
+}
+
+model CuratedSource {
+  id           String              @id @default(cuid())
+  shoeId       String
+  type         CuratedSourceType
+  platform     String
+  title        String
+  excerpt      String?             @db.Text
+  url          String              @db.Text
+  author       String?
+  language     String              @default("ja")
+  country      String?             @default("JP")
+  publishedAt  DateTime?
+  thumbnailUrl String?
+  engagement   Json?
+  tags         String[]            @default([])
+  curatedById  String?
+  status       CuratedSourceStatus @default(PUBLISHED)
+  reliability  Float               @default(0.7)
+  metadata     Json?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  shoe      Shoe @relation(fields: [shoeId], references: [id], onDelete: Cascade)
+  curatedBy User? @relation(fields: [curatedById], references: [id], onDelete: SetNull)
+
+  @@index([shoeId, type, status])
+  @@index([platform])
 }
 
 model AISource {
