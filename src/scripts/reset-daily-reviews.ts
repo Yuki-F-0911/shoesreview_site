@@ -34,32 +34,22 @@ const prisma = new PrismaClient({
 })
 
 async function main() {
-    console.log('Checking AI Reviews and Sources...')
-    try {
-        const count = await prisma.review.count({
-            where: { type: 'AI_SUMMARY' }
-        })
-        console.log(`Total AI reviews: ${count}`)
+    console.log('Resetting AI reviews...')
 
-        const reviews = await prisma.review.findMany({
-            where: { type: 'AI_SUMMARY' },
-            include: { aiSources: true },
-            take: 5,
-            orderBy: { createdAt: 'desc' }
+    try {
+        const deleteResult = await prisma.review.deleteMany({
+            where: {
+                type: 'AI_SUMMARY'
+            }
         })
-        console.log(`Latest 5 AI reviews:`)
-        reviews.forEach(r => {
-            console.log(`Review: ${r.title}`)
-            console.log(`  - Sources: ${r.aiSources.length}`)
-            r.aiSources.forEach(s => console.log(`    - ${s.sourceTitle} (${s.sourceUrl})`))
-        })
-    } catch (e) {
-        console.error('Error accessing Review table:', e)
+        console.log(`Deleted ${deleteResult.count} AI reviews.`)
+    } catch (error) {
+        console.error('Error deleting reviews:', error)
     }
 }
 
 main()
-    .catch(e => {
+    .catch((e) => {
         console.error(e)
         process.exit(1)
     })
