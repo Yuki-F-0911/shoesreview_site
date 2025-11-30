@@ -34,74 +34,9 @@ const nextConfig = {
   // 画像の最適化設定
   images: {
     remotePatterns: [
-      // Cloudinary
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
-      // 楽天
-      {
-        protocol: 'https',
-        hostname: 'thumbnail.image.rakuten.co.jp',
-      },
-      {
-        protocol: 'https',
-        hostname: 'shop.r10s.jp',
-      },
-      // Amazon
-      {
-        protocol: 'https',
-        hostname: 'images-na.ssl-images-amazon.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'm.media-amazon.com',
-      },
-      // YouTube
-      {
-        protocol: 'https',
-        hostname: 'i.ytimg.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'img.youtube.com',
-      },
-      // Reddit
-      {
-        protocol: 'https',
-        hostname: 'i.redd.it',
-      },
-      {
-        protocol: 'https',
-        hostname: 'preview.redd.it',
-      },
-      // Imgur
-      {
-        protocol: 'https',
-        hostname: 'i.imgur.com',
-      },
-      // ブランド公式サイト
-      {
-        protocol: 'https',
-        hostname: '*.nike.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.adidas.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.asics.com',
-      },
-      // Google
-      {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-      },
-      // GitHub
-      {
-        protocol: 'https',
-        hostname: 'avatars.githubusercontent.com',
+        hostname: '**',
       },
     ],
     // 画像の最適化を有効化
