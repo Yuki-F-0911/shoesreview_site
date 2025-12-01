@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react'
 import { useForm, useFieldArray, type Control } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { reviewSchema, type ReviewInput } from '@/lib/validations/review'
+import { createShoeSchema, type CreateShoeInput } from '@/lib/validations/shoe'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
@@ -22,6 +24,15 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [shoesList, setShoesList] = useState(shoes)
+  const [isAddingShoe, setIsAddingShoe] = useState(false)
+  const [newShoe, setNewShoe] = useState<CreateShoeInput>({
+    brand: '',
+    modelName: '',
+    category: 'ランニング',
+    imageUrls: [],
+  })
+  const [createShoeError, setCreateShoeError] = useState<string | null>(null)
 
   const {
     register,
@@ -71,6 +82,40 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
   const designRating = watch('designRating')
   const durabilityRating = watch('durabilityRating')
 
+  const handleCreateShoe = async () => {
+    setCreateShoeError(null)
+    try {
+      const validated = createShoeSchema.parse(newShoe)
+      setIsLoading(true)
+
+      const response = await fetch('/api/shoes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(validated),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        setCreateShoeError(result.error || 'シューズの作成に失敗しました')
+        return
+      }
+
+      setShoesList((prev) => [...prev, result.data])
+      setValue('shoeId', result.data.id)
+      setIsAddingShoe(false)
+      setNewShoe({ brand: '', modelName: '', category: 'ランニング', imageUrls: [] })
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        setCreateShoeError(err.errors[0].message)
+      } else {
+        setCreateShoeError('予期しないエラーが発生しました')
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const onSubmit = async (data: ReviewInput) => {
     setIsLoading(true)
     setError(null)
@@ -115,24 +160,89 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
           )}
 
           <div>
-            <label htmlFor="shoeId" className="block text-sm font-medium text-gray-700">
-              シューズ *
-            </label>
-            <select
-              id="shoeId"
-              {...register('shoeId')}
-              className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm"
-              disabled={isLoading || !!reviewId}
-            >
-              <option value="">選択してください</option>
-              {shoes.map((shoe) => (
-                <option key={shoe.id} value={shoe.id}>
-                  {shoe.brand} {shoe.modelName}
-                </option>
-              ))}
-            </select>
+            <div className="flex items-end gap-2">
+              <div className="flex-1">
+                <label htmlFor="shoeId" className="block text-sm font-medium text-gray-700">
+                  シューズ *
+                </label>
+                <select
+                  id="shoeId"
+                  {...register('shoeId')}
+                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm"
+                  disabled={isLoading || !!reviewId}
+                >
+                  <option value="">選択してください</option>
+                  {shoesList.map((shoe) => (
+                    <option key={shoe.id} value={shoe.id}>
+                      {shoe.brand} {shoe.modelName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {!reviewId && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsAddingShoe(!isAddingShoe)}
+                  disabled={isLoading}
+                  className="mb-[1px]"
+                >
+                  {isAddingShoe ? 'キャンセル' : '新規追加'}
+                </Button>
+              )}
+            </div>
             {errors.shoeId && (
               <p className="mt-1 text-sm text-red-600">{errors.shoeId.message}</p>
+            )}
+
+            {isAddingShoe && (
+              <div className="mt-4 rounded-md border border-gray-200 bg-gray-50 p-4">
+                <h4 className="mb-3 text-sm font-medium text-gray-900">新しいシューズを追加</h4>
+                {createShoeError && (
+                  <div className="mb-3 rounded-md bg-red-50 p-2 text-sm text-red-800">
+                    {createShoeError}
+                  </div>
+                )}
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700">ブランド</label>
+                    <Input
+                      value={newShoe.brand}
+                      onChange={(e) => setNewShoe({ ...newShoe, brand: e.target.value })}
+                      className="mt-1"
+                      placeholder="例: Nike"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700">モデル名</label>
+                    <Input
+                      value={newShoe.modelName}
+                      onChange={(e) => setNewShoe({ ...newShoe, modelName: e.target.value })}
+                      className="mt-1"
+                      placeholder="例: Air Zoom Pegasus 40"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-xs font-medium text-gray-700">カテゴリー</label>
+                    <Input
+                      value={newShoe.category}
+                      onChange={(e) => setNewShoe({ ...newShoe, category: e.target.value })}
+                      className="mt-1"
+                      placeholder="例: ランニング"
+                    />
+                  </div>
+                </div>
+                <div className="mt-4 flex justify-end">
+                  <Button
+                    type="button"
+                    onClick={handleCreateShoe}
+                    disabled={isLoading}
+                    size="sm"
+                  >
+                    保存して選択
+                  </Button>
+                </div>
+              </div>
             )}
           </div>
 
