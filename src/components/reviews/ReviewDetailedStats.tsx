@@ -187,7 +187,7 @@ export function ReviewDetailedStats({ review }: ReviewDetailedStatsProps) {
                 <div className="flex gap-4">
                     {review.onomatopoeia && (
                         <Badge variant="secondary" className="text-base py-1 px-3">
-                            感覚: "{review.onomatopoeia}"
+                            感覚: &quot;{review.onomatopoeia}&quot;
                         </Badge>
                     )}
                     {review.purchaseSize && (
