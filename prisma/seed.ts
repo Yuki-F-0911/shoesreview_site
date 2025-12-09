@@ -93,8 +93,6 @@ async function main() {
       usageScene: ['ランニング', 'ウォーキング'],
       pros: ['履き心地が良い', 'デザインが良い'],
       cons: ['少し高価'],
-      isPublished: true,
-      isDraft: false,
     },
   })
 
@@ -114,8 +112,6 @@ async function main() {
       usageScene: ['ランニング'],
       pros: ['クッション性が高い'],
       cons: ['価格が高い'],
-      isPublished: true,
-      isDraft: false,
     },
   })
 
