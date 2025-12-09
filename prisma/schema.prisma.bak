@@ -176,9 +176,12 @@ model Review {
   reviewerWeight         Float?
   reviewerWeeklyDistance Float?
   reviewerPersonalBest   String?
-  reviewerExpertise      String?
   reviewerFootShape      String?
   reviewerLandingType    String?
+  isPublished      Boolean  @default(true)
+  isDraft          Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   shoe     Shoe      @relation(fields: [shoeId], references: [id], onDelete: Cascade)
   user     User?     @relation(fields: [userId], references: [id], onDelete: SetNull)

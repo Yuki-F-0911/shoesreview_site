@@ -109,7 +109,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
           <h3 className="mb-2 line-clamp-2 font-semibold text-gray-900 transition-colors group-hover:text-blue-600">
             {review.title}
           </h3>
-          
+
           <p className="mb-3 line-clamp-2 text-sm text-gray-600">{review.content}</p>
 
           {/* タグ */}
@@ -130,14 +130,23 @@ export function ReviewCard({ review }: ReviewCardProps) {
           <div className="flex items-center justify-between border-t border-gray-100 pt-3">
             <div className="flex items-center space-x-2">
               {user ? (
-                <>
-                  <Avatar 
-                    src={user.avatarUrl} 
-                    fallback={user.displayName[0]} 
-                    className="h-6 w-6"
-                  />
-                  <span className="text-xs text-gray-600">{user.displayName}</span>
-                </>
+                <div className="flex flex-col">
+                  <div className="flex items-center space-x-2">
+                    <Avatar
+                      src={user.avatarUrl}
+                      fallback={user.displayName[0]}
+                      className="h-6 w-6"
+                    />
+                    <span className="text-xs text-gray-600">{user.displayName}</span>
+                  </div>
+                  {/* Reviewer Attributes (Check if they exist on review object) */}
+                  <div className="mt-1 flex flex-wrap gap-x-2 gap-y-1 text-[10px] text-gray-500">
+                    {/* Using generic access for new fields to avoid stale type errors if needed, but standard should work if generated */}
+                    {(review as any).reviewerGender && <span>{(review as any).reviewerGender}</span>}
+                    {(review as any).reviewerExpertise && <span>/ {(review as any).reviewerExpertise}</span>}
+                    {(review as any).reviewerPersonalBest && <span>/ PB: {(review as any).reviewerPersonalBest}</span>}
+                  </div>
+                </div>
               ) : isAISummary ? (
                 <div className="flex items-center text-xs text-gray-600">
                   <Sparkles className="mr-1 h-4 w-4 text-purple-500" />

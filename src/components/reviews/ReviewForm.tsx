@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/Textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { ReviewRating } from '@/components/reviews/ReviewRating'
 import type { Shoe } from '@/types/shoe'
+import { ReviewDetailedFields } from '@/components/reviews/ReviewDetailedFields'
 
 interface ReviewFormProps {
   shoes: Shoe[]
@@ -423,10 +424,14 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
             </div>
           </div>
 
+
+          <ReviewDetailedFields register={register} errors={errors} watch={watch} />
+
           <div className="flex items-center space-x-4">
             <Button type="submit" disabled={isLoading}>
               {isLoading ? '保存中...' : reviewId ? '更新' : '投稿'}
             </Button>
+
             <Button
               type="button"
               variant="outline"
