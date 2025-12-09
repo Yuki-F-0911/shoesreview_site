@@ -19,8 +19,7 @@ export interface Review {
   cons: string[]
   recommendedFor?: string | null // AI要約の場合の推奨ランナータイプ
   sourceCount?: number // 情報源の数（AI要約の場合）
-  isPublished: boolean
-  isDraft: boolean
+  // isPublished, isDraft removed
   createdAt: Date
   updatedAt: Date
   shoe?: Shoe
@@ -44,7 +43,7 @@ export interface CreateReviewInput {
   usageScene?: string[]
   pros?: string[]
   cons?: string[]
-  isDraft?: boolean
+  // isDraft removed
 }
 
 export interface UpdateReviewInput {
@@ -59,8 +58,7 @@ export interface UpdateReviewInput {
   usageScene?: string[]
   pros?: string[]
   cons?: string[]
-  isPublished?: boolean
-  isDraft?: boolean
+  // isPublished, isDraft removed
 }
 
 export interface AISource {

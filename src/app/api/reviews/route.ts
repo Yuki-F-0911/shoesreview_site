@@ -12,10 +12,7 @@ export async function GET(request: Request) {
 
     const [reviews, total] = await Promise.all([
       prisma.review.findMany({
-        where: {
-          isPublished: true,
-          isDraft: false,
-        },
+        where: {},
         include: {
           user: {
             select: {
@@ -48,10 +45,7 @@ export async function GET(request: Request) {
         take: pageSize,
       }),
       prisma.review.count({
-        where: {
-          isPublished: true,
-          isDraft: false,
-        },
+        where: {},
       }),
     ])
 

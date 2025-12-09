@@ -119,10 +119,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let reviewPages: MetadataRoute.Sitemap = []
   try {
     const reviews = await prisma.review.findMany({
-      where: {
-        isPublished: true,
-        isDraft: false,
-      },
+      where: {},
       select: {
         id: true,
         updatedAt: true,

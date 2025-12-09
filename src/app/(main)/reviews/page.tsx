@@ -16,10 +16,7 @@ async function getReviews(page: number = 1, pageSize: number = 12) {
 
     const [reviews, total] = await Promise.all([
       prisma.review.findMany({
-        where: {
-          isPublished: true,
-          isDraft: false,
-        },
+        where: {},
         include: {
           user: {
             select: {
@@ -52,10 +49,7 @@ async function getReviews(page: number = 1, pageSize: number = 12) {
         take: pageSize,
       }),
       prisma.review.count({
-        where: {
-          isPublished: true,
-          isDraft: false,
-        },
+        where: {},
       }),
     ])
 
@@ -95,7 +89,7 @@ export default async function ReviewsPage({
   return (
     <>
       <JsonLd data={breadcrumbSchema} />
-      
+
       <div className="container mx-auto px-4 py-8">
         {/* パンくずリスト */}
         <nav className="mb-6 text-sm" aria-label="Breadcrumb">
@@ -116,43 +110,43 @@ export default async function ReviewsPage({
           </Link>
         </div>
 
-      {reviews.length > 0 ? (
-        <>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {reviews.map((review) => (
-              <ReviewCard key={review.id} review={review} />
-            ))}
-          </div>
-
-          {totalPages > 1 && (
-            <div className="mt-8 flex justify-center space-x-2">
-              {page > 1 && (
-                <Link href={`/reviews?page=${page - 1}`}>
-                  <Button variant="outline">前へ</Button>
-                </Link>
-              )}
-              <span className="flex items-center px-4 text-sm text-gray-700">
-                {page} / {totalPages}
-              </span>
-              {page < totalPages && (
-                <Link href={`/reviews?page=${page + 1}`}>
-                  <Button variant="outline">次へ</Button>
-                </Link>
-              )}
+        {reviews.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {reviews.map((review) => (
+                <ReviewCard key={review.id} review={review} />
+              ))}
             </div>
-          )}
-        </>
-      ) : (
-        <EmptyState
-          title="レビューがありません"
-          description="最初のレビューを投稿してみましょう"
-          action={
-            <Link href="/reviews/new">
-              <Button>レビューを投稿</Button>
-            </Link>
-          }
-        />
-      )}
+
+            {totalPages > 1 && (
+              <div className="mt-8 flex justify-center space-x-2">
+                {page > 1 && (
+                  <Link href={`/reviews?page=${page - 1}`}>
+                    <Button variant="outline">前へ</Button>
+                  </Link>
+                )}
+                <span className="flex items-center px-4 text-sm text-gray-700">
+                  {page} / {totalPages}
+                </span>
+                {page < totalPages && (
+                  <Link href={`/reviews?page=${page + 1}`}>
+                    <Button variant="outline">次へ</Button>
+                  </Link>
+                )}
+              </div>
+            )}
+          </>
+        ) : (
+          <EmptyState
+            title="レビューがありません"
+            description="最初のレビューを投稿してみましょう"
+            action={
+              <Link href="/reviews/new">
+                <Button>レビューを投稿</Button>
+              </Link>
+            }
+          />
+        )}
       </div>
     </>
   )

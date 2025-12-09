@@ -93,10 +93,7 @@ async function getShoe(id: string): Promise<ShoeWithRelations | null> {
       where: { id },
       include: {
         reviews: {
-          where: {
-            isPublished: true,
-            isDraft: false,
-          },
+          where: {},
           include: {
             user: {
               select: {
@@ -321,8 +318,8 @@ export default async function ShoeDetailPage({ params }: { params: { id: string 
                         <div
                           key={i}
                           className={`h-2 w-6 rounded-full ${i < Math.round(averageRating / 2)
-                              ? 'bg-yellow-400'
-                              : 'bg-slate-200'
+                            ? 'bg-yellow-400'
+                            : 'bg-slate-200'
                             }`}
                         />
                       ))}
