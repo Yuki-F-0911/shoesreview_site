@@ -21,7 +21,7 @@ async function checkReviews() {
       },
       orderBy: {
         createdAt: 'desc',
-      },
+      } as any,
     })
 
     console.log(`\n総レビュー数: ${allReviews.length}`)
