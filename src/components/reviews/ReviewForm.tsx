@@ -56,7 +56,7 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
       usageScene: initialData?.usageScene || [],
       pros: initialData?.pros || [],
       cons: initialData?.cons || [],
-      isDraft: initialData?.isDraft || false,
+      // isDraft removed
     },
   })
 
@@ -432,17 +432,6 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
               {isLoading ? '保存中...' : reviewId ? '更新' : '投稿'}
             </Button>
 
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                setValue('isDraft', true)
-                handleSubmit(onSubmit)()
-              }}
-              disabled={isLoading}
-            >
-              下書き保存
-            </Button>
           </div>
         </form>
       </CardContent>

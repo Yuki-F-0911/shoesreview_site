@@ -97,7 +97,7 @@ async function getReview(id: string) {
 export default async function ReviewDetailPage({ params }: { params: { id: string } }) {
   const review = await getReview(params.id)
 
-  if (!review || (!review.isPublished && !review.isDraft)) {
+  if (!review) {
     notFound()
   }
 

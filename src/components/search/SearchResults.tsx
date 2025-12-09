@@ -5,8 +5,7 @@ import type { SearchParams } from '@/types/api'
 
 async function searchReviews(params: SearchParams) {
   const where: any = {
-    isPublished: true,
-    isDraft: false,
+    // isPublished/isDraft removed
   }
 
   if (params.query) {

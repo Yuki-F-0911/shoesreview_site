@@ -35,8 +35,7 @@ async function getLatestReviews() {
   try {
     const reviews = await prisma.review.findMany({
       where: {
-        isPublished: true,
-        isDraft: false,
+        // isPublished/isDraft removed
       },
       include: {
         user: {
@@ -84,7 +83,6 @@ async function getPopularShoes() {
           select: { reviews: true },
         },
         reviews: {
-          where: { isPublished: true },
           select: { overallRating: true },
           take: 100,
         },
@@ -98,11 +96,11 @@ async function getPopularShoes() {
     })
 
     return shoes.map(shoe => {
-      const ratings = shoe.reviews.map(r => 
+      const ratings = shoe.reviews.map(r =>
         typeof r.overallRating === 'number' ? r.overallRating : parseFloat(String(r.overallRating)) || 0
       )
-      const avgRating = ratings.length > 0 
-        ? ratings.reduce((sum, r) => sum + r, 0) / ratings.length 
+      const avgRating = ratings.length > 0
+        ? ratings.reduce((sum, r) => sum + r, 0) / ratings.length
         : 0
 
       return {
@@ -120,7 +118,7 @@ async function getStats() {
   try {
     const [shoeCount, reviewCount, userCount] = await Promise.all([
       prisma.shoe.count(),
-      prisma.review.count({ where: { isPublished: true } }),
+      prisma.review.count(),
       prisma.user.count(),
     ])
     return { shoeCount, reviewCount, userCount }
@@ -177,7 +175,7 @@ export default async function HomePage() {
       position: index + 1,
     }))
   )
-  
+
   const faqSchema = generateFAQSchema(HOME_FAQS)
 
   return (
@@ -246,7 +244,7 @@ export default async function HomePage() {
         {/* 波形の装飾 */}
         <div className="absolute bottom-0 left-0 right-0">
           <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 100V50C360 0 720 100 1080 50C1260 25 1380 12.5 1440 50V100H0Z" fill="white"/>
+            <path d="M0 100V50C360 0 720 100 1080 50C1260 25 1380 12.5 1440 50V100H0Z" fill="white" />
           </svg>
         </div>
       </section>

@@ -15,7 +15,7 @@ export async function GET() {
   try {
     const [shoes, reviews, brands] = await Promise.all([
       prisma.shoe.count(),
-      prisma.review.count({ where: { isPublished: true } }),
+      prisma.review.count(),
       prisma.shoe.findMany({
         select: { brand: true },
         distinct: ['brand'],
