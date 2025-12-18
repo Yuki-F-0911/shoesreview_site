@@ -1,56 +1,91 @@
 import { PrismaClient } from '@prisma/client'
+import fs from 'fs';
 
-const prisma = new PrismaClient()
+const logFile = 'check-result.txt';
+
+function log(msg: string) {
+    console.log(msg);
+    try {
+        fs.appendFileSync(logFile, msg + '\n');
+    } catch (e) { /* ignore */ }
+}
 
 async function main() {
-    console.log('Checking database content...')
+    try {
+        fs.writeFileSync(logFile, 'Checking database content with PgBouncer fix...\n');
+    } catch (e) { /* ignore */ }
 
-    // Count Users
-    const userCount = await prisma.user.count()
-    console.log(`Total Users: ${userCount}`)
+    log('Checking database content...');
 
-    // Check for Admin User
-    const adminUser = await prisma.user.findFirst({
-        where: {
-            OR: [
-                { email: 'admin@example.com' }, // Adjust if you know the specific admin email
-                { username: 'admin' }
-            ]
-        }
-    })
-    if (adminUser) {
-        console.log(`Admin User Found: ${adminUser.username} (${adminUser.email})`)
-    } else {
-        console.log('Admin User NOT Found')
+    // Check DB Connection String
+    let dbUrl = process.env.DATABASE_URL || '';
+
+    // Add pgbouncer=true if likely using Supabase Transaction connection
+    if (dbUrl.includes('6543') && !dbUrl.includes('pgbouncer=true')) {
+        log('Adding pgbouncer=true to connection string...');
+        const separator = dbUrl.includes('?') ? '&' : '?';
+        dbUrl = `${dbUrl}${separator}pgbouncer=true`;
+        process.env.DATABASE_URL = dbUrl;
     }
 
-    // Count Shoes
-    const shoeCount = await prisma.shoe.count()
-    console.log(`Total Shoes: ${shoeCount}`)
+    const isSupabase = dbUrl.includes('supabase');
+    const isLocal = dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1');
+    const isVercel = dbUrl.includes('vercel');
 
-    // Count Reviews
-    const reviewCount = await prisma.review.count()
-    console.log(`Total Reviews: ${reviewCount}`)
+    let connectionType = 'Unknown';
+    if (isSupabase) connectionType = 'Supabase (Production?)';
+    else if (isLocal) connectionType = 'Localhost (Development)';
+    else if (isVercel) connectionType = 'Vercel Postgres';
 
-    // Count Published Reviews (isPublished removed from schema, just count all)
-    // const publishedReviewCount = await prisma.review.count({
-    //     where: { isPublished: true }
-    // })
-    // console.log(`Published Reviews: ${publishedReviewCount}`)
+    log(`Database connection type: ${connectionType}`)
 
-    // List first 5 shoes
-    const shoes = await prisma.shoe.findMany({
-        take: 5,
-        select: { id: true, brand: true, modelName: true }
-    })
-    console.log('First 5 Shoes:', JSON.stringify(shoes, null, 2))
+    const prisma = new PrismaClient();
+
+    try {
+        // Count Shoes
+        const shoeCount = await prisma.shoe.count()
+        log(`Total Shoes: ${shoeCount}`)
+
+        // Count Reviews
+        const reviewCount = await prisma.review.count()
+        log(`Total Reviews: ${reviewCount}`)
+
+        // List first 5 shoes
+        const shoes = await prisma.shoe.findMany({
+            take: 5,
+            select: { id: true, brand: true, modelName: true }
+        })
+        log('First 5 Shoes: ' + JSON.stringify(shoes, null, 2))
+
+        // List latest 5 reviews WITHOUT orderBy (createdAt doesn't exist)
+        const reviews = await prisma.review.findMany({
+            take: 5,
+            include: {
+                shoe: { select: { brand: true, modelName: true } },
+                user: { select: { username: true } }
+            }
+        })
+
+        log('Sample 5 Reviews:');
+        if (reviews.length === 0) {
+            log('No reviews found.');
+        } else {
+            reviews.forEach((r: any) => {
+                log(`- [${r.type}] ${r.shoe?.brand} ${r.shoe?.modelName}: "${r.title}" by ${r.user?.username || 'AI'} (${r.id})`);
+            });
+        }
+
+        log('SUCCESS: All queries completed without error.');
+        await prisma.$disconnect();
+
+    } catch (error) {
+        log('Error querying database: ' + error);
+        await prisma.$disconnect();
+    }
 }
 
 main()
     .catch(e => {
-        console.error(e)
+        log('Fatal Error: ' + e)
         process.exit(1)
-    })
-    .finally(async () => {
-        await prisma.$disconnect()
     })

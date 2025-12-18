@@ -62,9 +62,7 @@ async function getLatestReviews() {
           },
         },
       },
-      orderBy: {
-        createdAt: 'desc',
-      } as any,
+      // Note: orderBy removed because createdAt column doesn't exist in Review model
       take: 6,
     })
 

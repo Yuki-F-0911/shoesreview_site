@@ -42,9 +42,7 @@ async function getReviews(page: number = 1, pageSize: number = 12) {
             },
           },
         },
-        orderBy: {
-          createdAt: 'desc',
-        } as any,
+        // Note: orderBy removed because createdAt column doesn't exist in Review model
         skip,
         take: pageSize,
       }),
