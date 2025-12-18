@@ -332,11 +332,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                     )}
                   </div>
                   <div className="text-sm text-gray-500">
-                    {formatDate(new Date((review as any).createdAt))}
-                    {(review as any).updatedAt && (review as any).createdAt &&
-                      new Date((review as any).updatedAt).getTime() !== new Date((review as any).createdAt).getTime() && (
-                        <span className="ml-2">(更新済み)</span>
-                      )}
+                    {review.type === 'AI_SUMMARY' ? 'AI統合レビュー' : 'ユーザーレビュー'}
                   </div>
                 </div>
 
