@@ -119,9 +119,7 @@ async function getShoe(id: string): Promise<ShoeWithRelations | null> {
               },
             },
           },
-          orderBy: {
-            createdAt: 'desc',
-          } as any,
+          // Note: orderBy removed because createdAt column doesn't exist in Review model
         },
         _count: {
           select: {

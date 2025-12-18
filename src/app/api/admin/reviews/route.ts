@@ -48,9 +48,7 @@ export async function GET(request: Request) {
           },
         },
       },
-      orderBy: {
-        createdAt: 'desc',
-      } as any,
+      // Note: orderBy removed because createdAt column doesn't exist in Review model
     })
 
     return NextResponse.json({
