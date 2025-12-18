@@ -60,7 +60,7 @@ async function main() {
         },
         orderBy: {
             createdAt: 'desc' // Prioritize recently added shoes (like the new category ones)
-        },
+        } as any,
         take: 100 // Target 100 shoes
     })
 
@@ -122,7 +122,6 @@ async function main() {
                     cons: summary.cons,
                     recommendedFor: summary.recommendedFor,
                     sourceCount: sources.length,
-                    isPublished: true,
                 },
             })
 

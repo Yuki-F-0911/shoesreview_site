@@ -161,8 +161,8 @@ export function generateReviewSchema(
     '@type': 'Review',
     name: review.title,
     reviewBody: review.content,
-    datePublished: review.createdAt.toISOString(),
-    dateModified: review.updatedAt.toISOString(),
+    datePublished: (review as any).createdAt?.toISOString?.() || new Date().toISOString(),
+    dateModified: (review as any).updatedAt?.toISOString?.() || new Date().toISOString(),
     reviewRating: {
       '@type': 'Rating',
       ratingValue: rating,

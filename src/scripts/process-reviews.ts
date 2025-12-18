@@ -114,7 +114,7 @@ async function main() {
                         cons: summary.cons,
                         recommendedFor: summary.recommendedFor,
                         sourceCount: sources.length,
-                        isPublished: true,
+                        // isPublished removed from schema
                     },
                 })
             } else {
@@ -130,7 +130,7 @@ async function main() {
                         cons: summary.cons,
                         recommendedFor: summary.recommendedFor,
                         sourceCount: sources.length,
-                        isPublished: true,
+                        // isPublished removed from schema
                         // AI reviews don't have a userId, or we could assign a system user if needed
                         // Schema allows userId to be nullable
                     },

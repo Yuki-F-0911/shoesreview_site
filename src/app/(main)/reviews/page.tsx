@@ -44,7 +44,7 @@ async function getReviews(page: number = 1, pageSize: number = 12) {
         },
         orderBy: {
           createdAt: 'desc',
-        },
+        } as any,
         skip,
         take: pageSize,
       }),

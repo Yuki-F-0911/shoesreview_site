@@ -123,9 +123,12 @@ export function ReviewDetailedFields({ register, errors, watch }: ReviewDetailed
             {/* レビュアー情報 */}
             <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">レビュアー情報 (任意)</h3>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">年齢</label>
+                        <Input {...register('reviewerAge', { valueAsNumber: true })} type="number" min="10" max="100" className="mt-1" placeholder="30" />
+                    </div>
                     {renderSelectInput('reviewerGender', '性別', ['男性', '女性', '回答しない'])}
-                    {renderSelectInput('reviewerExpertise', '専門種目', ['短距離', '中距離', '長距離', 'マラソン', 'トレイル', 'その他'])}
                     <div>
                         <label className="block text-sm font-medium text-gray-700">身長 (cm)</label>
                         <Input {...register('reviewerHeight', { valueAsNumber: true })} type="number" step="0.1" className="mt-1" />
@@ -134,23 +137,63 @@ export function ReviewDetailedFields({ register, errors, watch }: ReviewDetailed
                         <label className="block text-sm font-medium text-gray-700">体重 (kg)</label>
                         <Input {...register('reviewerWeight', { valueAsNumber: true })} type="number" step="0.1" className="mt-1" />
                     </div>
+                </div>
+                <div className="grid grid-cols-1 gap-6 mt-4 md:grid-cols-3">
                     <div>
                         <label className="block text-sm font-medium text-gray-700">週間走行距離 (km)</label>
                         <Input {...register('reviewerWeeklyDistance', { valueAsNumber: true })} type="number" className="mt-1" />
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700">自己ベスト</label>
-                        <Input {...register('reviewerPersonalBest')} className="mt-1" />
+                        <Input {...register('reviewerPersonalBest')} className="mt-1" placeholder="例: フルマラソン 3:30:00" />
+                    </div>
+                    {renderSelectInput('reviewerLandingType', '接地タイプ', ['ヒールストライク', 'ミッドフット', 'フォアフット', '不明'])}
+                </div>
+
+                {/* 専門種目（複数選択） */}
+                <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">専門種目（該当するもの全て選択）</label>
+                    <div className="flex flex-wrap gap-3">
+                        {['短距離', '中距離', '長距離', 'ロードレース', 'トレイルランニング', 'その他'].map((expertise) => (
+                            <label key={expertise} className="inline-flex items-center">
+                                <input
+                                    type="checkbox"
+                                    value={expertise}
+                                    {...register('reviewerExpertise')}
+                                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                />
+                                <span className="ml-2 text-sm text-gray-700">{expertise}</span>
+                            </label>
+                        ))}
                     </div>
                 </div>
+
+                {/* 足の形状（複数選択） */}
+                <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">足の形状（該当するもの全て選択）</label>
+                    <div className="flex flex-wrap gap-3">
+                        {['幅広', '甲高', 'エジプト型', 'ギリシャ型', 'スクエア型', '特になし', 'その他'].map((shape) => (
+                            <label key={shape} className="inline-flex items-center">
+                                <input
+                                    type="checkbox"
+                                    value={shape}
+                                    {...register('reviewerFootShape')}
+                                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                />
+                                <span className="ml-2 text-sm text-gray-700">{shape}</span>
+                            </label>
+                        ))}
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-1 gap-6 mt-4 md:grid-cols-2">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">足の形状</label>
-                        <Input {...register('reviewerFootShape')} className="mt-1" placeholder="例: ギリシャ型" />
+                        <label className="block text-sm font-medium text-gray-700">足の形状に関する詳細な補足</label>
+                        <Input {...register('reviewerFootShapeDetail')} className="mt-1" placeholder="その他の詳細があれば" />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">接地タイプ</label>
-                        <Input {...register('reviewerLandingType')} className="mt-1" placeholder="例: ミッドフット" />
+                        <label className="block text-sm font-medium text-gray-700">接地タイプの補足があれば</label>
+                        <Input {...register('reviewerLandingTypeDetail')} className="mt-1" />
                     </div>
                 </div>
             </div>

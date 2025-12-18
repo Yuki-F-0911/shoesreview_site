@@ -49,6 +49,11 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
       comfortRating: initialData?.comfortRating,
       designRating: initialData?.designRating,
       durabilityRating: initialData?.durabilityRating,
+      lightnessRating: initialData?.lightnessRating,
+      stabilityRating: initialData?.stabilityRating,
+      cushioningRating: initialData?.cushioningRating,
+      gripRating: initialData?.gripRating,
+      responsivenessRating: initialData?.responsivenessRating,
       title: initialData?.title || '',
       content: initialData?.content || '',
       imageUrls: initialData?.imageUrls || [],
@@ -314,6 +319,188 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
                 />
                 <div className="text-xs text-gray-500 text-center mt-1">
                   {durabilityRating ? durabilityRating.toFixed(1) : '0.0'}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">軽量性</label>
+              <div className="mt-2">
+                <ReviewRating rating={watch('lightnessRating') || 0} size="sm" />
+                <input
+                  type="range"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  {...register('lightnessRating', { valueAsNumber: true })}
+                  className="mt-1 w-full"
+                />
+                <div className="text-xs text-gray-500 text-center mt-1">
+                  {watch('lightnessRating') ? watch('lightnessRating')?.toFixed(1) : '0.0'}
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">安定性</label>
+              <div className="mt-2">
+                <ReviewRating rating={watch('stabilityRating') || 0} size="sm" />
+                <input
+                  type="range"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  {...register('stabilityRating', { valueAsNumber: true })}
+                  className="mt-1 w-full"
+                />
+                <div className="text-xs text-gray-500 text-center mt-1">
+                  {watch('stabilityRating') ? watch('stabilityRating')?.toFixed(1) : '0.0'}
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">クッション性</label>
+              <div className="mt-2">
+                <ReviewRating rating={watch('cushioningRating') || 0} size="sm" />
+                <input
+                  type="range"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  {...register('cushioningRating', { valueAsNumber: true })}
+                  className="mt-1 w-full"
+                />
+                <div className="text-xs text-gray-500 text-center mt-1">
+                  {watch('cushioningRating') ? watch('cushioningRating')?.toFixed(1) : '0.0'}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">グリップ力</label>
+              <div className="mt-2">
+                <ReviewRating rating={watch('gripRating') || 0} size="sm" />
+                <input
+                  type="range"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  {...register('gripRating', { valueAsNumber: true })}
+                  className="mt-1 w-full"
+                />
+                <div className="text-xs text-gray-500 text-center mt-1">
+                  {watch('gripRating') ? watch('gripRating')?.toFixed(1) : '0.0'}
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">反発力</label>
+              <div className="mt-2">
+                <ReviewRating rating={watch('responsivenessRating') || 0} size="sm" />
+                <input
+                  type="range"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  {...register('responsivenessRating', { valueAsNumber: true })}
+                  className="mt-1 w-full"
+                />
+                <div className="text-xs text-gray-500 text-center mt-1">
+                  {watch('responsivenessRating') ? watch('responsivenessRating')?.toFixed(1) : '0.0'}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">軽量性</label>
+              <div className="mt-2">
+                <ReviewRating rating={watch('lightnessRating') || 0} size="sm" />
+                <input
+                  type="range"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  {...register('lightnessRating', { valueAsNumber: true })}
+                  className="mt-1 w-full"
+                />
+                <div className="text-xs text-gray-500 text-center mt-1">
+                  {watch('lightnessRating') ? watch('lightnessRating')?.toFixed(1) : '0.0'}
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">安定性</label>
+              <div className="mt-2">
+                <ReviewRating rating={watch('stabilityRating') || 0} size="sm" />
+                <input
+                  type="range"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  {...register('stabilityRating', { valueAsNumber: true })}
+                  className="mt-1 w-full"
+                />
+                <div className="text-xs text-gray-500 text-center mt-1">
+                  {watch('stabilityRating') ? watch('stabilityRating')?.toFixed(1) : '0.0'}
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">クッション性</label>
+              <div className="mt-2">
+                <ReviewRating rating={watch('cushioningRating') || 0} size="sm" />
+                <input
+                  type="range"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  {...register('cushioningRating', { valueAsNumber: true })}
+                  className="mt-1 w-full"
+                />
+                <div className="text-xs text-gray-500 text-center mt-1">
+                  {watch('cushioningRating') ? watch('cushioningRating')?.toFixed(1) : '0.0'}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">グリップ力</label>
+              <div className="mt-2">
+                <ReviewRating rating={watch('gripRating') || 0} size="sm" />
+                <input
+                  type="range"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  {...register('gripRating', { valueAsNumber: true })}
+                  className="mt-1 w-full"
+                />
+                <div className="text-xs text-gray-500 text-center mt-1">
+                  {watch('gripRating') ? watch('gripRating')?.toFixed(1) : '0.0'}
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">反発力</label>
+              <div className="mt-2">
+                <ReviewRating rating={watch('responsivenessRating') || 0} size="sm" />
+                <input
+                  type="range"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  {...register('responsivenessRating', { valueAsNumber: true })}
+                  className="mt-1 w-full"
+                />
+                <div className="text-xs text-gray-500 text-center mt-1">
+                  {watch('responsivenessRating') ? watch('responsivenessRating')?.toFixed(1) : '0.0'}
                 </div>
               </div>
             </div>

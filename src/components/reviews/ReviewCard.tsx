@@ -171,7 +171,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
             </div>
           </div>
 
-          <p className="mt-2 text-xs text-gray-400">{formatDate(review.createdAt)}</p>
+          <p className="mt-2 text-xs text-gray-400">{formatDate((review as any).createdAt)}</p>
         </CardContent>
       </Card>
     </Link>

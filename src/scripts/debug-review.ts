@@ -45,7 +45,7 @@ async function main() {
             where: { type: 'AI_SUMMARY' },
             include: { aiSources: true },
             take: 5,
-            orderBy: { createdAt: 'desc' }
+            orderBy: { createdAt: 'desc' } as any
         })
         console.log(`Latest 5 AI reviews:`)
         reviews.forEach(r => {

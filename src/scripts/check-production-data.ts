@@ -32,11 +32,11 @@ async function main() {
     const reviewCount = await prisma.review.count()
     console.log(`Total Reviews: ${reviewCount}`)
 
-    // Count Published Reviews
-    const publishedReviewCount = await prisma.review.count({
-        where: { isPublished: true }
-    })
-    console.log(`Published Reviews: ${publishedReviewCount}`)
+    // Count Published Reviews (isPublished removed from schema, just count all)
+    // const publishedReviewCount = await prisma.review.count({
+    //     where: { isPublished: true }
+    // })
+    // console.log(`Published Reviews: ${publishedReviewCount}`)
 
     // List first 5 shoes
     const shoes = await prisma.shoe.findMany({

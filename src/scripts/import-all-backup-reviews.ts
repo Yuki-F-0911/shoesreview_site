@@ -293,8 +293,8 @@ async function createReview(
       cons: reviewContent.cons || [],
       recommendedFor: analysis.recommended_runner_level || null,
       sourceCount: 1,
-      isPublished: true,
-      isDraft: false,
+      // isPublished removed from schema
+      // isDraft removed from schema
     },
   })
 
@@ -334,7 +334,7 @@ async function main() {
   console.log('='.repeat(60))
 
   const backupDir = path.join(process.cwd(), 'scrayping', 'backup')
-  
+
   if (!fs.existsSync(backupDir)) {
     console.error(`\nエラー: バックアップフォルダが見つかりません: ${backupDir}`)
     process.exit(1)
@@ -342,7 +342,7 @@ async function main() {
 
   // バックアップフォルダ内のすべてのJSONファイルを読み込む
   const jsonFiles = fs.readdirSync(backupDir).filter((file) => file.endsWith('.json'))
-  
+
   console.log(`\n見つかったJSONファイル: ${jsonFiles.length}件`)
 
   const allReviews: ScrapedReview[] = []

@@ -296,8 +296,8 @@ async function createReview(
       cons: reviewContent.cons || [],
       recommendedFor: analysis.recommended_runner_level || null,
       sourceCount: 1,
-      isPublished: true,
-      isDraft: false,
+      // isPublished removed from schema
+      // isDraft removed from schema
     },
   })
 
@@ -456,8 +456,8 @@ async function processConsolidatedReview(
         cons: reviewContent.cons || [],
         recommendedFor: analysis.recommended_runner_level || null,
         sourceCount: 0,
-        isPublished: true,
-        isDraft: false,
+        // isPublished removed from schema
+        // isDraft removed from schema
       },
       include: {
         aiSources: true,
