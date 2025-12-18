@@ -121,7 +121,7 @@ async function getShoe(id: string): Promise<ShoeWithRelations | null> {
           },
           orderBy: {
             createdAt: 'desc',
-          },
+          } as any,
         },
         _count: {
           select: {

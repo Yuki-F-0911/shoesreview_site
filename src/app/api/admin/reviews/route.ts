@@ -50,7 +50,7 @@ export async function GET(request: Request) {
       },
       orderBy: {
         createdAt: 'desc',
-      },
+      } as any,
     })
 
     return NextResponse.json({

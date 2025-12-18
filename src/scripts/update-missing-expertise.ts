@@ -84,7 +84,7 @@ async function main() {
                     shoeId: shoe.id,
                     reviewerExpertise: null
                 } as any,
-                orderBy: { createdAt: 'desc' }
+                orderBy: { createdAt: 'desc' } as any
             });
 
             if (review) {

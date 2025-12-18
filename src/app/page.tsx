@@ -64,7 +64,7 @@ async function getLatestReviews() {
       },
       orderBy: {
         createdAt: 'desc',
-      },
+      } as any,
       take: 6,
     })
 

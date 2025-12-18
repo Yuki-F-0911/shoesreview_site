@@ -129,7 +129,7 @@ async function main() {
                     cons: summary.cons,
                     recommendedFor: summary.recommendedFor,
                     sourceCount: sources.length,
-                    isPublished: true,
+                    // isPublished removed from schema
                 },
             })
 

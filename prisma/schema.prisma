@@ -49,6 +49,18 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // ランナープロフィール（永続化）
+  runnerAge            Int?      // 年齢
+  runnerGender         String?   // 性別
+  runnerGenderPublic   Boolean   @default(true)  // 性別の公開設定
+  runnerHeight         Float?    // 身長 (cm)
+  runnerWeight         Float?    // 体重 (kg)
+  runnerWeeklyDistance Float?    // 週間走行距離 (km)
+  runnerPersonalBest   String?   // 自己ベスト
+  runnerExpertise      String[]  @default([])  // 専門種目（複数選択可）
+  runnerFootShape      String[]  @default([])  // 足の形状（複数選択可）
+  runnerLandingType    String?   // 接地タイプ
+
   reviews  Review[]
   comments Comment[]
   likes    Like[]
@@ -130,6 +142,11 @@ model Review {
   comfortRating    Decimal? @db.Decimal(3, 1) // 0.0-10.0
   designRating     Decimal? @db.Decimal(3, 1) // 0.0-10.0
   durabilityRating Decimal? @db.Decimal(3, 1) // 0.0-10.0
+  lightnessRating  Decimal? @db.Decimal(3, 1) // 軽量性 0.0-10.0
+  stabilityRating  Decimal? @db.Decimal(3, 1) // 安定性 0.0-10.0
+  cushioningRating Decimal? @db.Decimal(3, 1) // クッション性 0.0-10.0
+  gripRating       Decimal? @db.Decimal(3, 1) // グリップ力 0.0-10.0
+  responsivenessRating Decimal? @db.Decimal(3, 1) // 反発力 0.0-10.0
   title            String
   content          String   @db.Text
   imageUrls        String[]
@@ -171,14 +188,17 @@ model Review {
   purchaseSize     String?  // 購入サイズ (cm)
 
   // レビュアー属性（スナップショット）
+  reviewerAge            Int?      // 年齢
   reviewerGender         String?
   reviewerHeight         Float?
   reviewerWeight         Float?
   reviewerWeeklyDistance Float?
   reviewerPersonalBest   String?
-  reviewerExpertise      String?
-  reviewerFootShape      String?
+  reviewerExpertise      String[]  @default([])  // 専門種目（複数選択可）
+  reviewerFootShape      String[]  @default([])  // 足の形状（複数選択可）
+  reviewerFootShapeDetail String? // 足の形状に関する詳細な補足
   reviewerLandingType    String?
+  reviewerLandingTypeDetail String? // 接地タイプの補足
 
   shoe     Shoe      @relation(fields: [shoeId], references: [id], onDelete: Cascade)
   user     User?     @relation(fields: [userId], references: [id], onDelete: SetNull)

@@ -40,7 +40,7 @@ export async function GET(request: Request) {
         },
         orderBy: {
           createdAt: 'desc',
-        },
+        } as any,
         skip,
         take: pageSize,
       }),
@@ -90,7 +90,7 @@ export async function POST(request: Request) {
         ...validatedData,
         userId: session.user.id,
         type: 'USER',
-      },
+      } as any,
       include: {
         user: {
           select: {

@@ -101,7 +101,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
       orderBy: {
         updatedAt: 'desc',
-      },
+      } as any,
     })
 
     shoePages = shoes.map(shoe => ({
@@ -124,14 +124,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         id: true,
         updatedAt: true,
         type: true,
-      },
+      } as any,
       orderBy: {
         updatedAt: 'desc',
-      },
+      } as any,
       take: 1000, // 最大1000件
     })
 
-    reviewPages = reviews.map(review => ({
+    reviewPages = reviews.map((review: any) => ({
       url: `${SITE_URL}/reviews/${review.id}`,
       lastModified: review.updatedAt,
       changeFrequency: 'monthly' as const,
