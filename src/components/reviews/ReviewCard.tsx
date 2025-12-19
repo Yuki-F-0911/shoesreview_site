@@ -2,12 +2,11 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Avatar } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
-import { Card, CardContent } from '@/components/ui/Card'
+import { Card } from '@/components/ui/Card'
 import { formatDate } from '@/lib/utils/date'
-import { Star, ThumbsUp, MessageCircle, Sparkles } from 'lucide-react'
+import { Star, ThumbsUp, MessageCircle, Sparkles, ChevronRight } from 'lucide-react'
 import type { Prisma } from '@prisma/client'
 
-// Prismaから返される型を受け入れる
 type ReviewWithRelations = Prisma.ReviewGetPayload<{
   include: {
     user: {
@@ -44,135 +43,113 @@ export function ReviewCard({ review }: ReviewCardProps) {
   const shoe = review.shoe
   const user = review.user
   const isAISummary = review.type === 'AI_SUMMARY'
-
   const shoeImageUrl = shoe?.imageUrls && shoe.imageUrls.length > 0 ? shoe.imageUrls[0] : null
   const rating = parseFloat(String(review.overallRating))
 
-  // 評価に基づく色を決定
-  const getRatingColor = (rating: number) => {
-    if (rating >= 8) return 'text-green-600 bg-green-50'
-    if (rating >= 6) return 'text-blue-600 bg-blue-50'
-    if (rating >= 4) return 'text-yellow-600 bg-yellow-50'
-    return 'text-red-600 bg-red-50'
-  }
+  // 良い点のサマリーを抽出（最初の100文字程度）
+  const contentPreview = review.content.length > 150
+    ? review.content.slice(0, 150) + '...'
+    : review.content
 
   return (
-    <Link href={`/reviews/${review.id}`}>
-      <Card className="group h-full overflow-hidden transition-all hover:shadow-lg">
-        {/* 画像セクション */}
-        <div className="relative h-44 w-full overflow-hidden bg-gradient-to-br from-gray-100 to-gray-50">
-          {shoeImageUrl ? (
-            <>
+    <Link href={`/reviews/${review.id}`} className="block group">
+      <Card className="overflow-hidden hover:shadow-lg transition-all duration-300">
+        {/* シューズ画像エリア - メインビジュアル */}
+        <div className="relative">
+          <div className="aspect-[16/9] bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
+            {shoeImageUrl ? (
               <Image
                 src={shoeImageUrl}
-                alt={shoe ? `${shoe.brand} ${shoe.modelName}` : 'シューズ画像'}
+                alt={`${shoe.brand} ${shoe.modelName}`}
                 fill
-                className="object-contain p-3 transition-transform group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-contain p-6 transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 600px"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-            </>
-          ) : (
-            <div className="flex h-full items-center justify-center">
-              <span className="text-4xl text-gray-300">👟</span>
-            </div>
-          )}
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <span className="text-6xl text-slate-200">👟</span>
+              </div>
+            )}
+          </div>
 
-          {/* AI要約バッジ */}
+          {/* 評価スコアバッジ */}
+          <div className="absolute bottom-4 right-4">
+            <div className="flex items-center space-x-1 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg">
+              <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
+              <span className="text-lg font-bold text-slate-900">{rating.toFixed(1)}</span>
+            </div>
+          </div>
+
+          {/* AIバッジ */}
           {isAISummary && (
-            <div className="absolute left-2 top-2">
-              <Badge className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white">
+            <div className="absolute top-4 left-4">
+              <Badge className="bg-gradient-to-r from-primary to-primary-dark text-white border-0 shadow-md">
                 <Sparkles className="mr-1 h-3 w-3" />
                 AI統合
               </Badge>
             </div>
           )}
-
-          {/* 評価スコア */}
-          <div className={`absolute right-2 top-2 flex items-center rounded-lg px-2 py-1 ${getRatingColor(rating)}`}>
-            <Star className="mr-1 h-3.5 w-3.5 fill-current" />
-            <span className="text-sm font-bold">{rating.toFixed(1)}</span>
-          </div>
-
-          {/* シューズ情報オーバーレイ */}
-          {shoe && (
-            <div className="absolute bottom-0 left-0 right-0 px-3 py-2">
-              <p className="text-xs font-medium text-white drop-shadow-md">
-                {shoe.brand} {shoe.modelName}
-              </p>
-            </div>
-          )}
         </div>
 
-        {/* コンテンツセクション */}
-        <CardContent className="p-4">
-          <h3 className="mb-2 line-clamp-2 font-semibold text-gray-900 transition-colors group-hover:text-blue-600">
-            {review.title}
-          </h3>
+        {/* コンテンツエリア */}
+        <div className="p-5">
+          {/* シューズ名 - 最も目立つ */}
+          {shoe && (
+            <div className="mb-3">
+              <p className="text-xs font-medium text-primary uppercase tracking-wider">
+                {shoe.brand}
+              </p>
+              <h3 className="text-xl font-bold text-slate-900 group-hover:text-primary transition-colors">
+                {shoe.modelName}
+              </h3>
+            </div>
+          )}
 
-          <p className="mb-3 line-clamp-2 text-sm text-gray-600">{review.content}</p>
+          {/* レビュー本文プレビュー */}
+          <p className="text-slate-600 text-sm leading-relaxed mb-4">
+            {contentPreview}
+          </p>
 
-          {/* タグ */}
-          <div className="mb-3 flex flex-wrap gap-1.5">
-            {shoe && (
-              <Badge variant="outline" className="text-xs">
-                {shoe.category}
-              </Badge>
-            )}
-            {review.sourceCount > 0 && isAISummary && (
-              <Badge variant="secondary" className="text-xs">
-                {review.sourceCount}件の情報源
-              </Badge>
-            )}
-          </div>
-
-          {/* フッター */}
-          <div className="flex items-center justify-between border-t border-gray-100 pt-3">
+          {/* フッター: ユーザーとエンゲージメント */}
+          <div className="flex items-center justify-between pt-4 border-t border-slate-100">
             <div className="flex items-center space-x-2">
               {user ? (
-                <div className="flex flex-col">
-                  <div className="flex items-center space-x-2">
-                    <Avatar
-                      src={user.avatarUrl}
-                      fallback={user.displayName[0]}
-                      className="h-6 w-6"
-                    />
-                    <span className="text-xs text-gray-600">{user.displayName}</span>
+                <>
+                  <Avatar
+                    src={user.avatarUrl}
+                    fallback={user.displayName[0]}
+                    className="h-8 w-8"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-slate-900">{user.displayName}</p>
+                    <p className="text-xs text-slate-400">{formatDate((review as any).createdAt)}</p>
                   </div>
-                  {/* Reviewer Attributes (Check if they exist on review object) */}
-                  <div className="mt-1 flex flex-wrap gap-x-2 gap-y-1 text-[10px] text-gray-500">
-                    {/* Using generic access for new fields to avoid stale type errors if needed, but standard should work if generated */}
-                    {(review as any).reviewerGender && <span>{(review as any).reviewerGender}</span>}
-                    {(review as any).reviewerExpertise && <span>/ {(review as any).reviewerExpertise}</span>}
-                    {(review as any).reviewerPersonalBest && <span>/ PB: {(review as any).reviewerPersonalBest}</span>}
-                  </div>
-                </div>
+                </>
               ) : isAISummary ? (
-                <div className="flex items-center text-xs text-gray-600">
-                  <Sparkles className="mr-1 h-4 w-4 text-purple-500" />
-                  AI要約
+                <div className="flex items-center space-x-2">
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
+                    <Sparkles className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-slate-900">AI統合レビュー</p>
+                    <p className="text-xs text-slate-400">{review.sourceCount}件の情報源</p>
+                  </div>
                 </div>
               ) : null}
             </div>
 
-            <div className="flex items-center space-x-3 text-xs text-gray-500">
-              {review._count && (
-                <>
-                  <span className="flex items-center">
-                    <ThumbsUp className="mr-1 h-3 w-3" />
-                    {review._count.likes}
-                  </span>
-                  <span className="flex items-center">
-                    <MessageCircle className="mr-1 h-3 w-3" />
-                    {review._count.comments}
-                  </span>
-                </>
-              )}
+            <div className="flex items-center space-x-3 text-slate-400">
+              <span className="flex items-center space-x-1 text-sm">
+                <ThumbsUp className="h-4 w-4" />
+                <span>{review._count?.likes || 0}</span>
+              </span>
+              <span className="flex items-center space-x-1 text-sm">
+                <MessageCircle className="h-4 w-4" />
+                <span>{review._count?.comments || 0}</span>
+              </span>
             </div>
           </div>
-
-          <p className="mt-2 text-xs text-gray-400">{formatDate((review as any).createdAt)}</p>
-        </CardContent>
+        </div>
       </Card>
     </Link>
   )

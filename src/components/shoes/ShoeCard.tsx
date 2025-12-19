@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Card, CardContent, CardHeader } from '@/components/ui/Card'
+import { Card, CardContent } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
-import { Star, Users } from 'lucide-react'
+import { Star, MessageSquare } from 'lucide-react'
 import type { Shoe } from '@/types/shoe'
 
 interface ShoeCardProps {
@@ -16,42 +16,31 @@ interface ShoeCardProps {
 
 export function ShoeCard({ shoe }: ShoeCardProps) {
   return (
-    <Link href={`/shoes/${shoe.id}`}>
-      <Card className="group h-full overflow-hidden transition-all hover:shadow-lg">
+    <Link href={`/shoes/${shoe.id}`} className="block group">
+      <Card className="h-full overflow-hidden">
         {/* 画像セクション */}
-        <div className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-50">
+        <div className="relative aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
           {shoe.imageUrls && shoe.imageUrls.length > 0 ? (
             <Image
               src={shoe.imageUrls[0]}
               alt={`${shoe.brand} ${shoe.modelName}`}
               fill
-              className="object-contain p-4 transition-transform group-hover:scale-105"
+              className="object-contain p-6 transition-transform duration-300 group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
             <div className="flex h-full items-center justify-center">
-              <div className="text-center text-gray-400">
-                <svg className="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              <div className="text-center text-gray-300">
+                <svg className="mx-auto h-16 w-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <span className="mt-1 text-xs">No Image</span>
               </div>
             </div>
           )}
-          
-          {/* 評価バッジ */}
-          {shoe.avgRating && shoe.avgRating > 0 && (
-            <div className="absolute right-2 top-2 flex items-center rounded-full bg-white/95 px-2 py-1 shadow-md backdrop-blur-sm">
-              <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-              <span className="ml-1 text-sm font-semibold text-gray-900">
-                {shoe.avgRating.toFixed(1)}
-              </span>
-            </div>
-          )}
-          
+
           {/* カテゴリバッジ */}
-          <div className="absolute left-2 top-2">
-            <Badge variant="secondary" className="bg-white/95 text-xs backdrop-blur-sm">
+          <div className="absolute left-3 top-3">
+            <Badge variant="secondary" className="bg-white/90 text-gray-600 text-xs backdrop-blur-sm shadow-sm">
               {shoe.category}
             </Badge>
           </div>
@@ -59,29 +48,43 @@ export function ShoeCard({ shoe }: ShoeCardProps) {
 
         {/* 情報セクション */}
         <CardContent className="p-4">
-          <div className="mb-1 text-xs font-medium uppercase tracking-wider text-gray-500">
+          {/* ブランド名（小さく控えめ） */}
+          <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
             {shoe.brand}
-          </div>
-          <h3 className="font-semibold text-gray-900 transition-colors group-hover:text-blue-600">
+          </p>
+
+          {/* モデル名（大きく目立つ） */}
+          <h3 className="text-lg font-bold text-gray-900 leading-tight group-hover:text-primary transition-colors line-clamp-2">
             {shoe.modelName}
           </h3>
-          
+
+          {/* メタ情報 */}
           <div className="mt-3 flex items-center justify-between">
+            {/* 価格 */}
             {shoe.officialPrice && (
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-base font-semibold text-gray-900">
                 ¥{shoe.officialPrice.toLocaleString()}
               </p>
             )}
-            {shoe._count && (
-              <div className="flex items-center text-xs text-gray-500">
-                <Users className="mr-1 h-3 w-3" />
-                {shoe._count.reviews}件
-              </div>
-            )}
+
+            {/* 評価とレビュー数 */}
+            <div className="flex items-center space-x-3 text-sm text-gray-500">
+              {shoe.avgRating && shoe.avgRating > 0 && (
+                <div className="flex items-center space-x-1">
+                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  <span className="font-medium text-gray-700">{shoe.avgRating.toFixed(1)}</span>
+                </div>
+              )}
+              {shoe._count && (
+                <div className="flex items-center space-x-1">
+                  <MessageSquare className="h-4 w-4" />
+                  <span>{shoe._count.reviews}</span>
+                </div>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>
     </Link>
   )
 }
-
