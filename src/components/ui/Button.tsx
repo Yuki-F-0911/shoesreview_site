@@ -3,24 +3,21 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils/cn'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cyber-black disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]',
+  'inline-flex items-center justify-center font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]',
   {
     variants: {
       variant: {
-        default: 'bg-gradient-to-r from-primary to-primary-dark text-cyber-black font-bold hover:shadow-glow-primary',
-        secondary: 'bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 hover:border-primary',
-        destructive: 'bg-neon-red text-white hover:bg-red-600 hover:shadow-glow-accent',
-        outline: 'border border-primary/30 bg-transparent text-text-secondary hover:bg-primary/10 hover:text-primary hover:border-primary',
-        ghost: 'text-text-secondary hover:bg-primary/10 hover:text-primary',
-        link: 'text-primary underline-offset-4 hover:underline',
-        accent: 'bg-gradient-to-r from-accent to-accent-secondary text-white font-bold hover:shadow-glow-accent',
-        cyber: 'bg-cyber-gray border border-primary text-primary font-bold hover:bg-primary hover:text-cyber-black hover:shadow-glow-primary',
+        default: 'bg-neutral-900 text-white hover:bg-neutral-800',
+        outline: 'border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 hover:border-neutral-400',
+        ghost: 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900',
+        link: 'text-neutral-900 underline-offset-4 hover:underline',
+        destructive: 'bg-red-600 text-white hover:bg-red-700',
       },
       size: {
-        default: 'h-10 py-2 px-5 text-sm rounded-lg',
-        sm: 'h-9 px-4 text-sm rounded-lg',
-        lg: 'h-12 px-8 text-base rounded-xl',
-        icon: 'h-10 w-10 rounded-lg',
+        default: 'h-10 py-2 px-5 text-sm',
+        sm: 'h-9 px-4 text-sm',
+        lg: 'h-11 px-6 text-base',
+        icon: 'h-10 w-10',
       },
     },
     defaultVariants: {
