@@ -1,10 +1,9 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Avatar } from '@/components/ui/Avatar'
-import { Badge } from '@/components/ui/Badge'
 import { Card } from '@/components/ui/Card'
 import { formatDate } from '@/lib/utils/date'
-import { Star, ThumbsUp, MessageCircle, Sparkles, Zap } from 'lucide-react'
+import { ThumbsUp, MessageCircle } from 'lucide-react'
 import type { Prisma } from '@prisma/client'
 
 type ReviewWithRelations = Prisma.ReviewGetPayload<{
@@ -46,111 +45,97 @@ export function ReviewCard({ review }: ReviewCardProps) {
   const shoeImageUrl = shoe?.imageUrls && shoe.imageUrls.length > 0 ? shoe.imageUrls[0] : null
   const rating = parseFloat(String(review.overallRating))
 
-  // 良い点のサマリーを抽出（最初の100文字程度）
   const contentPreview = review.content.length > 150
     ? review.content.slice(0, 150) + '...'
     : review.content
 
   return (
     <Link href={`/reviews/${review.id}`} className="block group">
-      <Card className="overflow-hidden glass border border-primary/20 hover:border-primary/50 hover:shadow-glow-primary transition-all duration-300">
-        {/* シューズ画像エリア - メインビジュアル */}
-        <div className="relative">
-          <div className="aspect-[16/9] bg-gradient-to-br from-cyber-dark to-cyber-gray overflow-hidden">
-            {shoeImageUrl ? (
-              <Image
-                src={shoeImageUrl}
-                alt={`${shoe.brand} ${shoe.modelName}`}
-                fill
-                className="object-contain p-6 transition-transform duration-500 group-hover:scale-110"
-                sizes="(max-width: 768px) 100vw, 600px"
+      <Card className="overflow-hidden card-hover">
+        {/* ヘッダー */}
+        <div className="flex items-center p-4 pb-3">
+          {user ? (
+            <>
+              <Avatar
+                src={user.avatarUrl}
+                fallback={user.displayName[0]}
+                className="h-9 w-9"
               />
-            ) : (
-              <div className="flex h-full items-center justify-center">
-                <span className="text-6xl opacity-30">👟</span>
+              <div className="ml-3 flex-1 min-w-0">
+                <p className="text-sm font-medium text-neutral-900 truncate">{user.displayName}</p>
+                <p className="text-xs text-neutral-400">{formatDate((review as any).createdAt)}</p>
               </div>
-            )}
+            </>
+          ) : isAISummary ? (
+            <>
+              <div className="h-9 w-9 bg-neutral-100 flex items-center justify-center text-xs font-medium text-neutral-500">
+                AI
+              </div>
+              <div className="ml-3 flex-1 min-w-0">
+                <p className="text-sm font-medium text-neutral-900">AI統合レビュー</p>
+                <p className="text-xs text-neutral-400">{review.sourceCount}件の情報源</p>
+              </div>
+            </>
+          ) : null}
 
-            {/* オーバーレイグラデーション */}
-            <div className="absolute inset-0 bg-gradient-to-t from-cyber-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          </div>
-
-          {/* 評価スコアバッジ - ネオン風 */}
-          <div className="absolute bottom-4 right-4">
-            <div className="flex items-center space-x-1 glass px-3 py-1.5 rounded-full border border-neon-yellow/50 shadow-lg">
-              <Star className="h-5 w-5 fill-neon-yellow text-neon-yellow" />
-              <span className="text-lg font-bold text-white">{rating.toFixed(1)}</span>
-            </div>
-          </div>
-
-          {/* AIバッジ - サイバー風 */}
           {isAISummary && (
-            <div className="absolute top-4 left-4">
-              <Badge className="bg-gradient-to-r from-primary to-accent text-cyber-black border-0 shadow-glow-primary font-bold">
-                <Zap className="mr-1 h-3 w-3" />
-                AI統合
-              </Badge>
+            <span className="text-xs text-neutral-400 border border-neutral-200 px-2 py-0.5">
+              AI
+            </span>
+          )}
+        </div>
+
+        {/* 画像 */}
+        <div className="relative aspect-[4/3] bg-neutral-50 overflow-hidden">
+          {shoeImageUrl ? (
+            <Image
+              src={shoeImageUrl}
+              alt={`${shoe.brand} ${shoe.modelName}`}
+              fill
+              className="object-contain p-6 transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center">
+              <span className="text-neutral-300 text-sm">No Image</span>
             </div>
           )}
         </div>
 
-        {/* コンテンツエリア */}
-        <div className="p-5 bg-gradient-to-b from-transparent to-cyber-black/50">
-          {/* シューズ名 - 最も目立つ */}
+        {/* コンテンツ */}
+        <div className="p-4">
           {shoe && (
             <div className="mb-3">
-              <p className="text-xs font-medium text-primary uppercase tracking-wider">
+              <p className="text-xs text-neutral-400 uppercase tracking-wider mb-0.5">
                 {shoe.brand}
               </p>
-              <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors">
+              <h3 className="text-base font-medium text-neutral-900 group-hover:underline">
                 {shoe.modelName}
               </h3>
             </div>
           )}
 
-          {/* レビュー本文プレビュー */}
-          <p className="text-text-secondary text-sm leading-relaxed mb-4 line-clamp-3">
+          {/* 評価 */}
+          <div className="flex items-center mb-3">
+            <span className="text-2xl font-semibold text-neutral-900">{rating.toFixed(1)}</span>
+            <span className="text-sm text-neutral-400 ml-1">/ 10</span>
+          </div>
+
+          {/* 本文 */}
+          <p className="text-sm text-neutral-600 leading-relaxed mb-4 line-clamp-3">
             {contentPreview}
           </p>
 
-          {/* フッター: ユーザーとエンゲージメント */}
-          <div className="flex items-center justify-between pt-4 border-t border-primary/10">
-            <div className="flex items-center space-x-2">
-              {user ? (
-                <>
-                  <Avatar
-                    src={user.avatarUrl}
-                    fallback={user.displayName[0]}
-                    className="h-8 w-8 ring-2 ring-primary/30"
-                  />
-                  <div>
-                    <p className="text-sm font-medium text-white">{user.displayName}</p>
-                    <p className="text-xs text-text-muted">{formatDate((review as any).createdAt)}</p>
-                  </div>
-                </>
-              ) : isAISummary ? (
-                <div className="flex items-center space-x-2">
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-glow-sm">
-                    <Sparkles className="h-4 w-4 text-cyber-black" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-white">AI統合レビュー</p>
-                    <p className="text-xs text-text-muted">{review.sourceCount}件の情報源</p>
-                  </div>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="flex items-center space-x-3 text-text-muted">
-              <span className="flex items-center space-x-1 text-sm hover:text-neon-magenta transition-colors">
-                <ThumbsUp className="h-4 w-4" />
-                <span>{review._count?.likes || 0}</span>
-              </span>
-              <span className="flex items-center space-x-1 text-sm hover:text-primary transition-colors">
-                <MessageCircle className="h-4 w-4" />
-                <span>{review._count?.comments || 0}</span>
-              </span>
-            </div>
+          {/* アクション */}
+          <div className="flex items-center space-x-4 pt-3 border-t border-neutral-100">
+            <button className="flex items-center text-neutral-400 hover:text-neutral-900 transition-colors">
+              <ThumbsUp className="h-4 w-4" />
+              <span className="ml-1.5 text-xs">{review._count?.likes || 0}</span>
+            </button>
+            <button className="flex items-center text-neutral-400 hover:text-neutral-900 transition-colors">
+              <MessageCircle className="h-4 w-4" />
+              <span className="ml-1.5 text-xs">{review._count?.comments || 0}</span>
+            </button>
           </div>
         </div>
       </Card>
