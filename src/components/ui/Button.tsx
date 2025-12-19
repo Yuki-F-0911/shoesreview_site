@@ -3,16 +3,18 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils/cn'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]',
+  'inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-cyber-black disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-white hover:bg-primary-dark shadow-sm hover:shadow',
-        secondary: 'bg-primary-50 text-primary-700 hover:bg-primary-100',
-        destructive: 'bg-red-500 text-white hover:bg-red-600',
-        outline: 'border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-300',
-        ghost: 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+        default: 'bg-gradient-to-r from-primary to-primary-dark text-cyber-black font-bold hover:shadow-glow-primary',
+        secondary: 'bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 hover:border-primary',
+        destructive: 'bg-neon-red text-white hover:bg-red-600 hover:shadow-glow-accent',
+        outline: 'border border-primary/30 bg-transparent text-text-secondary hover:bg-primary/10 hover:text-primary hover:border-primary',
+        ghost: 'text-text-secondary hover:bg-primary/10 hover:text-primary',
         link: 'text-primary underline-offset-4 hover:underline',
+        accent: 'bg-gradient-to-r from-accent to-accent-secondary text-white font-bold hover:shadow-glow-accent',
+        cyber: 'bg-cyber-gray border border-primary text-primary font-bold hover:bg-primary hover:text-cyber-black hover:shadow-glow-primary',
       },
       size: {
         default: 'h-10 py-2 px-5 text-sm rounded-lg',
