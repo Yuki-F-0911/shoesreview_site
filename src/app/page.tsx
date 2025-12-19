@@ -139,28 +139,19 @@ export default async function HomePage() {
       <div className="min-h-screen bg-white">
         {/* ===== ヒーローセクション ===== */}
         <section className="border-b border-neutral-100">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20">
-            <div className="max-w-2xl mx-auto text-center">
-              <p className="text-neutral-500 text-sm mb-3">{stats.reviewCount}件のレビュー掲載中</p>
-
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-neutral-900 mb-4 tracking-tight">
-                ランニングシューズレビュー
-              </h1>
-
-              <p className="text-neutral-600 text-base sm:text-lg mb-8">
-                AI統合レビューとコミュニティの声で最適なシューズを見つける
-              </p>
-
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+            <div className="max-w-lg mx-auto">
               {/* 検索バー */}
-              <div className="max-w-md mx-auto">
-                <Link href="/search" className="block">
-                  <div className="flex items-center border border-neutral-200 hover:border-neutral-400 bg-white px-4 py-3 transition-colors group">
-                    <Search className="h-4 w-4 text-neutral-400" />
-                    <span className="ml-3 text-neutral-500 text-sm">シューズ名、ブランドで検索</span>
-                    <ArrowRight className="ml-auto h-4 w-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </Link>
-              </div>
+              <Link href="/search" className="block">
+                <div className="flex items-center border border-neutral-200 hover:border-neutral-400 bg-white px-4 py-3 transition-colors group">
+                  <Search className="h-4 w-4 text-neutral-400" />
+                  <span className="ml-3 text-neutral-500 text-sm">シューズ名、ブランドで検索</span>
+                  <ArrowRight className="ml-auto h-4 w-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+              <p className="text-neutral-400 text-xs text-center mt-3">
+                {stats.reviewCount}件のレビュー掲載中
+              </p>
             </div>
           </div>
         </section>
