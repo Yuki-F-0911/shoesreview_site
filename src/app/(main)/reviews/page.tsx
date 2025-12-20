@@ -4,15 +4,24 @@ import { prisma } from '@/lib/prisma/client'
 import { ReviewCard } from '@/components/reviews/ReviewCard'
 import { EmptyState } from '@/components/common/EmptyState'
 import { Button } from '@/components/ui/Button'
+import { Pagination } from '@/components/ui/Pagination'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { generateBreadcrumbSchema } from '@/lib/seo/structured-data'
 import { reviewsListMetadata } from '@/lib/seo/metadata'
+import { Clock, TrendingUp } from 'lucide-react'
 
 export const metadata: Metadata = reviewsListMetadata
 
-async function getReviews(page: number = 1, pageSize: number = 12) {
+type SortType = 'latest' | 'popular'
+
+async function getReviews(page: number = 1, pageSize: number = 12, sort: SortType = 'latest') {
   try {
     const skip = (page - 1) * pageSize
+
+    // ソート条件を決定
+    const orderBy = sort === 'popular'
+      ? { likes: { _count: 'desc' as const } }
+      : { postedAt: 'desc' as const }
 
     const [reviews, total] = await Promise.all([
       prisma.review.findMany({
@@ -42,7 +51,7 @@ async function getReviews(page: number = 1, pageSize: number = 12) {
             },
           },
         },
-        // Note: orderBy removed because createdAt column doesn't exist in Review model
+        orderBy,
         skip,
         take: pageSize,
       }),
@@ -60,7 +69,6 @@ async function getReviews(page: number = 1, pageSize: number = 12) {
     }
   } catch (error) {
     console.error('Failed to fetch reviews:', error)
-    // エラーが発生した場合は空の結果を返す
     return {
       reviews: [],
       total: 0,
@@ -74,10 +82,11 @@ async function getReviews(page: number = 1, pageSize: number = 12) {
 export default async function ReviewsPage({
   searchParams,
 }: {
-  searchParams: { page?: string }
+  searchParams: { page?: string; sort?: string }
 }) {
   const page = parseInt(searchParams.page || '1', 10)
-  const { reviews, total, totalPages } = await getReviews(page)
+  const sort = (searchParams.sort === 'popular' ? 'popular' : 'latest') as SortType
+  const { reviews, total, totalPages } = await getReviews(page, 12, sort)
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'ホーム', url: '/' },
@@ -98,14 +107,39 @@ export default async function ReviewsPage({
           </ol>
         </nav>
 
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">レビュー一覧</h1>
             <p className="mt-1 text-gray-600">全{total}件のレビュー</p>
           </div>
-          <Link href="/reviews/new">
-            <Button>レビューを投稿</Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            {/* ソートボタン */}
+            <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+              <Link
+                href={`/reviews?sort=latest${page > 1 ? `&page=${page}` : ''}`}
+                className={`flex items-center gap-1 px-3 py-2 text-sm transition-colors ${sort === 'latest'
+                    ? 'bg-neutral-900 text-white'
+                    : 'bg-white text-gray-600 hover:bg-gray-50'
+                  }`}
+              >
+                <Clock className="h-4 w-4" />
+                <span>新着順</span>
+              </Link>
+              <Link
+                href={`/reviews?sort=popular${page > 1 ? `&page=${page}` : ''}`}
+                className={`flex items-center gap-1 px-3 py-2 text-sm transition-colors ${sort === 'popular'
+                    ? 'bg-neutral-900 text-white'
+                    : 'bg-white text-gray-600 hover:bg-gray-50'
+                  }`}
+              >
+                <TrendingUp className="h-4 w-4" />
+                <span>人気順</span>
+              </Link>
+            </div>
+            <Link href="/reviews/new">
+              <Button>レビューを投稿</Button>
+            </Link>
+          </div>
         </div>
 
         {reviews.length > 0 ? (
@@ -117,20 +151,13 @@ export default async function ReviewsPage({
             </div>
 
             {totalPages > 1 && (
-              <div className="mt-8 flex justify-center space-x-2">
-                {page > 1 && (
-                  <Link href={`/reviews?page=${page - 1}`}>
-                    <Button variant="outline">前へ</Button>
-                  </Link>
-                )}
-                <span className="flex items-center px-4 text-sm text-gray-700">
-                  {page} / {totalPages}
-                </span>
-                {page < totalPages && (
-                  <Link href={`/reviews?page=${page + 1}`}>
-                    <Button variant="outline">次へ</Button>
-                  </Link>
-                )}
+              <div className="mt-8">
+                <Pagination
+                  currentPage={page}
+                  totalPages={totalPages}
+                  basePath="/reviews"
+                  searchParams={{ sort }}
+                />
               </div>
             )}
           </>
@@ -149,4 +176,3 @@ export default async function ReviewsPage({
     </>
   )
 }
-

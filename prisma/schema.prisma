@@ -137,6 +137,7 @@ model Review {
   id               String   @id @default(cuid())
   shoeId           String
   userId           String?  // AI要約の場合はnull
+  postedAt         DateTime @default(now())  // 投稿日時
   type             String   @default("USER") // USER or AI_SUMMARY
   overallRating    Decimal  @db.Decimal(3, 1) // 0.0-10.0
   comfortRating    Decimal? @db.Decimal(3, 1) // 0.0-10.0

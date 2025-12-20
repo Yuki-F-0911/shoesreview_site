@@ -240,6 +240,23 @@ async function main() {
                 ? contentParts.join('\n\n')
                 : `${shoe.brand} ${shoe.modelName}を使用してのレビューです。`;
 
+            // タイムスタンプをパース (形式: 2025/12/05 18:42:56)
+            const timestampStr = record[COLUMN_INDICES.TIMESTAMP];
+            let postedAt: Date | null = null;
+            if (timestampStr) {
+                const match = timestampStr.match(/(\d{4})\/(\d{2})\/(\d{2})\s+(\d{2}):(\d{2}):(\d{2})/);
+                if (match) {
+                    postedAt = new Date(
+                        parseInt(match[1]),
+                        parseInt(match[2]) - 1,
+                        parseInt(match[3]),
+                        parseInt(match[4]),
+                        parseInt(match[5]),
+                        parseInt(match[6])
+                    );
+                }
+            }
+
             // Create Review
             await prisma.review.create({
                 data: {
@@ -249,6 +266,7 @@ async function main() {
                     content,
                     type: 'USER',
                     overallRating: avgRating,
+                    postedAt: postedAt || new Date(),
 
                     stepInToeWidth: mapRating(record[COLUMN_INDICES.STEP_TOE_WIDTH]),
                     stepInInstepHeight: mapRating(record[COLUMN_INDICES.STEP_INSTEP_HEIGHT]),

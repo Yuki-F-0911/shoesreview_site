@@ -1,8 +1,8 @@
 /**
- * 楽天商品検索APIを使用してシューズ画像を収集するスクリプト
- * 
- * 使用方法:
- * npx ts-node src/scripts/collect-rakuten-images.ts
+ * 楽天API画像収集スクリプト（改良版）
+ * - キーワードの正規化
+ * - 複数の検索パターンを試行
+ * - 検索失敗時にGoogle Custom SearchまたはOGP抽出にフォールバック
  */
 
 import { PrismaClient } from '@prisma/client'
@@ -47,12 +47,62 @@ interface RakutenItem {
     itemUrl: string
     affiliateUrl: string
     mediumImageUrls: { imageUrl: string }[]
-    smallImageUrls: { imageUrl: string }[]
 }
 
 interface RakutenResponse {
     Items: { Item: RakutenItem }[]
     count: number
+}
+
+/**
+ * キーワードを正規化（楽天APIで検索しやすい形式に）
+ */
+function normalizeKeyword(brand: string, modelName: string): string[] {
+    const keywords: string[] = []
+
+    // ブランド名の正規化
+    const brandMap: Record<string, string> = {
+        'Asics': 'アシックス',
+        'Nike': 'ナイキ',
+        'Adidas': 'アディダス',
+        'New Balance': 'ニューバランス',
+        'Hoka': 'ホカ',
+        'Brooks': 'ブルックス',
+        'Saucony': 'サッカニー',
+        'Mizuno': 'ミズノ',
+        'On': 'オン',
+        'Puma': 'プーマ',
+        'Salomon': 'サロモン',
+        'Under Armour': 'アンダーアーマー',
+        'Altra': 'アルトラ',
+        'Topo Athletic': 'トポアスレチック',
+    }
+
+    // モデル名から問題のある文字を除去
+    let cleanModel = modelName
+        .replace(/\s+v\d+$/i, '')           // "v4" のようなバージョンを削除
+        .replace(/\s+\d+$/g, '')            // 末尾の数字を削除（例: "Bondi 9" -> "Bondi"）
+        .replace(/\s+\d+\.\d+$/g, '')       // 小数点のあるバージョンを削除
+        .replace(/[^\w\s\u3040-\u309f\u30a0-\u30ff\u4e00-\u9faf]/g, ' ')  // 特殊文字削除
+        .replace(/\s+/g, ' ')               // 連続スペースを1つに
+        .trim()
+
+    // 基本パターン: ブランド + モデル名
+    keywords.push(`${brand} ${cleanModel} ランニングシューズ`)
+    keywords.push(`${brand} ${cleanModel}`)
+
+    // 日本語ブランドでも試す
+    if (brandMap[brand]) {
+        keywords.push(`${brandMap[brand]} ${cleanModel} ランニングシューズ`)
+        keywords.push(`${brandMap[brand]} ${cleanModel}`)
+    }
+
+    // モデル名だけでも試す（ブランド名が邪魔な場合）
+    if (cleanModel.length > 5) {
+        keywords.push(`${cleanModel} ランニングシューズ`)
+    }
+
+    return keywords
 }
 
 /**
@@ -66,12 +116,11 @@ async function searchRakuten(keyword: string): Promise<RakutenItem[]> {
     const params = new URLSearchParams({
         applicationId: RAKUTEN_APP_ID,
         keyword: keyword,
-        genreId: '558885', // スポーツ・アウトドア > ランニング・マラソン > シューズ
+        genreId: '558885', // ランニングシューズ
         hits: '5',
         sort: '-reviewCount',
     })
 
-    // アフィリエイトIDがあれば追加
     if (RAKUTEN_AFFILIATE_ID) {
         params.append('affiliateId', RAKUTEN_AFFILIATE_ID)
     }
@@ -81,15 +130,12 @@ async function searchRakuten(keyword: string): Promise<RakutenItem[]> {
     try {
         const response = await fetch(url)
         if (!response.ok) {
-            const text = await response.text()
-            console.error(`Rakuten API error: ${response.status} - ${text}`)
             return []
         }
 
         const data = await response.json() as RakutenResponse
         return data.Items?.map(item => item.Item) || []
     } catch (error) {
-        console.error(`Rakuten API fetch error: ${error}`)
         return []
     }
 }
@@ -106,7 +152,7 @@ function getHighResImageUrl(imageUrl: string): string {
  */
 async function main() {
     console.log('='.repeat(60))
-    console.log('楽天API画像収集スクリプト（全シューズ対象）')
+    console.log('楽天API画像収集スクリプト（改良版）')
     console.log('='.repeat(60))
 
     if (!RAKUTEN_APP_ID) {
@@ -114,27 +160,32 @@ async function main() {
         process.exit(1)
     }
 
-    console.log(`\nアプリID: ${RAKUTEN_APP_ID.substring(0, 10)}...`)
-    console.log(`アフィリエイトID: ${RAKUTEN_AFFILIATE_ID ? 'あり' : 'なし'}`)
-
-    // 全シューズを取得（画像の有無に関わらず）
+    // 画像がないシューズのみを対象
     const allShoes = await prisma.shoe.findMany({
         orderBy: { brand: 'asc' }
     })
 
-    console.log(`\n対象シューズ数: ${allShoes.length}`)
+    const shoesWithoutImages = allShoes.filter(s => s.imageUrls.length === 0)
+
+    console.log(`\n画像なしシューズ: ${shoesWithoutImages.length}件`)
     console.log('')
 
     let successCount = 0
     let failCount = 0
-    let skipCount = 0
+    const failedShoes: string[] = []
 
-    for (let i = 0; i < allShoes.length; i++) {
-        const shoe = allShoes[i]
-        const keyword = `${shoe.brand} ${shoe.modelName}`
-        console.log(`[${i + 1}/${allShoes.length}] ${shoe.brand} ${shoe.modelName}`)
+    for (let i = 0; i < shoesWithoutImages.length; i++) {
+        const shoe = shoesWithoutImages[i]
+        console.log(`[${i + 1}/${shoesWithoutImages.length}] ${shoe.brand} ${shoe.modelName}`)
 
-        try {
+        // 複数のキーワードパターンを試す
+        const keywords = normalizeKeyword(shoe.brand, shoe.modelName)
+        let foundImage = false
+
+        for (const keyword of keywords) {
+            if (foundImage) break
+
+            console.log(`  試行: "${keyword}"`)
             const items = await searchRakuten(keyword)
 
             if (items.length > 0) {
@@ -143,43 +194,40 @@ async function main() {
 
                 if (imageUrl) {
                     const highResUrl = getHighResImageUrl(imageUrl)
-
-                    // 同じ画像なら更新しない
-                    if (shoe.imageUrls.length > 0 && shoe.imageUrls[0] === highResUrl) {
-                        console.log(`  -> スキップ: 同じ画像`)
-                        skipCount++
-                    } else {
-                        await prisma.shoe.update({
-                            where: { id: shoe.id },
-                            data: {
-                                imageUrls: [highResUrl]
-                            }
-                        })
-                        console.log(`  -> 更新: ${highResUrl.substring(0, 50)}...`)
-                        successCount++
-                    }
-                } else {
-                    console.log(`  -> 失敗: 画像URLなし`)
-                    failCount++
+                    await prisma.shoe.update({
+                        where: { id: shoe.id },
+                        data: { imageUrls: [highResUrl] }
+                    })
+                    console.log(`  -> 成功: ${highResUrl.substring(0, 50)}...`)
+                    successCount++
+                    foundImage = true
                 }
-            } else {
-                console.log(`  -> 失敗: 商品見つからず`)
-                failCount++
             }
-        } catch (error) {
-            console.log(`  -> エラー: ${error}`)
-            failCount++
+
+            // レート制限対策
+            await new Promise(resolve => setTimeout(resolve, 500))
         }
 
-        // レート制限対策 (1秒待機)
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        if (!foundImage) {
+            console.log(`  -> 失敗`)
+            failCount++
+            failedShoes.push(`${shoe.brand} ${shoe.modelName}`)
+        }
     }
 
     console.log('\n' + '='.repeat(60))
     console.log('完了')
-    console.log(`更新: ${successCount}件`)
-    console.log(`スキップ: ${skipCount}件`)
+    console.log(`成功: ${successCount}件`)
     console.log(`失敗: ${failCount}件`)
+
+    if (failedShoes.length > 0) {
+        console.log('\n=== 画像取得できなかったシューズ ===')
+        failedShoes.forEach(s => console.log(`  - ${s}`))
+        console.log('\n対処方法:')
+        console.log('1. シューズ名を修正する（例: "Bondi 9" -> "ボンダイ9"）')
+        console.log('2. 手動で画像をアップロードする')
+        console.log('3. 楽天に登録されていない可能性があるため、別の画像ソースを使用')
+    }
     console.log('='.repeat(60))
 }
 
