@@ -51,6 +51,9 @@ async function getTimelineReviews() {
           },
         },
       },
+      orderBy: {
+        postedAt: 'desc',
+      },
       take: 12,
     })
     return reviews
