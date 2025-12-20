@@ -60,21 +60,23 @@ const COLUMN_INDICES = {
     LANDING_TYPE_NOTE: 32
 };
 
-// Mapping helpers
+// Mapping helpers (10点満点換算)
 function mapRating(value: string): number | null {
     if (!value) return null;
-    if (value.includes('非常に良い')) return 5;
-    if (value === '良い') return 4;
-    if (value === '普通') return 3;
-    if (value === '悪い') return 2;
-    if (value.includes('非常に悪い')) return 1;
-    return 3;
+    // 5点満点 → 10点満点に換算
+    if (value.includes('非常に良い')) return 10;  // 5 * 2
+    if (value === '良い') return 8;               // 4 * 2
+    if (value === '普通') return 6;               // 3 * 2
+    if (value === '悪い') return 4;               // 2 * 2
+    if (value.includes('非常に悪い')) return 2;   // 1 * 2
+    return 6;  // デフォルト: 3 * 2
 }
 
 function mapSDRating(value: string): number | null {
     if (!value) return null;
     const num = parseInt(value, 10);
-    return isNaN(num) ? null : num;
+    // 5点満点 → 10点満点に換算
+    return isNaN(num) ? null : num * 2;
 }
 
 // 配列フィールドをパースするヘルパー関数
