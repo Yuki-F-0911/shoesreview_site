@@ -12,7 +12,7 @@ export function Footer() {
                 S
               </div>
               <span className="text-lg font-bold text-gray-900">
-                シューズレビュー
+                Stride
               </span>
             </Link>
             <p className="mt-4 text-sm text-gray-500 leading-relaxed">
@@ -83,7 +83,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-gray-100">
           <p className="text-center text-sm text-gray-400">
-            &copy; 2025 シューズレビューサイト. All rights reserved.
+            &copy; 2025 Stride. All rights reserved.
           </p>
         </div>
       </div>

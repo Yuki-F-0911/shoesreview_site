@@ -114,10 +114,12 @@ async function getFilterOptions() {
 export default async function ShoesPage({
   searchParams,
 }: {
-  searchParams: { brands?: string; categories?: string; sort?: string }
+  searchParams: { brands?: string; categories?: string; category?: string; sort?: string }
 }) {
   const brands = searchParams.brands?.split(',') || []
-  const categories = searchParams.categories?.split(',') || []
+  // category（単数）またはcategories（複数）の両方をサポート
+  const categoryParam = searchParams.category || searchParams.categories
+  const categories = categoryParam?.split(',') || []
   const sort = searchParams.sort
 
   const shoes = await getShoes({ brands, categories, sort })

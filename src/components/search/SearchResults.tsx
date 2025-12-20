@@ -65,8 +65,13 @@ async function searchReviews(params: SearchParams) {
   return reviews
 }
 
-export async function SearchResults({ searchParams }: { searchParams: SearchParams }) {
-  const reviews = await searchReviews(searchParams)
+export async function SearchResults({ searchParams }: { searchParams: SearchParams & { q?: string } }) {
+  // URLパラメータのqをqueryにマッピング
+  const params: SearchParams = {
+    ...searchParams,
+    query: searchParams.q || searchParams.query,
+  };
+  const reviews = await searchReviews(params)
 
   if (reviews.length === 0) {
     return (

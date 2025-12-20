@@ -110,12 +110,13 @@ async function getStats() {
   }
 }
 
+// タグはキーワード検索として機能（シューズ名やキーワードで検索）
 const CATEGORIES = [
-  { name: 'マラソン', query: 'MARATHON' },
-  { name: 'トレーニング', query: 'TRAINING' },
-  { name: 'トレイル', query: 'TRAIL' },
-  { name: 'レーシング', query: 'RACING' },
-  { name: 'デイリー', query: 'DAILY' },
+  { name: 'マラソン', query: 'marathon' },      // マラソン・レース向けシューズ
+  { name: 'トレーニング', query: 'training' },  // トレーニングシューズ
+  { name: 'トレイル', query: 'trail' },         // トレイルランニング
+  { name: 'レーシング', query: 'racing' },      // レーシングフラット
+  { name: 'デイリー', query: 'daily' },         // デイリートレーナー
 ]
 
 const BRANDS = ['Nike', 'Adidas', 'ASICS', 'New Balance', 'Hoka', 'On', 'Saucony', 'Brooks', 'Mizuno']
@@ -166,7 +167,7 @@ export default async function HomePage() {
               {CATEGORIES.map((cat) => (
                 <Link
                   key={cat.name}
-                  href={`/shoes?category=${cat.query}`}
+                  href={`/search?q=${cat.query}`}
                   className="px-4 py-2 text-sm text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 border border-transparent hover:border-neutral-200 transition-all"
                 >
                   {cat.name}
