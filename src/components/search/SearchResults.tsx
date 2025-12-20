@@ -57,8 +57,8 @@ async function searchReviews(params: SearchParams) {
       },
     },
     orderBy: {
-      createdAt: 'desc',
-    } as any,
+      postedAt: 'desc',
+    },
     take: 20,
   })
 
