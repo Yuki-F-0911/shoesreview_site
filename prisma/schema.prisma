@@ -172,10 +172,10 @@ model Review {
   runTransition    Int?     // トランジション（転がり） (1-5)
   runResponse      Int?     // 反発のリズム (1-5)
 
-  // 走行後の状態（疲労感）
-  fatigueSole      String?  // 足裏の疲労
-  fatigueCalf      String?  // ふくらはぎの張り
-  fatigueKnee      String?  // 膝への違和感
+  // 走行後の状態（疲労感）1=強く感じる, 10=感じない
+  fatigueSole      Int?     // 足裏の疲労
+  fatigueCalf      Int?     // ふくらはぎの張り
+  fatigueKnee      Int?     // 膝への違和感
   fatigueOther     String?  // その他
 
   // SD法による採点 (1-5)
