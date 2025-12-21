@@ -121,7 +121,7 @@ export function generateShoeMetadata(shoe: {
   officialPrice?: number | null
 }): Metadata {
   const title = `${shoe.brand} ${shoe.modelName}のレビュー・評価`
-  const description = shoe.description 
+  const description = shoe.description
     ? shoe.description.substring(0, 155) + '...'
     : `${shoe.brand} ${shoe.modelName}（${shoe.category}）の詳細レビューと評価。実際のユーザーの声やAI統合レビューで、あなたに最適なシューズを見つけましょう。`
 
@@ -169,8 +169,8 @@ export function generateShoeMetadata(shoe: {
  */
 export function generateReviewMetadata(review: {
   id: string
-  title: string
-  content: string
+  title: string | null
+  content: string | null
   type: string
   shoe?: {
     brand: string
@@ -181,14 +181,16 @@ export function generateReviewMetadata(review: {
   } | null
   imageUrls?: string[]
 }): Metadata {
-  const shoeInfo = review.shoe 
-    ? `${review.shoe.brand} ${review.shoe.modelName}` 
+  const shoeInfo = review.shoe
+    ? `${review.shoe.brand} ${review.shoe.modelName}`
     : ''
-  
-  const title = review.title || `${shoeInfo}のレビュー`
-  const description = review.content.substring(0, 155) + '...'
 
-  const authorName = review.type === 'AI_SUMMARY' 
+  const title = review.title || `${shoeInfo}のレビュー`
+  const description = review.content
+    ? review.content.substring(0, 155) + '...'
+    : `${shoeInfo}のレビューです。`
+
+  const authorName = review.type === 'AI_SUMMARY'
     ? 'AI統合レビュー'
     : review.user?.displayName || '匿名ユーザー'
 
@@ -199,13 +201,13 @@ export function generateReviewMetadata(review: {
   return {
     title,
     description,
-    keywords: shoeInfo 
+    keywords: shoeInfo
       ? [
-          shoeInfo,
-          `${shoeInfo} レビュー`,
-          `${shoeInfo} 評価`,
-          `${shoeInfo} 口コミ`,
-        ]
+        shoeInfo,
+        `${shoeInfo} レビュー`,
+        `${shoeInfo} 評価`,
+        `${shoeInfo} 口コミ`,
+      ]
       : ['シューズレビュー', 'ランニングシューズ'],
     authors: [{ name: authorName }],
     openGraph: {
@@ -236,10 +238,10 @@ export function generateReviewMetadata(review: {
  * 検索ページのメタデータ生成
  */
 export function generateSearchMetadata(query?: string): Metadata {
-  const title = query 
+  const title = query
     ? `「${query}」の検索結果`
     : 'シューズを検索'
-  
+
   const description = query
     ? `「${query}」に関連するランニングシューズのレビューと評価を検索。`
     : 'ブランド、モデル名、カテゴリーでランニングシューズを検索。詳細なレビューと評価を確認できます。'

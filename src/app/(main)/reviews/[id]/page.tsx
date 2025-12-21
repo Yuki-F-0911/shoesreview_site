@@ -104,8 +104,12 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
   const shoe = review.shoe
   const user = review.user
 
+  // タイトルとコンテンツのnull対応
+  const displayTitle = review.title || (shoe ? `${shoe.brand} ${shoe.modelName}のレビュー` : 'シューズレビュー')
+  const displayContent = review.content || (review as any).quickComment || ''
+
   // 構造化データ
-  const reviewSchema = generateReviewSchema(review)
+  const reviewSchema = generateReviewSchema(review as any)
   const breadcrumbItems = [
     { name: 'ホーム', url: '/' },
     { name: 'レビュー', url: '/reviews' },
@@ -113,7 +117,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
   if (shoe) {
     breadcrumbItems.push({ name: `${shoe.brand} ${shoe.modelName}`, url: `/shoes/${shoe.id}` })
   }
-  breadcrumbItems.push({ name: review.title, url: `/reviews/${review.id}` })
+  breadcrumbItems.push({ name: displayTitle, url: `/reviews/${review.id}` })
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbItems)
 
   return (
@@ -135,7 +139,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
               </>
             )}
             <li>/</li>
-            <li className="text-gray-900 font-medium truncate max-w-[200px]">{review.title}</li>
+            <li className="text-gray-900 font-medium truncate max-w-[200px]">{displayTitle}</li>
           </ol>
         </nav>
 
@@ -154,7 +158,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <CardTitle className="text-2xl">{review.title}</CardTitle>
+                    <CardTitle className="text-2xl">{displayTitle}</CardTitle>
                     {shoe && (
                       <p className="mt-2 text-lg text-gray-600">
                         {shoe.brand} {shoe.modelName}
@@ -198,7 +202,7 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                 </div>
 
                 <div className="prose max-w-none">
-                  <p className="whitespace-pre-wrap text-gray-700">{review.content}</p>
+                  <p className="whitespace-pre-wrap text-gray-700">{displayContent}</p>
                 </div>
 
                 {review.imageUrls.length > 0 && (

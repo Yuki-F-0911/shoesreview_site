@@ -470,7 +470,7 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
 
               <div>
                 <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-                  タイトル *
+                  タイトル <span className="text-gray-400 font-normal">（任意）</span>
                 </label>
                 <Input id="title" {...register('title')} className="mt-1" disabled={isLoading} />
                 {errors.title && (
@@ -480,7 +480,7 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
 
               <div>
                 <label htmlFor="content" className="block text-sm font-medium text-gray-700">
-                  レビュー本文 *
+                  レビュー本文 <span className="text-gray-400 font-normal">（任意）</span>
                 </label>
                 <Textarea
                   id="content"
