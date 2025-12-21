@@ -189,6 +189,11 @@ export function ReviewDetailedFields({ register, errors, watch }: ReviewDetailed
                 {/* 足の形状（複数選択） */}
                 <div className="mt-4">
                     <label className="block text-sm font-medium text-gray-700 mb-2">足の形状（該当するもの全て選択）</label>
+                    <p className="text-xs text-gray-500 mb-3">
+                        <span className="font-medium">エジプト型：</span>親指が一番長い
+                        <span className="font-medium">ギリシャ型：</span>人差し指が一番長い
+                        <span className="font-medium">スクエア型：</span>指の長さがほぼ揃っている
+                    </p>
                     <div className="flex flex-wrap gap-3">
                         {['幅広', '甲高', 'エジプト型', 'ギリシャ型', 'スクエア型', '特になし', 'その他'].map((shape) => (
                             <label key={shape} className="inline-flex items-center">

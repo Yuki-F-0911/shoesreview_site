@@ -45,9 +45,10 @@ export function ReviewCard({ review }: ReviewCardProps) {
   const shoeImageUrl = shoe?.imageUrls && shoe.imageUrls.length > 0 ? shoe.imageUrls[0] : null
   const rating = parseFloat(String(review.overallRating))
 
-  const contentPreview = review.content.length > 150
-    ? review.content.slice(0, 150) + '...'
-    : review.content
+  const contentText = review.content || (review as any).quickComment || ''
+  const contentPreview = contentText.length > 150
+    ? contentText.slice(0, 150) + '...'
+    : contentText
 
   return (
     <Link href={`/reviews/${review.id}`} className="block group">

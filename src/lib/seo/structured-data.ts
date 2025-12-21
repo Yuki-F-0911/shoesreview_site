@@ -156,11 +156,15 @@ export function generateReviewSchema(
     ? review.overallRating
     : parseFloat(String(review.overallRating)) || 0
 
+  // タイトルとコンテンツのnull対応
+  const reviewTitle = review.title || (review.shoe ? `${review.shoe.brand} ${review.shoe.modelName}のレビュー` : 'シューズレビュー')
+  const reviewContent = review.content || ''
+
   const reviewSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Review',
-    name: review.title,
-    reviewBody: review.content,
+    name: reviewTitle,
+    reviewBody: reviewContent,
     datePublished: (review as any).createdAt?.toISOString?.() || new Date().toISOString(),
     dateModified: (review as any).updatedAt?.toISOString?.() || new Date().toISOString(),
     reviewRating: {

@@ -148,8 +148,9 @@ model Review {
   cushioningRating Decimal? @db.Decimal(3, 1) // クッション性 0.0-10.0
   gripRating       Decimal? @db.Decimal(3, 1) // グリップ力 0.0-10.0
   responsivenessRating Decimal? @db.Decimal(3, 1) // 反発力 0.0-10.0
-  title            String
-  content          String   @db.Text
+  title            String?  // 任意（簡易入力モード対応）
+  content          String?  @db.Text  // 任意（簡易入力モード対応）
+  quickComment     String?  @db.Text  // 簡易入力用のコメント
   imageUrls        String[]
   usagePeriod      String?
   usageScene       String[]
