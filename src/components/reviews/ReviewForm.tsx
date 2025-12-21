@@ -27,6 +27,8 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
   const [error, setError] = useState<string | null>(null)
   const [shoesList, setShoesList] = useState(shoes)
   const [isAddingShoe, setIsAddingShoe] = useState(false)
+  // 入力モード: 'simple' = 簡易入力, 'detailed' = 詳細入力
+  const [inputMode, setInputMode] = useState<'simple' | 'detailed'>('simple')
   const [newShoe, setNewShoe] = useState<CreateShoeInput>({
     brand: '',
     modelName: '',
@@ -165,6 +167,34 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
             <div className="rounded-md bg-red-50 p-3 text-sm text-red-800">{error}</div>
           )}
 
+          {/* 入力モード選択タブ */}
+          <div className="border-b border-gray-200">
+            <nav className="-mb-px flex space-x-8" aria-label="入力モード">
+              <button
+                type="button"
+                onClick={() => setInputMode('simple')}
+                className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm ${inputMode === 'simple'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+              >
+                📝 簡易入力
+                <span className="ml-2 text-xs text-gray-400">（総合評価のみ）</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setInputMode('detailed')}
+                className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm ${inputMode === 'detailed'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+              >
+                📊 詳細入力
+                <span className="ml-2 text-xs text-gray-400">（全ての評価項目）</span>
+              </button>
+            </nav>
+          </div>
+
           <div>
             <div className="flex items-end gap-2">
               <div className="flex-1">
@@ -270,349 +300,283 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">履き心地</label>
-              <div className="mt-2">
-                <ReviewRating rating={comfortRating || 0} size="sm" />
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  {...register('comfortRating', { valueAsNumber: true })}
-                  className="mt-1 w-full"
-                />
-                <div className="text-xs text-gray-500 text-center mt-1">
-                  {comfortRating ? comfortRating.toFixed(1) : '0.0'}
-                </div>
-              </div>
+          {/* 簡易入力モード：使用シーンコメントのみ */}
+          {inputMode === 'simple' && (
+            <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+              <label htmlFor="quickComment" className="block text-sm font-medium text-gray-700">
+                どんな時に使っていますか？
+              </label>
+              <Textarea
+                id="quickComment"
+                {...register('quickComment')}
+                className="mt-2 bg-white"
+                rows={3}
+                placeholder="例: 週末のロングランで使用しています。フルマラソンのサブ4を目指して練習中です。"
+                disabled={isLoading}
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                タイトルと本文は後から詳細入力モードで追加することもできます
+              </p>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">デザイン</label>
-              <div className="mt-2">
-                <ReviewRating rating={designRating || 0} size="sm" />
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  {...register('designRating', { valueAsNumber: true })}
-                  className="mt-1 w-full"
-                />
-                <div className="text-xs text-gray-500 text-center mt-1">
-                  {designRating ? designRating.toFixed(1) : '0.0'}
-                </div>
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">耐久性</label>
-              <div className="mt-2">
-                <ReviewRating rating={durabilityRating || 0} size="sm" />
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  {...register('durabilityRating', { valueAsNumber: true })}
-                  className="mt-1 w-full"
-                />
-                <div className="text-xs text-gray-500 text-center mt-1">
-                  {durabilityRating ? durabilityRating.toFixed(1) : '0.0'}
-                </div>
-              </div>
-            </div>
-          </div>
+          )}
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">軽量性</label>
-              <div className="mt-2">
-                <ReviewRating rating={watch('lightnessRating') || 0} size="sm" />
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  {...register('lightnessRating', { valueAsNumber: true })}
-                  className="mt-1 w-full"
-                />
-                <div className="text-xs text-gray-500 text-center mt-1">
-                  {watch('lightnessRating') ? watch('lightnessRating')?.toFixed(1) : '0.0'}
+          {/* 詳細入力モード：全ての評価項目 */}
+          {inputMode === 'detailed' && (
+            <>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">履き心地</label>
+                  <div className="mt-2">
+                    <ReviewRating rating={comfortRating || 0} size="sm" />
+                    <input
+                      type="range"
+                      min="0"
+                      max="10"
+                      step="0.1"
+                      {...register('comfortRating', { valueAsNumber: true })}
+                      className="mt-1 w-full"
+                    />
+                    <div className="text-xs text-gray-500 text-center mt-1">
+                      {comfortRating ? comfortRating.toFixed(1) : '0.0'}
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">デザイン</label>
+                  <div className="mt-2">
+                    <ReviewRating rating={designRating || 0} size="sm" />
+                    <input
+                      type="range"
+                      min="0"
+                      max="10"
+                      step="0.1"
+                      {...register('designRating', { valueAsNumber: true })}
+                      className="mt-1 w-full"
+                    />
+                    <div className="text-xs text-gray-500 text-center mt-1">
+                      {designRating ? designRating.toFixed(1) : '0.0'}
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">耐久性</label>
+                  <div className="mt-2">
+                    <ReviewRating rating={durabilityRating || 0} size="sm" />
+                    <input
+                      type="range"
+                      min="0"
+                      max="10"
+                      step="0.1"
+                      {...register('durabilityRating', { valueAsNumber: true })}
+                      className="mt-1 w-full"
+                    />
+                    <div className="text-xs text-gray-500 text-center mt-1">
+                      {durabilityRating ? durabilityRating.toFixed(1) : '0.0'}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">安定性</label>
-              <div className="mt-2">
-                <ReviewRating rating={watch('stabilityRating') || 0} size="sm" />
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  {...register('stabilityRating', { valueAsNumber: true })}
-                  className="mt-1 w-full"
-                />
-                <div className="text-xs text-gray-500 text-center mt-1">
-                  {watch('stabilityRating') ? watch('stabilityRating')?.toFixed(1) : '0.0'}
-                </div>
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">クッション性</label>
-              <div className="mt-2">
-                <ReviewRating rating={watch('cushioningRating') || 0} size="sm" />
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  {...register('cushioningRating', { valueAsNumber: true })}
-                  className="mt-1 w-full"
-                />
-                <div className="text-xs text-gray-500 text-center mt-1">
-                  {watch('cushioningRating') ? watch('cushioningRating')?.toFixed(1) : '0.0'}
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">グリップ力</label>
-              <div className="mt-2">
-                <ReviewRating rating={watch('gripRating') || 0} size="sm" />
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  {...register('gripRating', { valueAsNumber: true })}
-                  className="mt-1 w-full"
-                />
-                <div className="text-xs text-gray-500 text-center mt-1">
-                  {watch('gripRating') ? watch('gripRating')?.toFixed(1) : '0.0'}
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">軽量性</label>
+                  <div className="mt-2">
+                    <ReviewRating rating={watch('lightnessRating') || 0} size="sm" />
+                    <input
+                      type="range"
+                      min="0"
+                      max="10"
+                      step="0.1"
+                      {...register('lightnessRating', { valueAsNumber: true })}
+                      className="mt-1 w-full"
+                    />
+                    <div className="text-xs text-gray-500 text-center mt-1">
+                      {watch('lightnessRating') ? watch('lightnessRating')?.toFixed(1) : '0.0'}
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">安定性</label>
+                  <div className="mt-2">
+                    <ReviewRating rating={watch('stabilityRating') || 0} size="sm" />
+                    <input
+                      type="range"
+                      min="0"
+                      max="10"
+                      step="0.1"
+                      {...register('stabilityRating', { valueAsNumber: true })}
+                      className="mt-1 w-full"
+                    />
+                    <div className="text-xs text-gray-500 text-center mt-1">
+                      {watch('stabilityRating') ? watch('stabilityRating')?.toFixed(1) : '0.0'}
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">クッション性</label>
+                  <div className="mt-2">
+                    <ReviewRating rating={watch('cushioningRating') || 0} size="sm" />
+                    <input
+                      type="range"
+                      min="0"
+                      max="10"
+                      step="0.1"
+                      {...register('cushioningRating', { valueAsNumber: true })}
+                      className="mt-1 w-full"
+                    />
+                    <div className="text-xs text-gray-500 text-center mt-1">
+                      {watch('cushioningRating') ? watch('cushioningRating')?.toFixed(1) : '0.0'}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">反発力</label>
-              <div className="mt-2">
-                <ReviewRating rating={watch('responsivenessRating') || 0} size="sm" />
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  {...register('responsivenessRating', { valueAsNumber: true })}
-                  className="mt-1 w-full"
-                />
-                <div className="text-xs text-gray-500 text-center mt-1">
-                  {watch('responsivenessRating') ? watch('responsivenessRating')?.toFixed(1) : '0.0'}
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">軽量性</label>
-              <div className="mt-2">
-                <ReviewRating rating={watch('lightnessRating') || 0} size="sm" />
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  {...register('lightnessRating', { valueAsNumber: true })}
-                  className="mt-1 w-full"
-                />
-                <div className="text-xs text-gray-500 text-center mt-1">
-                  {watch('lightnessRating') ? watch('lightnessRating')?.toFixed(1) : '0.0'}
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">グリップ力</label>
+                  <div className="mt-2">
+                    <ReviewRating rating={watch('gripRating') || 0} size="sm" />
+                    <input
+                      type="range"
+                      min="0"
+                      max="10"
+                      step="0.1"
+                      {...register('gripRating', { valueAsNumber: true })}
+                      className="mt-1 w-full"
+                    />
+                    <div className="text-xs text-gray-500 text-center mt-1">
+                      {watch('gripRating') ? watch('gripRating')?.toFixed(1) : '0.0'}
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">反発力</label>
+                  <div className="mt-2">
+                    <ReviewRating rating={watch('responsivenessRating') || 0} size="sm" />
+                    <input
+                      type="range"
+                      min="0"
+                      max="10"
+                      step="0.1"
+                      {...register('responsivenessRating', { valueAsNumber: true })}
+                      className="mt-1 w-full"
+                    />
+                    <div className="text-xs text-gray-500 text-center mt-1">
+                      {watch('responsivenessRating') ? watch('responsivenessRating')?.toFixed(1) : '0.0'}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">安定性</label>
-              <div className="mt-2">
-                <ReviewRating rating={watch('stabilityRating') || 0} size="sm" />
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  {...register('stabilityRating', { valueAsNumber: true })}
-                  className="mt-1 w-full"
-                />
-                <div className="text-xs text-gray-500 text-center mt-1">
-                  {watch('stabilityRating') ? watch('stabilityRating')?.toFixed(1) : '0.0'}
-                </div>
+
+              <div>
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                  タイトル *
+                </label>
+                <Input id="title" {...register('title')} className="mt-1" disabled={isLoading} />
+                {errors.title && (
+                  <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+                )}
               </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">クッション性</label>
-              <div className="mt-2">
-                <ReviewRating rating={watch('cushioningRating') || 0} size="sm" />
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  {...register('cushioningRating', { valueAsNumber: true })}
-                  className="mt-1 w-full"
+
+              <div>
+                <label htmlFor="content" className="block text-sm font-medium text-gray-700">
+                  レビュー本文 *
+                </label>
+                <Textarea
+                  id="content"
+                  {...register('content')}
+                  className="mt-1"
+                  rows={8}
+                  disabled={isLoading}
                 />
-                <div className="text-xs text-gray-500 text-center mt-1">
-                  {watch('cushioningRating') ? watch('cushioningRating')?.toFixed(1) : '0.0'}
-                </div>
+                {errors.content && (
+                  <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
+                )}
               </div>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">グリップ力</label>
-              <div className="mt-2">
-                <ReviewRating rating={watch('gripRating') || 0} size="sm" />
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  {...register('gripRating', { valueAsNumber: true })}
-                  className="mt-1 w-full"
+              <div>
+                <label htmlFor="usagePeriod" className="block text-sm font-medium text-gray-700">
+                  使用期間
+                </label>
+                <Input
+                  id="usagePeriod"
+                  {...register('usagePeriod')}
+                  className="mt-1"
+                  placeholder="例: 6ヶ月"
+                  disabled={isLoading}
                 />
-                <div className="text-xs text-gray-500 text-center mt-1">
-                  {watch('gripRating') ? watch('gripRating')?.toFixed(1) : '0.0'}
-                </div>
               </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">反発力</label>
-              <div className="mt-2">
-                <ReviewRating rating={watch('responsivenessRating') || 0} size="sm" />
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  {...register('responsivenessRating', { valueAsNumber: true })}
-                  className="mt-1 w-full"
-                />
-                <div className="text-xs text-gray-500 text-center mt-1">
-                  {watch('responsivenessRating') ? watch('responsivenessRating')?.toFixed(1) : '0.0'}
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-              タイトル *
-            </label>
-            <Input id="title" {...register('title')} className="mt-1" disabled={isLoading} />
-            {errors.title && (
-              <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="content" className="block text-sm font-medium text-gray-700">
-              レビュー本文 *
-            </label>
-            <Textarea
-              id="content"
-              {...register('content')}
-              className="mt-1"
-              rows={8}
-              disabled={isLoading}
-            />
-            {errors.content && (
-              <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="usagePeriod" className="block text-sm font-medium text-gray-700">
-              使用期間
-            </label>
-            <Input
-              id="usagePeriod"
-              {...register('usagePeriod')}
-              className="mt-1"
-              placeholder="例: 6ヶ月"
-              disabled={isLoading}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">長所</label>
-            <div className="mt-2 space-y-2">
-              {prosFields.map((field, index) => (
-                <div key={field.id} className="flex space-x-2">
-                  <Input
-                    {...register(`pros.${index}`)}
-                    className="flex-1"
-                    disabled={isLoading}
-                  />
+              <div>
+                <label className="block text-sm font-medium text-gray-700">長所</label>
+                <div className="mt-2 space-y-2">
+                  {prosFields.map((field, index) => (
+                    <div key={field.id} className="flex space-x-2">
+                      <Input
+                        {...register(`pros.${index}`)}
+                        className="flex-1"
+                        disabled={isLoading}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removePros(index)}
+                        disabled={isLoading}
+                      >
+                        削除
+                      </Button>
+                    </div>
+                  ))}
                   <Button
                     type="button"
-                    variant="ghost"
+                    variant="outline"
                     size="sm"
-                    onClick={() => removePros(index)}
+                    onClick={() => appendPros('')}
                     disabled={isLoading}
                   >
-                    削除
+                    追加
                   </Button>
                 </div>
-              ))}
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => appendPros('')}
-                disabled={isLoading}
-              >
-                追加
-              </Button>
-            </div>
-          </div>
+              </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">短所</label>
-            <div className="mt-2 space-y-2">
-              {consFields.map((field, index) => (
-                <div key={field.id} className="flex space-x-2">
-                  <Input
-                    {...register(`cons.${index}`)}
-                    className="flex-1"
-                    disabled={isLoading}
-                  />
+              <div>
+                <label className="block text-sm font-medium text-gray-700">短所</label>
+                <div className="mt-2 space-y-2">
+                  {consFields.map((field, index) => (
+                    <div key={field.id} className="flex space-x-2">
+                      <Input
+                        {...register(`cons.${index}`)}
+                        className="flex-1"
+                        disabled={isLoading}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeCons(index)}
+                        disabled={isLoading}
+                      >
+                        削除
+                      </Button>
+                    </div>
+                  ))}
                   <Button
                     type="button"
-                    variant="ghost"
+                    variant="outline"
                     size="sm"
-                    onClick={() => removeCons(index)}
+                    onClick={() => appendCons('')}
                     disabled={isLoading}
                   >
-                    削除
+                    追加
                   </Button>
                 </div>
-              ))}
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => appendCons('')}
-                disabled={isLoading}
-              >
-                追加
-              </Button>
-            </div>
-          </div>
+              </div>
 
 
-          <ReviewDetailedFields register={register} errors={errors} watch={watch} />
+              <ReviewDetailedFields register={register} errors={errors} watch={watch} />
+            </>
+          )}
 
           <div className="flex items-center space-x-4">
             <Button type="submit" disabled={isLoading}>

@@ -129,24 +129,42 @@ export function ReviewDetailedFields({ register, errors, watch }: ReviewDetailed
                         <Input {...register('reviewerAge', { valueAsNumber: true })} type="number" min="10" max="100" className="mt-1" placeholder="30" />
                     </div>
                     {renderSelectInput('reviewerGender', '性別', ['男性', '女性', '回答しない'])}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">身長 (cm)</label>
-                        <Input {...register('reviewerHeight', { valueAsNumber: true })} type="number" step="0.1" className="mt-1" />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">体重 (kg)</label>
-                        <Input {...register('reviewerWeight', { valueAsNumber: true })} type="number" step="0.1" className="mt-1" />
-                    </div>
+                    {renderSelectInput('reviewerHeightRange', '身長', [
+                        '150cm未満',
+                        '150-159cm',
+                        '160-169cm',
+                        '170-179cm',
+                        '180-189cm',
+                        '190cm以上',
+                        '回答しない'
+                    ])}
+                    {renderSelectInput('reviewerWeightRange', '体重', [
+                        '40kg未満',
+                        '40-49kg',
+                        '50-59kg',
+                        '60-69kg',
+                        '70-79kg',
+                        '80-89kg',
+                        '90kg以上',
+                        '回答しない'
+                    ])}
                 </div>
                 <div className="grid grid-cols-1 gap-6 mt-4 md:grid-cols-3">
                     <div>
                         <label className="block text-sm font-medium text-gray-700">週間走行距離 (km)</label>
                         <Input {...register('reviewerWeeklyDistance', { valueAsNumber: true })} type="number" className="mt-1" />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">自己ベスト</label>
-                        <Input {...register('reviewerPersonalBest')} className="mt-1" placeholder="例: フルマラソン 3:30:00" />
-                    </div>
+                    {renderSelectInput('reviewerPersonalBestLevel', '走力レベル', [
+                        '初心者（完走目標）',
+                        'サブ6',
+                        'サブ5',
+                        'サブ4.5',
+                        'サブ4',
+                        'サブ3.5',
+                        'サブ3',
+                        'サブ2.5（エリート）',
+                        '回答しない'
+                    ])}
                     {renderSelectInput('reviewerLandingType', '接地タイプ', ['ヒールストライク', 'ミッドフット', 'フォアフット', '不明'])}
                 </div>
 

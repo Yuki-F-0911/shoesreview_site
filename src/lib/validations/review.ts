@@ -11,13 +11,16 @@ export const reviewSchema = z.object({
   cushioningRating: z.number().min(0).max(10).optional(),
   gripRating: z.number().min(0).max(10).optional(),
   responsivenessRating: z.number().min(0).max(10).optional(),
-  title: z.string().min(1, 'タイトルを入力してください').max(200, 'タイトルは200文字以内で入力してください'),
-  content: z.string().min(10, 'レビュー本文は10文字以上で入力してください').max(5000, 'レビュー本文は5000文字以内で入力してください'),
+  // 簡易入力モードではtitle/contentは任意（空の場合はquickCommentから生成）
+  title: z.string().max(200, 'タイトルは200文字以内で入力してください').optional().default(''),
+  content: z.string().max(5000, 'レビュー本文は5000文字以内で入力してください').optional().default(''),
   imageUrls: z.array(z.string().url()).optional().default([]),
   usagePeriod: z.string().optional(),
   usageScene: z.array(z.string()).default([]),
   pros: z.array(z.string()).default([]),
   cons: z.array(z.string()).default([]),
+  // 簡易レビュー用のコメント（どんな時に使っているか）
+  quickComment: z.string().optional(),
   // isDraft removed from Prisma schema
   // 詳細評価項目
   stepInToeWidth: z.number().min(1).max(5).optional(),
@@ -42,16 +45,19 @@ export const reviewSchema = z.object({
   // レビュアー属性
   reviewerAge: z.number().min(10).max(100).optional(),
   reviewerGender: z.string().optional(),
-  reviewerHeight: z.number().optional(),
-  reviewerWeight: z.number().optional(),
+  // 身長・体重は範囲選択（プライバシー保護）
+  reviewerHeightRange: z.string().optional(),
+  reviewerWeightRange: z.string().optional(),
   reviewerWeeklyDistance: z.number().optional(),
-  reviewerPersonalBest: z.string().optional(),
+  // 自己ベストは範囲選択（プライバシー保護）
+  reviewerPersonalBestLevel: z.string().optional(),
   reviewerExpertise: z.array(z.string()).default([]),
   reviewerFootShape: z.array(z.string()).default([]),
   reviewerFootShapeDetail: z.string().optional(),
   reviewerLandingType: z.string().optional(),
   reviewerLandingTypeDetail: z.string().optional(),
 })
+
 
 export type ReviewInput = z.infer<typeof reviewSchema>
 
