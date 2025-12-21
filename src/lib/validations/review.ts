@@ -32,13 +32,19 @@ export const reviewSchema = z.object({
   fatigueOther: z.string().optional(),
   onomatopoeia: z.string().optional(),
   purchaseSize: z.string().optional(),
-  // レビュアー属性
-  reviewerAge: z.number().min(10).max(100).optional(),
+  // レビュアー属性（空の入力を許容）
+  reviewerAge: z.preprocess(
+    (val) => (val === '' || val === undefined || val === null || Number.isNaN(val) ? undefined : Number(val)),
+    z.number().min(10).max(100).optional()
+  ),
   reviewerGender: z.string().optional(),
   // 身長・体重は範囲選択（プライバシー保護）
   reviewerHeightRange: z.string().optional(),
   reviewerWeightRange: z.string().optional(),
-  reviewerWeeklyDistance: z.number().optional(),
+  reviewerWeeklyDistance: z.preprocess(
+    (val) => (val === '' || val === undefined || val === null || Number.isNaN(val) ? undefined : Number(val)),
+    z.number().optional()
+  ),
   // 自己ベストは範囲選択（プライバシー保護）
   reviewerPersonalBestLevel: z.string().optional(),
   reviewerExpertise: z.array(z.string()).default([]),
