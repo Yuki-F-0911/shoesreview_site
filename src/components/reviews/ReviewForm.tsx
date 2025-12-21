@@ -332,12 +332,12 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
                       type="range"
                       min="0"
                       max="10"
-                      step="0.1"
+                      step="1"
                       {...register('comfortRating', { valueAsNumber: true })}
                       className="mt-1 w-full"
                     />
                     <div className="text-xs text-gray-500 text-center mt-1">
-                      {comfortRating ? comfortRating.toFixed(1) : '0.0'}
+                      {comfortRating ? Math.round(comfortRating) : '0'}
                     </div>
                   </div>
                 </div>
@@ -349,12 +349,12 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
                       type="range"
                       min="0"
                       max="10"
-                      step="0.1"
+                      step="1"
                       {...register('designRating', { valueAsNumber: true })}
                       className="mt-1 w-full"
                     />
                     <div className="text-xs text-gray-500 text-center mt-1">
-                      {designRating ? designRating.toFixed(1) : '0.0'}
+                      {designRating ? Math.round(designRating) : '0'}
                     </div>
                   </div>
                 </div>
@@ -366,12 +366,12 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
                       type="range"
                       min="0"
                       max="10"
-                      step="0.1"
+                      step="1"
                       {...register('durabilityRating', { valueAsNumber: true })}
                       className="mt-1 w-full"
                     />
                     <div className="text-xs text-gray-500 text-center mt-1">
-                      {durabilityRating ? durabilityRating.toFixed(1) : '0.0'}
+                      {durabilityRating ? Math.round(durabilityRating) : '0'}
                     </div>
                   </div>
                 </div>
@@ -386,12 +386,12 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
                       type="range"
                       min="0"
                       max="10"
-                      step="0.1"
+                      step="1"
                       {...register('lightnessRating', { valueAsNumber: true })}
                       className="mt-1 w-full"
                     />
                     <div className="text-xs text-gray-500 text-center mt-1">
-                      {watch('lightnessRating') ? watch('lightnessRating')?.toFixed(1) : '0.0'}
+                      {watch('lightnessRating') ? Math.round(watch('lightnessRating') || 0) : '0'}
                     </div>
                   </div>
                 </div>
@@ -403,12 +403,12 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
                       type="range"
                       min="0"
                       max="10"
-                      step="0.1"
+                      step="1"
                       {...register('stabilityRating', { valueAsNumber: true })}
                       className="mt-1 w-full"
                     />
                     <div className="text-xs text-gray-500 text-center mt-1">
-                      {watch('stabilityRating') ? watch('stabilityRating')?.toFixed(1) : '0.0'}
+                      {watch('stabilityRating') ? Math.round(watch('stabilityRating') || 0) : '0'}
                     </div>
                   </div>
                 </div>
@@ -420,12 +420,12 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
                       type="range"
                       min="0"
                       max="10"
-                      step="0.1"
+                      step="1"
                       {...register('cushioningRating', { valueAsNumber: true })}
                       className="mt-1 w-full"
                     />
                     <div className="text-xs text-gray-500 text-center mt-1">
-                      {watch('cushioningRating') ? watch('cushioningRating')?.toFixed(1) : '0.0'}
+                      {watch('cushioningRating') ? Math.round(watch('cushioningRating') || 0) : '0'}
                     </div>
                   </div>
                 </div>
@@ -440,12 +440,12 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
                       type="range"
                       min="0"
                       max="10"
-                      step="0.1"
+                      step="1"
                       {...register('gripRating', { valueAsNumber: true })}
                       className="mt-1 w-full"
                     />
                     <div className="text-xs text-gray-500 text-center mt-1">
-                      {watch('gripRating') ? watch('gripRating')?.toFixed(1) : '0.0'}
+                      {watch('gripRating') ? Math.round(watch('gripRating') || 0) : '0'}
                     </div>
                   </div>
                 </div>
@@ -457,12 +457,12 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
                       type="range"
                       min="0"
                       max="10"
-                      step="0.1"
+                      step="1"
                       {...register('responsivenessRating', { valueAsNumber: true })}
                       className="mt-1 w-full"
                     />
                     <div className="text-xs text-gray-500 text-center mt-1">
-                      {watch('responsivenessRating') ? watch('responsivenessRating')?.toFixed(1) : '0.0'}
+                      {watch('responsivenessRating') ? Math.round(watch('responsivenessRating') || 0) : '0'}
                     </div>
                   </div>
                 </div>
