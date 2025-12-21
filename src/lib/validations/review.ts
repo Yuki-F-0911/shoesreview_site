@@ -21,25 +21,15 @@ export const reviewSchema = z.object({
   cons: z.array(z.string()).default([]),
   // 簡易レビュー用のコメント（どんな時に使っているか）
   quickComment: z.string().optional(),
-  // isDraft removed from Prisma schema
-  // 詳細評価項目
-  stepInToeWidth: z.number().min(1).max(5).optional(),
-  stepInInstepHeight: z.number().min(1).max(5).optional(),
-  stepInHeelHold: z.number().min(1).max(5).optional(),
-  runLightness: z.number().min(1).max(5).optional(),
-  runSinkDepth: z.number().min(1).max(5).optional(),
-  runStability: z.number().min(1).max(5).optional(),
-  runTransition: z.number().min(1).max(5).optional(),
-  runResponse: z.number().min(1).max(5).optional(),
-  fatigueSole: z.string().optional(),
-  fatigueCalf: z.string().optional(),
-  fatigueKnee: z.string().optional(),
+  // 詳細評価項目（1-10スケール）
+  stepInToeWidth: z.number().min(1).max(10).optional(),
+  stepInInstepHeight: z.number().min(1).max(10).optional(),
+  stepInHeelHold: z.number().min(1).max(10).optional(),
+  // 疲労感（数値：1=強く感じる, 10=感じない）
+  fatigueSole: z.number().min(1).max(10).optional(),
+  fatigueCalf: z.number().min(1).max(10).optional(),
+  fatigueKnee: z.number().min(1).max(10).optional(),
   fatigueOther: z.string().optional(),
-  sdLanding: z.number().min(1).max(5).optional(),
-  sdResponse: z.number().min(1).max(5).optional(),
-  sdStability: z.number().min(1).max(5).optional(),
-  sdWidth: z.number().min(1).max(5).optional(),
-  sdDesign: z.number().min(1).max(5).optional(),
   onomatopoeia: z.string().optional(),
   purchaseSize: z.string().optional(),
   // レビュアー属性
