@@ -281,9 +281,10 @@ async function main() {
                     runTransition: mapRating(record[COLUMN_INDICES.RUN_TRANSITION]),
                     runResponse: mapRating(record[COLUMN_INDICES.RUN_RESPONSE]),
 
-                    fatigueSole: record[COLUMN_INDICES.FATIGUE_SOLE] || null,
-                    fatigueCalf: record[COLUMN_INDICES.FATIGUE_CALF] || null,
-                    fatigueKnee: record[COLUMN_INDICES.FATIGUE_KNEE] || null,
+                    // 疲労感フィールドはInt型に変更されたため、CSVからは変換せずnullとする
+                    fatigueSole: null,
+                    fatigueCalf: null,
+                    fatigueKnee: null,
                     fatigueOther: record[COLUMN_INDICES.FATIGUE_OTHER] || null,
 
                     sdLanding: mapSDRating(record[COLUMN_INDICES.SD_LANDING]),
