@@ -122,18 +122,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       where: {},
       select: {
         id: true,
-        updatedAt: true,
+        postedAt: true,
         type: true,
-      } as any,
+      },
       orderBy: {
-        updatedAt: 'desc',
-      } as any,
+        postedAt: 'desc',
+      },
       take: 1000, // 最大1000件
     })
 
-    reviewPages = reviews.map((review: any) => ({
+    reviewPages = reviews.map((review) => ({
       url: `${SITE_URL}/reviews/${review.id}`,
-      lastModified: review.updatedAt,
+      lastModified: review.postedAt,
       changeFrequency: 'monthly' as const,
       // AI要約レビューは優先度を高く
       priority: review.type === 'AI_SUMMARY' ? 0.7 : 0.6,
