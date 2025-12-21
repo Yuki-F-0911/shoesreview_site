@@ -143,7 +143,10 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
       const result = await response.json()
 
       if (!response.ok) {
-        setError(result.error || 'レビューの保存に失敗しました')
+        const errorMessage = result.details
+          ? `${result.error}: ${result.details}`
+          : result.error || 'レビューの保存に失敗しました'
+        setError(errorMessage)
         return
       }
 

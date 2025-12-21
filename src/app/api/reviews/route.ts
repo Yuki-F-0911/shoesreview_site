@@ -111,15 +111,29 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, data: review }, { status: 201 })
   } catch (error) {
+    // Zodバリデーションエラー
     if (error instanceof Error && error.name === 'ZodError') {
+      const zodError = error as any
       return NextResponse.json(
-        { error: '入力データが正しくありません', details: error },
+        {
+          error: '入力データが正しくありません',
+          details: zodError.errors?.map((e: any) => `${e.path.join('.')}: ${e.message}`).join(', ') || error.message
+        },
         { status: 400 }
       )
     }
 
+    // Prismaエラー（データベース制約違反など）
+    if (error instanceof Error && error.message.includes('Prisma')) {
+      console.error('Prisma error:', error)
+      return NextResponse.json(
+        { error: 'データベースエラーが発生しました。サポートにお問い合わせください。', details: error.message },
+        { status: 500 }
+      )
+    }
+
     console.error('Create review error:', error)
-    return NextResponse.json({ error: 'レビューの作成に失敗しました' }, { status: 500 })
+    return NextResponse.json({ error: 'レビューの作成に失敗しました', details: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
   }
 }
 
