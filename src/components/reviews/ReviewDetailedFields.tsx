@@ -63,22 +63,12 @@ export function ReviewDetailedFields({ register, errors, watch }: ReviewDetailed
                 </div>
             </div>
 
-            {/* 走行評価 */}
+            {/* 詳細特性（走行評価を統合） */}
             <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">走行評価</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">詳細特性</h3>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                    {renderRangeInput('runLightness', '軽さの実感')}
-                    {renderRangeInput('runSinkDepth', '沈み込み (クッション)')}
-                    {renderRangeInput('runStability', '安定性')}
-                    {renderRangeInput('runTransition', '走り出しの転がり')}
-                    {renderRangeInput('runResponse', '反発性')}
-                </div>
-            </div>
-
-            {/* SD法評価 */}
-            <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">詳細特性 (1-5スケール)</h3>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    {renderRangeInput('runLightness', '軽さの実感 (1:重い - 5:軽い)')}
+                    {renderRangeInput('runTransition', '走り出しの転がり (1:鈍い - 5:スムーズ)')}
                     {renderRangeInput('sdLanding', '着地感 (1:柔らかめ - 5:地面を感じる)')}
                     {renderRangeInput('sdResponse', '反発性 (1:ない - 5:ある)')}
                     {renderRangeInput('sdStability', '安定性 (1:自然 - 5:制御される)')}
