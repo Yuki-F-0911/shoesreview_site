@@ -101,13 +101,12 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
   const fatigueCalfRating = watch('fatigueCalf')
   const fatigueKneeRating = watch('fatigueKnee')
 
-  // 総合評価を自動計算（評価された項目の平均）
+  // 総合評価を自動計算（評価された項目の平均）※ステップインは除外
   useEffect(() => {
     if (inputMode === 'detailed') {
       const ratings = [
         comfortRating, designRating, durabilityRating, lightnessRating,
         stabilityRating, cushioningRating, gripRating, responsivenessRating,
-        stepInToeWidth, stepInInstepHeight, stepInHeelHold,
         fatigueSoleRating, fatigueCalfRating, fatigueKneeRating
       ].filter(r => r !== undefined && r !== null && !isNaN(Number(r))) as number[]
 
@@ -119,7 +118,6 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
   }, [
     comfortRating, designRating, durabilityRating, lightnessRating,
     stabilityRating, cushioningRating, gripRating, responsivenessRating,
-    stepInToeWidth, stepInInstepHeight, stepInHeelHold,
     fatigueSoleRating, fatigueCalfRating, fatigueKneeRating,
     inputMode, setValue
   ])
