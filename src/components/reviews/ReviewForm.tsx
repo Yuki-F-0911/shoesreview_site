@@ -89,6 +89,40 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
   const comfortRating = watch('comfortRating')
   const designRating = watch('designRating')
   const durabilityRating = watch('durabilityRating')
+  const lightnessRating = watch('lightnessRating')
+  const stabilityRating = watch('stabilityRating')
+  const cushioningRating = watch('cushioningRating')
+  const gripRating = watch('gripRating')
+  const responsivenessRating = watch('responsivenessRating')
+  const stepInToeWidth = watch('stepInToeWidth')
+  const stepInInstepHeight = watch('stepInInstepHeight')
+  const stepInHeelHold = watch('stepInHeelHold')
+  const fatigueSoleRating = watch('fatigueSole')
+  const fatigueCalfRating = watch('fatigueCalf')
+  const fatigueKneeRating = watch('fatigueKnee')
+
+  // 総合評価を自動計算（評価された項目の平均）
+  useEffect(() => {
+    if (inputMode === 'detailed') {
+      const ratings = [
+        comfortRating, designRating, durabilityRating, lightnessRating,
+        stabilityRating, cushioningRating, gripRating, responsivenessRating,
+        stepInToeWidth, stepInInstepHeight, stepInHeelHold,
+        fatigueSoleRating, fatigueCalfRating, fatigueKneeRating
+      ].filter(r => r !== undefined && r !== null && !isNaN(Number(r))) as number[]
+
+      if (ratings.length > 0) {
+        const average = ratings.reduce((sum, r) => sum + r, 0) / ratings.length
+        setValue('overallRating', Math.round(average * 10) / 10) // 小数点1桁
+      }
+    }
+  }, [
+    comfortRating, designRating, durabilityRating, lightnessRating,
+    stabilityRating, cushioningRating, gripRating, responsivenessRating,
+    stepInToeWidth, stepInInstepHeight, stepInHeelHold,
+    fatigueSoleRating, fatigueCalfRating, fatigueKneeRating,
+    inputMode, setValue
+  ])
 
   const handleCreateShoe = async () => {
     setCreateShoeError(null)
@@ -285,22 +319,39 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
             )}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">総合評価 *</label>
+          {/* 総合評価 - 簡易モードは手動、詳細モードは自動計算 */}
+          <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-4 border border-blue-100">
+            <label className="block text-sm font-medium text-gray-700">
+              総合評価 {inputMode === 'detailed' && <span className="text-gray-400 font-normal">（自動計算）</span>}
+            </label>
             <div className="mt-2 flex items-center space-x-4">
               <ReviewRating rating={overallRating} showNumber />
-              <input
-                type="range"
-                min="0"
-                max="10"
-                step="0.1"
-                {...register('overallRating', { valueAsNumber: true })}
-                className="flex-1"
-              />
-              <span className="text-sm text-gray-600 w-12 text-right">
+              {inputMode === 'simple' ? (
+                <input
+                  type="range"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  {...register('overallRating', { valueAsNumber: true })}
+                  className="flex-1"
+                />
+              ) : (
+                <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                    style={{ width: `${(overallRating / 10) * 100}%` }}
+                  />
+                </div>
+              )}
+              <span className="text-lg font-bold text-blue-600 w-16 text-right">
                 {overallRating.toFixed(1)}
               </span>
             </div>
+            {inputMode === 'detailed' && (
+              <p className="mt-2 text-xs text-gray-500">
+                ※ 以下の評価項目の平均から自動計算されます
+              </p>
+            )}
           </div>
 
           {/* 簡易入力モード：使用シーンコメントのみ */}
@@ -326,148 +377,163 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
           {/* 詳細入力モード：全ての評価項目 */}
           {inputMode === 'detailed' && (
             <>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">履き心地</label>
-                  <div className="mt-2">
-                    <ReviewRating rating={comfortRating || 0} size="sm" />
-                    <input
-                      type="range"
-                      min="0"
-                      max="10"
-                      step="1"
-                      {...register('comfortRating', { valueAsNumber: true })}
-                      className="mt-1 w-full"
-                    />
-                    <div className="text-xs text-gray-500 text-center mt-1">
-                      {comfortRating ? Math.round(comfortRating) : '0'}
+              {/* ステップイン（足入れ感） */}
+              <div className="border border-gray-200 rounded-lg p-4">
+                <h3 className="text-base font-medium text-gray-900 mb-4">ステップイン（足入れ感）</h3>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>狭い</span>
+                      <span className="font-medium text-gray-700">つま先の広さ</span>
+                      <span>広い</span>
                     </div>
+                    <input type="range" min="1" max="10" step="1" {...register('stepInToeWidth', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{stepInToeWidth || '-'}</div>
                   </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">デザイン</label>
-                  <div className="mt-2">
-                    <ReviewRating rating={designRating || 0} size="sm" />
-                    <input
-                      type="range"
-                      min="0"
-                      max="10"
-                      step="1"
-                      {...register('designRating', { valueAsNumber: true })}
-                      className="mt-1 w-full"
-                    />
-                    <div className="text-xs text-gray-500 text-center mt-1">
-                      {designRating ? Math.round(designRating) : '0'}
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>低い</span>
+                      <span className="font-medium text-gray-700">甲の高さ</span>
+                      <span>高い</span>
                     </div>
+                    <input type="range" min="1" max="10" step="1" {...register('stepInInstepHeight', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{stepInInstepHeight || '-'}</div>
                   </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">耐久性</label>
-                  <div className="mt-2">
-                    <ReviewRating rating={durabilityRating || 0} size="sm" />
-                    <input
-                      type="range"
-                      min="0"
-                      max="10"
-                      step="1"
-                      {...register('durabilityRating', { valueAsNumber: true })}
-                      className="mt-1 w-full"
-                    />
-                    <div className="text-xs text-gray-500 text-center mt-1">
-                      {durabilityRating ? Math.round(durabilityRating) : '0'}
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>弱い</span>
+                      <span className="font-medium text-gray-700">ヒールホールド</span>
+                      <span>強い</span>
                     </div>
+                    <input type="range" min="1" max="10" step="1" {...register('stepInHeelHold', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{stepInHeelHold || '-'}</div>
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">軽量性</label>
-                  <div className="mt-2">
-                    <ReviewRating rating={watch('lightnessRating') || 0} size="sm" />
-                    <input
-                      type="range"
-                      min="0"
-                      max="10"
-                      step="1"
-                      {...register('lightnessRating', { valueAsNumber: true })}
-                      className="mt-1 w-full"
-                    />
-                    <div className="text-xs text-gray-500 text-center mt-1">
-                      {watch('lightnessRating') ? Math.round(watch('lightnessRating') || 0) : '0'}
+              {/* 走行・機能評価 */}
+              <div className="border border-gray-200 rounded-lg p-4">
+                <h3 className="text-base font-medium text-gray-900 mb-4">走行・機能評価</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>悪い</span>
+                      <span className="font-medium text-gray-700">履き心地</span>
+                      <span>良い</span>
                     </div>
+                    <input type="range" min="1" max="10" step="1" {...register('comfortRating', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{comfortRating || '-'}</div>
                   </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">安定性</label>
-                  <div className="mt-2">
-                    <ReviewRating rating={watch('stabilityRating') || 0} size="sm" />
-                    <input
-                      type="range"
-                      min="0"
-                      max="10"
-                      step="1"
-                      {...register('stabilityRating', { valueAsNumber: true })}
-                      className="mt-1 w-full"
-                    />
-                    <div className="text-xs text-gray-500 text-center mt-1">
-                      {watch('stabilityRating') ? Math.round(watch('stabilityRating') || 0) : '0'}
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>重い</span>
+                      <span className="font-medium text-gray-700">軽量性</span>
+                      <span>軽い</span>
                     </div>
+                    <input type="range" min="1" max="10" step="1" {...register('lightnessRating', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{lightnessRating || '-'}</div>
                   </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">クッション性</label>
-                  <div className="mt-2">
-                    <ReviewRating rating={watch('cushioningRating') || 0} size="sm" />
-                    <input
-                      type="range"
-                      min="0"
-                      max="10"
-                      step="1"
-                      {...register('cushioningRating', { valueAsNumber: true })}
-                      className="mt-1 w-full"
-                    />
-                    <div className="text-xs text-gray-500 text-center mt-1">
-                      {watch('cushioningRating') ? Math.round(watch('cushioningRating') || 0) : '0'}
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>硬い</span>
+                      <span className="font-medium text-gray-700">クッション性</span>
+                      <span>柔らかい</span>
                     </div>
+                    <input type="range" min="1" max="10" step="1" {...register('cushioningRating', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{cushioningRating || '-'}</div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>不安定</span>
+                      <span className="font-medium text-gray-700">安定性</span>
+                      <span>安定</span>
+                    </div>
+                    <input type="range" min="1" max="10" step="1" {...register('stabilityRating', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{stabilityRating || '-'}</div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>弱い</span>
+                      <span className="font-medium text-gray-700">反発力</span>
+                      <span>強い</span>
+                    </div>
+                    <input type="range" min="1" max="10" step="1" {...register('responsivenessRating', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{responsivenessRating || '-'}</div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>滑る</span>
+                      <span className="font-medium text-gray-700">グリップ力</span>
+                      <span>グリップ強</span>
+                    </div>
+                    <input type="range" min="1" max="10" step="1" {...register('gripRating', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{gripRating || '-'}</div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>地味</span>
+                      <span className="font-medium text-gray-700">デザイン</span>
+                      <span>派手</span>
+                    </div>
+                    <input type="range" min="1" max="10" step="1" {...register('designRating', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{designRating || '-'}</div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>弱い</span>
+                      <span className="font-medium text-gray-700">耐久性</span>
+                      <span>強い</span>
+                    </div>
+                    <input type="range" min="1" max="10" step="1" {...register('durabilityRating', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{durabilityRating || '-'}</div>
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">グリップ力</label>
-                  <div className="mt-2">
-                    <ReviewRating rating={watch('gripRating') || 0} size="sm" />
-                    <input
-                      type="range"
-                      min="0"
-                      max="10"
-                      step="1"
-                      {...register('gripRating', { valueAsNumber: true })}
-                      className="mt-1 w-full"
-                    />
-                    <div className="text-xs text-gray-500 text-center mt-1">
-                      {watch('gripRating') ? Math.round(watch('gripRating') || 0) : '0'}
+              {/* 疲労感（使用後） */}
+              <div className="border border-gray-200 rounded-lg p-4">
+                <h3 className="text-base font-medium text-gray-900 mb-4">疲労感（使用後）</h3>
+                <p className="text-xs text-gray-500 mb-3">※ 10に近いほど疲労が少ない（良い）評価になります</p>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>強く感じる</span>
+                      <span className="font-medium text-gray-700">足裏の疲労</span>
+                      <span>感じない</span>
                     </div>
+                    <input type="range" min="1" max="10" step="1" {...register('fatigueSole', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{fatigueSoleRating || '-'}</div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>強く感じる</span>
+                      <span className="font-medium text-gray-700">ふくらはぎの張り</span>
+                      <span>感じない</span>
+                    </div>
+                    <input type="range" min="1" max="10" step="1" {...register('fatigueCalf', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{fatigueCalfRating || '-'}</div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs text-gray-500 mb-1">
+                      <span>強く感じる</span>
+                      <span className="font-medium text-gray-700">膝への負担</span>
+                      <span>感じない</span>
+                    </div>
+                    <input type="range" min="1" max="10" step="1" {...register('fatigueKnee', { valueAsNumber: true })} className="w-full" />
+                    <div className="text-center text-sm font-medium text-blue-600">{fatigueKneeRating || '-'}</div>
                   </div>
                 </div>
+              </div>
+
+              {/* オノマトペ・購入サイズ */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">反発力</label>
-                  <div className="mt-2">
-                    <ReviewRating rating={watch('responsivenessRating') || 0} size="sm" />
-                    <input
-                      type="range"
-                      min="0"
-                      max="10"
-                      step="1"
-                      {...register('responsivenessRating', { valueAsNumber: true })}
-                      className="mt-1 w-full"
-                    />
-                    <div className="text-xs text-gray-500 text-center mt-1">
-                      {watch('responsivenessRating') ? Math.round(watch('responsivenessRating') || 0) : '0'}
-                    </div>
-                  </div>
+                  <label className="block text-sm font-medium text-gray-700">オノマトペ（感触）</label>
+                  <Input {...register('onomatopoeia')} placeholder="例: フワフワ, カッチリ" className="mt-1" disabled={isLoading} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">購入サイズ</label>
+                  <Input {...register('purchaseSize')} placeholder="26.5cm" className="mt-1" disabled={isLoading} />
                 </div>
               </div>
 
