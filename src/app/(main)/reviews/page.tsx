@@ -8,13 +8,14 @@ import { Pagination } from '@/components/ui/Pagination'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { generateBreadcrumbSchema } from '@/lib/seo/structured-data'
 import { reviewsListMetadata } from '@/lib/seo/metadata'
-import { Clock, TrendingUp } from 'lucide-react'
+import { Clock, TrendingUp, Users, Bot } from 'lucide-react'
 
 export const metadata: Metadata = reviewsListMetadata
 
 type SortType = 'latest' | 'popular'
+type ReviewType = 'all' | 'user' | 'ai'
 
-async function getReviews(page: number = 1, pageSize: number = 12, sort: SortType = 'latest') {
+async function getReviews(page: number = 1, pageSize: number = 12, sort: SortType = 'latest', reviewType: ReviewType = 'all') {
   try {
     const skip = (page - 1) * pageSize
 
@@ -23,9 +24,16 @@ async function getReviews(page: number = 1, pageSize: number = 12, sort: SortTyp
       ? { likes: { _count: 'desc' as const } }
       : { postedAt: 'desc' as const }
 
+    // レビュータイプでフィルタ
+    const typeFilter = reviewType === 'user'
+      ? { type: 'USER' }
+      : reviewType === 'ai'
+        ? { type: 'AI_SUMMARY' }
+        : {}
+
     const [reviews, total] = await Promise.all([
       prisma.review.findMany({
-        where: {},
+        where: typeFilter,
         include: {
           user: {
             select: {
@@ -56,7 +64,7 @@ async function getReviews(page: number = 1, pageSize: number = 12, sort: SortTyp
         take: pageSize,
       }),
       prisma.review.count({
-        where: {},
+        where: typeFilter,
       }),
     ])
 
@@ -82,11 +90,12 @@ async function getReviews(page: number = 1, pageSize: number = 12, sort: SortTyp
 export default async function ReviewsPage({
   searchParams,
 }: {
-  searchParams: { page?: string; sort?: string }
+  searchParams: { page?: string; sort?: string; type?: string }
 }) {
   const page = parseInt(searchParams.page || '1', 10)
   const sort = (searchParams.sort === 'popular' ? 'popular' : 'latest') as SortType
-  const { reviews, total, totalPages } = await getReviews(page, 12, sort)
+  const reviewType = (['all', 'user', 'ai'].includes(searchParams.type || '') ? searchParams.type : 'all') as ReviewType
+  const { reviews, total, totalPages } = await getReviews(page, 12, sort, reviewType)
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'ホーム', url: '/' },
@@ -116,20 +125,20 @@ export default async function ReviewsPage({
             {/* ソートボタン */}
             <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
               <Link
-                href={`/reviews?sort=latest${page > 1 ? `&page=${page}` : ''}`}
+                href={`/reviews?sort=latest&type=${reviewType}`}
                 className={`flex items-center gap-1 px-3 py-2 text-sm transition-colors ${sort === 'latest'
-                    ? 'bg-neutral-900 text-white'
-                    : 'bg-white text-gray-600 hover:bg-gray-50'
+                  ? 'bg-neutral-900 text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-50'
                   }`}
               >
                 <Clock className="h-4 w-4" />
                 <span>新着順</span>
               </Link>
               <Link
-                href={`/reviews?sort=popular${page > 1 ? `&page=${page}` : ''}`}
+                href={`/reviews?sort=popular&type=${reviewType}`}
                 className={`flex items-center gap-1 px-3 py-2 text-sm transition-colors ${sort === 'popular'
-                    ? 'bg-neutral-900 text-white'
-                    : 'bg-white text-gray-600 hover:bg-gray-50'
+                  ? 'bg-neutral-900 text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-50'
                   }`}
               >
                 <TrendingUp className="h-4 w-4" />
@@ -140,6 +149,39 @@ export default async function ReviewsPage({
               <Button>レビューを投稿</Button>
             </Link>
           </div>
+        </div>
+
+        {/* レビュータイプフィルター */}
+        <div className="mb-6 flex items-center gap-2 border-b border-gray-200 pb-4">
+          <Link
+            href={`/reviews?sort=${sort}&type=all`}
+            className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium transition-colors ${reviewType === 'all'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+          >
+            すべて
+          </Link>
+          <Link
+            href={`/reviews?sort=${sort}&type=user`}
+            className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium transition-colors ${reviewType === 'user'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+          >
+            <Users className="h-4 w-4" />
+            個人レビュー
+          </Link>
+          <Link
+            href={`/reviews?sort=${sort}&type=ai`}
+            className={`flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium transition-colors ${reviewType === 'ai'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+          >
+            <Bot className="h-4 w-4" />
+            AI統合
+          </Link>
         </div>
 
         {reviews.length > 0 ? (
@@ -156,7 +198,7 @@ export default async function ReviewsPage({
                   currentPage={page}
                   totalPages={totalPages}
                   basePath="/reviews"
-                  searchParams={{ sort }}
+                  searchParams={{ sort, type: reviewType }}
                 />
               </div>
             )}
