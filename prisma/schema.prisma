@@ -194,6 +194,10 @@ model Review {
   reviewerGender         String?
   reviewerHeight         Float?
   reviewerWeight         Float?
+  // プライバシー保護のための範囲選択
+  reviewerHeightRange    String?   // 身長範囲 (例: "170-179cm")
+  reviewerWeightRange    String?   // 体重範囲 (例: "60-69kg")
+  reviewerPersonalBestLevel String? // 走力レベル (例: "サブ4")
   reviewerWeeklyDistance Float?
   reviewerPersonalBest   String?
   reviewerExpertise      String[]  @default([])  // 専門種目（複数選択可）
