@@ -641,7 +641,7 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
               </div>
 
 
-              <ReviewDetailedFields register={register} errors={errors} watch={watch} />
+              <ReviewDetailedFields register={register} errors={errors} watch={watch} setValue={setValue} />
             </>
           )}
 

@@ -12,8 +12,10 @@ import { JsonLd } from '@/components/seo/JsonLd'
 import { generateReviewSchema, generateBreadcrumbSchema } from '@/lib/seo/structured-data'
 import { generateReviewMetadata } from '@/lib/seo/metadata'
 import { formatDate } from '@/lib/utils/date'
-import { ArrowLeft, ExternalLink, ThumbsUp, MessageCircle, Share2 } from 'lucide-react'
+import { ArrowLeft, ExternalLink } from 'lucide-react'
 import { ReviewDetailedStats } from '@/components/reviews/ReviewDetailedStats'
+import { LikeButton } from '@/components/reviews/LikeButton'
+import { CommentSection } from '@/components/reviews/CommentSection'
 
 // メタデータ生成
 export async function generateMetadata({
@@ -340,12 +342,12 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                   </div>
                 </div>
 
-                {review._count && (
-                  <div className="mt-4 flex items-center space-x-4 text-sm text-gray-600">
-                    <span>いいね {review._count.likes}</span>
-                    <span>コメント {review._count.comments}</span>
-                  </div>
-                )}
+                {/* いいね・コメント */}
+                <div className="mt-4 flex items-center space-x-4">
+                  <LikeButton reviewId={review.id} initialLikeCount={review._count?.likes || 0} />
+                </div>
+
+                <CommentSection reviewId={review.id} />
               </CardContent>
             </Card>
           </div>
