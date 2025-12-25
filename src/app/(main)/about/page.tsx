@@ -1,6 +1,9 @@
 import { Metadata } from 'next'
 import { generateAboutPageSchema, generateBreadcrumbSchema, combineSchemas } from '@/lib/seo/structured-data'
 
+// SSG: ビルド時に静的HTMLを生成（最速配信）
+export const dynamic = 'force-static'
+
 export const metadata: Metadata = {
     title: '私たちについて - シューズレビューサイトの運営方針',
     description: 'シューズレビューサイトの運営方針、ミッション、レビューの収集方法について。公平で信頼できるランニングシューズ情報を提供することを目指しています。',

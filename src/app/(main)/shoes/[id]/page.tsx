@@ -12,6 +12,11 @@ import { generateShoeMetadata } from '@/lib/seo/metadata'
 import { generatePriceComparisonLinks } from '@/lib/curation/price-comparison'
 import type { Prisma } from '@prisma/client'
 
+// ISR: 2分ごとにバックグラウンドで再生成
+// レビュー追加時はオンデマンド再検証で即座に更新
+// 初回アクセス時に動的生成してキャッシュする方式（ビルド時のDB接続不要）
+export const revalidate = 120
+
 // メタデータ生成
 export async function generateMetadata({
   params

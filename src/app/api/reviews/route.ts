@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { auth } from '@/lib/auth/auth'
 import { prisma } from '@/lib/prisma/client'
 import { reviewSchema } from '@/lib/validations/review'
@@ -108,6 +109,17 @@ export async function POST(request: Request) {
         },
       },
     })
+
+    // ISRキャッシュを再検証して最新のレビューを反映
+    try {
+      revalidatePath('/')                           // ホームページ
+      revalidatePath('/reviews')                    // レビュー一覧
+      revalidatePath('/shoes')                      // シューズ一覧
+      revalidatePath(`/shoes/${validatedData.shoeId}`)  // 該当シューズページ
+    } catch (revalidateError) {
+      // 再検証エラーはログに記録するが、レビュー作成は成功として扱う
+      console.error('Revalidation error:', revalidateError)
+    }
 
     return NextResponse.json({ success: true, data: review }, { status: 201 })
   } catch (error) {
