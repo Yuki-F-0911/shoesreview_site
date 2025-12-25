@@ -9,8 +9,9 @@ import { generateBreadcrumbSchema } from '@/lib/seo/structured-data'
 import { shoesListMetadata } from '@/lib/seo/metadata'
 import { Prisma } from '@prisma/client'
 
-// 動的レンダリングを強制
-export const dynamic = 'force-dynamic'
+// ISR: 5分ごとにバックグラウンドで再生成
+// シューズデータは頻繁に変わらないため長めのキャッシュ
+export const revalidate = 300
 
 export const metadata: Metadata = shoesListMetadata
 

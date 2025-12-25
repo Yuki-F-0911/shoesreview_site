@@ -15,7 +15,9 @@ import {
   MessageSquare,
 } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
+// ISR: 60秒ごとにバックグラウンドで再生成
+// 初回アクセスは静的ファイルを即座に配信し、バックグラウンドで更新
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Stride - ランニングシューズレビュー',

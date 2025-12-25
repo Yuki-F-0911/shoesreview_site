@@ -10,6 +10,9 @@ import { generateBreadcrumbSchema } from '@/lib/seo/structured-data'
 import { reviewsListMetadata } from '@/lib/seo/metadata'
 import { Clock, TrendingUp, Users, Bot } from 'lucide-react'
 
+// ISR: 1分ごとにバックグラウンドで再生成
+export const revalidate = 60
+
 export const metadata: Metadata = reviewsListMetadata
 
 type SortType = 'latest' | 'popular'
