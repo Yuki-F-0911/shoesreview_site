@@ -345,6 +345,92 @@ export function generateAboutPageSchema() {
 }
 
 /**
+ * Dataset構造化データ（シューズデータセット情報）
+ * AIにサイトがデータセットとして認識されやすくなる
+ */
+export function generateDatasetSchema(stats: {
+  shoeCount: number
+  reviewCount: number
+  brandCount: number
+  lastUpdated?: Date
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'ランニングシューズレビューデータセット',
+    description: 'ランニングシューズの詳細情報（ブランド、モデル、カテゴリ、価格）とユーザーレビュー・AI統合レビューを含むデータセット。',
+    url: SITE_INFO.url,
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    isAccessibleForFree: true,
+    creator: {
+      '@type': 'Organization',
+      name: SITE_INFO.name,
+      url: SITE_INFO.url,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_INFO.name,
+    },
+    dateModified: (stats.lastUpdated || new Date()).toISOString(),
+    inLanguage: 'ja',
+    keywords: [
+      'ランニングシューズ',
+      'マラソンシューズ',
+      'シューズレビュー',
+      'ランニング',
+      'マラソン',
+    ],
+    measurementTechnique: 'ユーザーレビュー集計およびAI統合分析',
+    variableMeasured: [
+      {
+        '@type': 'PropertyValue',
+        name: '登録シューズ数',
+        value: stats.shoeCount,
+        unitText: 'モデル',
+      },
+      {
+        '@type': 'PropertyValue',
+        name: '総レビュー数',
+        value: stats.reviewCount,
+        unitText: '件',
+      },
+      {
+        '@type': 'PropertyValue',
+        name: '取扱ブランド数',
+        value: stats.brandCount,
+        unitText: 'ブランド',
+      },
+    ],
+    distribution: [
+      {
+        '@type': 'DataDownload',
+        encodingFormat: 'text/html',
+        contentUrl: `${SITE_INFO.url}/shoes`,
+      },
+    ],
+  }
+}
+
+/**
+ * SpeakableSpecification構造化データ（音声検索対応）
+ * Google Assistant、Siri等の音声アシスタントでの読み上げに対応
+ */
+export function generateSpeakableSchema(page: {
+  url: string
+  speakableSelectors: string[]
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    url: page.url,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: page.speakableSelectors,
+    },
+  }
+}
+
+/**
  * 複数のスキーマを結合する (@graphを使用)
  */
 export function combineSchemas(...schemas: Record<string, unknown>[]) {
