@@ -6,18 +6,19 @@
 
 import type { ReviewAssistInput, ReviewAssistOutput } from '@/types/ai'
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent'
 
 /**
  * Gemini APIを呼び出す共通関数
  */
 async function callGeminiAPI(prompt: string): Promise<string> {
-    if (!GEMINI_API_KEY) {
-        throw new Error('GEMINI_API_KEY が設定されていません')
+    const apiKey = process.env.GEMINI_API_KEY
+    if (!apiKey) {
+        console.error('GEMINI_API_KEY is not set')
+        throw new Error('AIアシスト機能は現在利用できません（設定が必要です）')
     }
 
-    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+    const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
