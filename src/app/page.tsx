@@ -4,40 +4,30 @@ import { Metadata } from 'next'
 import { prisma } from '@/lib/prisma/client'
 import { Button } from '@/components/ui/Button'
 import { ReviewCard } from '@/components/reviews/ReviewCard'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardContent } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { JsonLd } from '@/components/seo/JsonLd'
-import { generateItemListSchema, generateFAQSchema } from '@/lib/seo/structured-data'
-import { Star, TrendingUp, Users, Zap, Search, ArrowRight, Check } from 'lucide-react'
+import { generateItemListSchema } from '@/lib/seo/structured-data'
+import {
+  Search,
+  ChevronRight,
+  ArrowRight,
+  MessageSquare,
+} from 'lucide-react'
 
-// 動的レンダリングを強制（ビルド時の静的生成をスキップ）
-export const dynamic = 'force-dynamic'
+// ISR: 60秒ごとにバックグラウンドで再生成
+// 初回アクセスは静的ファイルを即座に配信し、バックグラウンドで更新
+export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'シューズレビューサイト | ランニングシューズの専門レビュー・評価サイト',
-  description: 'ランニングシューズの専門レビューサイト。Nike、Adidas、ASICS、New Balance、Hokaなど主要ブランドのシューズをAIが厳選した情報源から統合レビュー。あなたに最適なシューズが見つかります。',
-  keywords: [
-    'ランニングシューズ',
-    'レビュー',
-    'マラソン',
-    'ジョギング',
-    'Nike',
-    'Adidas',
-    'ASICS',
-    'New Balance',
-    'Hoka',
-    'おすすめ',
-    '比較',
-  ],
+  title: 'Stride - ランニングシューズレビュー',
+  description: 'ランニングシューズの専門レビューサイト。Nike、Adidas、ASICS、New Balance、Hokaなど主要ブランドのシューズをAIが厳選した情報源から統合レビュー。',
 }
 
-async function getLatestReviews() {
+async function getTimelineReviews() {
   try {
     const reviews = await prisma.review.findMany({
-      where: {
-        isPublished: true,
-        isDraft: false,
-      },
+      where: {},
       include: {
         user: {
           select: {
@@ -64,11 +54,10 @@ async function getLatestReviews() {
         },
       },
       orderBy: {
-        createdAt: 'desc',
+        postedAt: 'desc',
       },
-      take: 6,
+      take: 12,
     })
-
     return reviews
   } catch (error) {
     console.error('Failed to fetch reviews:', error)
@@ -76,7 +65,7 @@ async function getLatestReviews() {
   }
 }
 
-async function getPopularShoes() {
+async function getTrendingShoes() {
   try {
     const shoes = await prisma.shoe.findMany({
       include: {
@@ -84,9 +73,8 @@ async function getPopularShoes() {
           select: { reviews: true },
         },
         reviews: {
-          where: { isPublished: true },
           select: { overallRating: true },
-          take: 100,
+          take: 50,
         },
       },
       orderBy: {
@@ -94,24 +82,19 @@ async function getPopularShoes() {
           _count: 'desc',
         },
       },
-      take: 8,
+      take: 6,
     })
 
     return shoes.map(shoe => {
-      const ratings = shoe.reviews.map(r => 
+      const ratings = shoe.reviews.map(r =>
         typeof r.overallRating === 'number' ? r.overallRating : parseFloat(String(r.overallRating)) || 0
       )
-      const avgRating = ratings.length > 0 
-        ? ratings.reduce((sum, r) => sum + r, 0) / ratings.length 
+      const avgRating = ratings.length > 0
+        ? ratings.reduce((sum, r) => sum + r, 0) / ratings.length
         : 0
-
-      return {
-        ...shoe,
-        avgRating,
-      }
+      return { ...shoe, avgRating }
     })
   } catch (error) {
-    console.error('Failed to fetch popular shoes:', error)
     return []
   }
 }
@@ -120,368 +103,240 @@ async function getStats() {
   try {
     const [shoeCount, reviewCount, userCount] = await Promise.all([
       prisma.shoe.count(),
-      prisma.review.count({ where: { isPublished: true } }),
+      prisma.review.count(),
       prisma.user.count(),
     ])
     return { shoeCount, reviewCount, userCount }
   } catch (error) {
-    console.error('Failed to fetch stats:', error)
     return { shoeCount: 0, reviewCount: 0, userCount: 0 }
   }
 }
 
-// ブランドリスト
-const BRANDS = [
-  { name: 'Nike', logo: '/brands/nike.svg' },
-  { name: 'Adidas', logo: '/brands/adidas.svg' },
-  { name: 'ASICS', logo: '/brands/asics.svg' },
-  { name: 'New Balance', logo: '/brands/newbalance.svg' },
-  { name: 'Hoka', logo: '/brands/hoka.svg' },
-  { name: 'On', logo: '/brands/on.svg' },
-  { name: 'Saucony', logo: '/brands/saucony.svg' },
-  { name: 'Brooks', logo: '/brands/brooks.svg' },
+// タグはキーワード検索として機能（シューズ名やキーワードで検索）
+const CATEGORIES = [
+  { name: 'マラソン', query: 'marathon' },      // マラソン・レース向けシューズ
+  { name: 'トレーニング', query: 'training' },  // トレーニングシューズ
+  { name: 'トレイル', query: 'trail' },         // トレイルランニング
+  { name: 'レーシング', query: 'racing' },      // レーシングフラット
+  { name: 'デイリー', query: 'daily' },         // デイリートレーナー
 ]
 
-// FAQ
-const HOME_FAQS = [
-  {
-    question: 'このサイトではどのような情報が得られますか？',
-    answer: 'ランニングシューズの詳細なレビューと評価を提供しています。公式サイト、YouTubeレビュー、ユーザー投稿など複数の信頼できる情報源からレビューを収集・統合し、包括的な評価を提供します。',
-  },
-  {
-    question: 'AI統合レビューとは何ですか？',
-    answer: 'AI統合レビューは、複数の情報源（公式情報、動画レビュー、ユーザー投稿等）から収集したレビューをAIが分析・統合したものです。様々な視点からの評価を1つのレビューにまとめており、より信頼性の高い情報を提供します。',
-  },
-  {
-    question: '初心者におすすめのランニングシューズは？',
-    answer: '初心者の方には、クッション性が高く安定感のあるシューズがおすすめです。当サイトでは「初心者向け」タグが付いたレビューを参考に、あなたに最適なシューズを見つけることができます。',
-  },
-  {
-    question: 'シューズのサイズ選びのコツは？',
-    answer: 'ランニングシューズは通常、普段履きより0.5〜1.0cm大きいサイズを選ぶことをおすすめします。各レビューにはサイズ感についてのコメントも含まれていますので、参考にしてください。',
-  },
-]
+const BRANDS = ['Nike', 'Adidas', 'ASICS', 'New Balance', 'Hoka', 'On', 'Saucony', 'Brooks', 'Mizuno']
 
 export default async function HomePage() {
-  const [reviews, popularShoes, stats] = await Promise.all([
-    getLatestReviews(),
-    getPopularShoes(),
+  const [reviews, trendingShoes, stats] = await Promise.all([
+    getTimelineReviews(),
+    getTrendingShoes(),
     getStats(),
   ])
 
-  // 構造化データ
   const shoeListSchema = generateItemListSchema(
-    popularShoes.map((shoe, index) => ({
+    trendingShoes.map((shoe, index) => ({
       name: `${shoe.brand} ${shoe.modelName}`,
       url: `/shoes/${shoe.id}`,
       position: index + 1,
     }))
   )
-  
-  const faqSchema = generateFAQSchema(HOME_FAQS)
 
   return (
     <>
       <JsonLd data={shoeListSchema} />
-      <JsonLd data={faqSchema} />
 
-      {/* ヒーローセクション */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800">
-        <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
-        <div className="container relative mx-auto px-4 py-20 md:py-28">
-          <div className="mx-auto max-w-4xl text-center">
-            <Badge variant="secondary" className="mb-4 bg-white/20 text-white">
-              AI統合レビューで信頼性の高い情報を
-            </Badge>
-            <h1 className="mb-6 text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
-              あなたに最適な
-              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                ランニングシューズ
-              </span>
-              を見つけよう
-            </h1>
-            <p className="mb-8 text-lg text-blue-100 md:text-xl">
-              公式サイト、YouTube、ユーザー投稿など複数の信頼できる情報源から
-              <br className="hidden md:block" />
-              AIがレビューを収集・統合。あなたのシューズ選びをサポートします。
-            </p>
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link href="/shoes">
-                <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
-                  シューズを探す
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+      <div className="min-h-screen bg-white">
+        {/* ===== ヒーローセクション ===== */}
+        <section className="border-b border-neutral-100">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+            <div className="max-w-lg mx-auto">
+              {/* 検索バー */}
+              <Link href="/search" className="block">
+                <div className="flex items-center border border-neutral-200 hover:border-neutral-400 bg-white px-4 py-3 transition-colors group">
+                  <Search className="h-4 w-4 text-neutral-400" />
+                  <span className="ml-3 text-neutral-500 text-sm">シューズ名、ブランドで検索</span>
+                  <ArrowRight className="ml-auto h-4 w-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
+                </div>
               </Link>
-              <Link href="/reviews">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  レビューを見る
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          {/* 統計 */}
-          <div className="mx-auto mt-16 grid max-w-3xl grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-bold text-white md:text-4xl">
-                {stats.shoeCount}+
-              </div>
-              <div className="mt-1 text-sm text-blue-200">シューズ</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-white md:text-4xl">
-                {stats.reviewCount}+
-              </div>
-              <div className="mt-1 text-sm text-blue-200">レビュー</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-white md:text-4xl">
-                {stats.userCount}+
-              </div>
-              <div className="mt-1 text-sm text-blue-200">ユーザー</div>
-            </div>
-          </div>
-        </div>
-
-        {/* 波形の装飾 */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 100V50C360 0 720 100 1080 50C1260 25 1380 12.5 1440 50V100H0Z" fill="white"/>
-          </svg>
-        </div>
-      </section>
-
-      {/* 特徴セクション */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="mb-4 text-3xl font-bold text-gray-900">
-              なぜこのサイトが選ばれるのか
-            </h2>
-            <p className="text-gray-600">
-              他のレビューサイトとは一線を画す、AI統合レビューの強み
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <Card className="border-0 bg-gradient-to-br from-blue-50 to-white shadow-lg">
-              <CardContent className="pt-6">
-                <div className="mb-4 inline-flex rounded-lg bg-blue-100 p-3">
-                  <Zap className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="mb-2 font-semibold text-gray-900">AI統合レビュー</h3>
-                <p className="text-sm text-gray-600">
-                  複数の情報源からAIがレビューを収集・分析。偏りのない包括的な評価を提供します。
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 bg-gradient-to-br from-green-50 to-white shadow-lg">
-              <CardContent className="pt-6">
-                <div className="mb-4 inline-flex rounded-lg bg-green-100 p-3">
-                  <TrendingUp className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="mb-2 font-semibold text-gray-900">価格比較リンク</h3>
-                <p className="text-sm text-gray-600">
-                  楽天、Amazon、公式ストアなど各ECサイトへのリンクを提供。簡単に価格比較できます。
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 bg-gradient-to-br from-purple-50 to-white shadow-lg">
-              <CardContent className="pt-6">
-                <div className="mb-4 inline-flex rounded-lg bg-purple-100 p-3">
-                  <Users className="h-6 w-6 text-purple-600" />
-                </div>
-                <h3 className="mb-2 font-semibold text-gray-900">リアルな口コミ</h3>
-                <p className="text-sm text-gray-600">
-                  Reddit、Twitter、YouTubeなどSNSからの生の声も収集。リアルなユーザー体験がわかります。
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 bg-gradient-to-br from-orange-50 to-white shadow-lg">
-              <CardContent className="pt-6">
-                <div className="mb-4 inline-flex rounded-lg bg-orange-100 p-3">
-                  <Search className="h-6 w-6 text-orange-600" />
-                </div>
-                <h3 className="mb-2 font-semibold text-gray-900">詳細な検索</h3>
-                <p className="text-sm text-gray-600">
-                  ブランド、用途、価格帯など多彩な条件で検索。あなたにぴったりのシューズが見つかります。
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* 人気シューズセクション */}
-      {popularShoes.length > 0 && (
-        <section className="bg-gray-50 py-16">
-          <div className="container mx-auto px-4">
-            <div className="mb-8 flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">人気のシューズ</h2>
-                <p className="mt-1 text-gray-600">レビュー数の多い注目シューズ</p>
-              </div>
-              <Link href="/shoes">
-                <Button variant="outline">
-                  すべて見る
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {popularShoes.map((shoe) => (
-                <Link key={shoe.id} href={`/shoes/${shoe.id}`}>
-                  <Card className="group h-full overflow-hidden transition-all hover:shadow-lg">
-                    <div className="relative aspect-square bg-gray-100">
-                      {shoe.imageUrls && shoe.imageUrls[0] ? (
-                        <Image
-                          src={shoe.imageUrls[0]}
-                          alt={`${shoe.brand} ${shoe.modelName}`}
-                          fill
-                          className="object-contain p-4 transition-transform group-hover:scale-105"
-                          sizes="(max-width: 640px) 50vw, 25vw"
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center">
-                          <span className="text-4xl text-gray-300">👟</span>
-                        </div>
-                      )}
-                      {shoe.avgRating > 0 && (
-                        <div className="absolute right-2 top-2 flex items-center rounded-full bg-white px-2 py-1 shadow-md">
-                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          <span className="ml-1 text-sm font-medium">{shoe.avgRating.toFixed(1)}</span>
-                        </div>
-                      )}
-                    </div>
-                    <CardContent className="p-4">
-                      <Badge variant="outline" className="mb-2 text-xs">
-                        {shoe.category}
-                      </Badge>
-                      <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">
-                        {shoe.brand}
-                      </h3>
-                      <p className="text-sm text-gray-600">{shoe.modelName}</p>
-                      <div className="mt-2 flex items-center text-xs text-gray-500">
-                        <Users className="mr-1 h-3 w-3" />
-                        {shoe._count.reviews}件のレビュー
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
+              <p className="text-neutral-400 text-xs text-center mt-3">
+                {stats.reviewCount}件のレビュー掲載中
+              </p>
             </div>
           </div>
         </section>
-      )}
 
-      {/* 新着レビューセクション */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="mb-8 flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">新着レビュー</h2>
-              <p className="mt-1 text-gray-600">最新のユーザーレビュー</p>
-            </div>
-            <Link href="/reviews">
-              <Button variant="outline">
-                すべて見る
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-
-          {reviews.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {reviews.map((review) => (
-                <ReviewCard key={review.id} review={review} />
-              ))}
-            </div>
-          ) : (
-            <Card>
-              <CardContent className="py-12 text-center">
-                <p className="text-gray-500">まだレビューがありません</p>
-                <Link href="/reviews/new" className="mt-4 inline-block">
-                  <Button>最初のレビューを投稿</Button>
+        {/* ===== カテゴリー ===== */}
+        <section className="border-b border-neutral-100 py-4 overflow-x-auto">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="flex items-center space-x-2 min-w-max">
+              {CATEGORIES.map((cat) => (
+                <Link
+                  key={cat.name}
+                  href={`/search?q=${cat.query}`}
+                  className="px-4 py-2 text-sm text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 border border-transparent hover:border-neutral-200 transition-all"
+                >
+                  {cat.name}
                 </Link>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      </section>
-
-      {/* ブランドセクション */}
-      <section className="bg-gray-50 py-16">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="mb-4 text-2xl font-bold text-gray-900">取り扱いブランド</h2>
-            <p className="text-gray-600">主要なランニングシューズブランドを網羅</p>
-          </div>
-
-          <div className="mt-10 grid grid-cols-4 gap-6 md:grid-cols-8">
-            {BRANDS.map((brand) => (
+              ))}
               <Link
-                key={brand.name}
-                href={`/search?brand=${encodeURIComponent(brand.name)}`}
-                className="flex flex-col items-center justify-center rounded-lg bg-white p-4 shadow-sm transition-all hover:shadow-md"
+                href="/shoes"
+                className="px-4 py-2 text-sm text-neutral-600 hover:text-neutral-900 border border-neutral-200 hover:border-neutral-400 transition-all"
               >
-                <span className="text-2xl font-bold text-gray-800">{brand.name.charAt(0)}</span>
-                <span className="mt-2 text-xs text-gray-600">{brand.name}</span>
+                すべて
               </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQセクション */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-3xl">
-            <div className="text-center">
-              <h2 className="mb-4 text-2xl font-bold text-gray-900">よくある質問</h2>
-              <p className="text-gray-600">シューズ選びのヒント</p>
             </div>
+          </div>
+        </section>
 
-            <div className="mt-10 space-y-4">
-              {HOME_FAQS.map((faq, index) => (
-                <Card key={index}>
-                  <CardContent className="p-6">
-                    <h3 className="mb-2 font-semibold text-gray-900">{faq.question}</h3>
-                    <p className="text-sm text-gray-600">{faq.answer}</p>
+        {/* ===== メインコンテンツ ===== */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+            {/* 左サイドバー */}
+            <aside className="hidden lg:block lg:col-span-3">
+              <div className="sticky top-20 space-y-6">
+                {/* 統計 */}
+                <div className="border-b border-neutral-100 pb-6">
+                  <h3 className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-4">統計</h3>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-neutral-500">シューズ</span>
+                      <span className="text-neutral-900 font-medium">{stats.shoeCount}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-neutral-500">レビュー</span>
+                      <span className="text-neutral-900 font-medium">{stats.reviewCount}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-neutral-500">ユーザー</span>
+                      <span className="text-neutral-900 font-medium">{stats.userCount}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ブランド */}
+                <div>
+                  <h3 className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-4">ブランド</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {BRANDS.slice(0, 6).map((brand) => (
+                      <Link
+                        key={brand}
+                        href={`/search?brand=${encodeURIComponent(brand)}`}
+                        className="px-2 py-1 text-xs text-neutral-600 hover:text-neutral-900 border border-neutral-200 hover:border-neutral-400 transition-all"
+                      >
+                        {brand}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+            {/* メインフィード */}
+            <main className="lg:col-span-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">レビュー</h2>
+                <Link href="/reviews" className="text-neutral-500 text-sm hover:text-neutral-900 flex items-center">
+                  すべて
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Link>
+              </div>
+
+              {reviews.length > 0 ? (
+                <div className="space-y-6">
+                  {reviews.map((review) => (
+                    <ReviewCard key={review.id} review={review} />
+                  ))}
+                </div>
+              ) : (
+                <Card>
+                  <CardContent className="py-16 text-center">
+                    <p className="text-neutral-500 mb-4">まだレビューがありません</p>
+                    <Link href="/reviews/new">
+                      <Button>最初のレビューを投稿</Button>
+                    </Link>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+              )}
 
-      {/* CTAセクション */}
-      <section className="bg-gradient-to-r from-blue-600 to-indigo-700 py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-white">
-            あなたのレビューを投稿しませんか？
-          </h2>
-          <p className="mb-8 text-blue-100">
-            他のランナーの参考になるレビューを投稿して、コミュニティに貢献しましょう。
-          </p>
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link href="/reviews/new">
-              <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
-                レビューを投稿
-              </Button>
-            </Link>
-            <Link href="/register">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                アカウント作成
-              </Button>
-            </Link>
+              {reviews.length > 0 && (
+                <div className="mt-8 text-center">
+                  <Link href="/reviews">
+                    <Button variant="outline">
+                      もっと見る
+                    </Button>
+                  </Link>
+                </div>
+              )}
+            </main>
+
+            {/* 右サイドバー */}
+            <aside className="lg:col-span-3">
+              <div className="lg:sticky lg:top-20 space-y-6">
+                {/* 注目のシューズ */}
+                <div>
+                  <h3 className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-4">注目</h3>
+                  <div className="space-y-4">
+                    {trendingShoes.map((shoe, index) => (
+                      <Link
+                        key={shoe.id}
+                        href={`/shoes/${shoe.id}`}
+                        className="flex items-center group"
+                      >
+                        <span className="text-xs text-neutral-400 w-4">{index + 1}</span>
+                        <div className="relative h-10 w-10 flex-shrink-0 bg-neutral-50 ml-2">
+                          {shoe.imageUrls && shoe.imageUrls[0] && (
+                            <Image
+                              src={shoe.imageUrls[0]}
+                              alt={shoe.modelName}
+                              fill
+                              className="object-contain p-1"
+                              sizes="40px"
+                            />
+                          )}
+                        </div>
+                        <div className="ml-3 min-w-0 flex-1">
+                          <p className="text-xs text-neutral-400">{shoe.brand}</p>
+                          <p className="text-sm text-neutral-900 truncate group-hover:underline">
+                            {shoe.modelName}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                  <Link href="/shoes" className="text-sm text-neutral-500 hover:text-neutral-900 mt-4 inline-block">
+                    すべて見る
+                  </Link>
+                </div>
+
+                {/* モバイル用ブランド */}
+                <div className="lg:hidden border-t border-neutral-100 pt-6">
+                  <h3 className="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-4">ブランド</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {BRANDS.map((brand) => (
+                      <Link
+                        key={brand}
+                        href={`/search?brand=${encodeURIComponent(brand)}`}
+                        className="px-2 py-1 text-xs text-neutral-600 hover:text-neutral-900 border border-neutral-200 hover:border-neutral-400 transition-all"
+                      >
+                        {brand}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* CTA */}
+                <div className="border border-neutral-200 p-4">
+                  <h3 className="text-sm font-medium text-neutral-900 mb-2">レビューを投稿</h3>
+                  <p className="text-xs text-neutral-500 mb-3">
+                    あなたの経験をシェアしてランナーの参考に
+                  </p>
+                  <Link href="/reviews/new">
+                    <Button className="w-full">投稿する</Button>
+                  </Link>
+                </div>
+              </div>
+            </aside>
           </div>
         </div>
-      </section>
+      </div>
     </>
   )
 }

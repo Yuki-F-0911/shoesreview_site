@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { auth } from '@/lib/auth/auth'
 import { prisma } from '@/lib/prisma/client'
 import { reviewSchema } from '@/lib/validations/review'
@@ -12,10 +13,7 @@ export async function GET(request: Request) {
 
     const [reviews, total] = await Promise.all([
       prisma.review.findMany({
-        where: {
-          isPublished: true,
-          isDraft: false,
-        },
+        where: {},
         include: {
           user: {
             select: {
@@ -41,17 +39,12 @@ export async function GET(request: Request) {
             },
           },
         },
-        orderBy: {
-          createdAt: 'desc',
-        },
+        // Note: orderBy removed because createdAt column doesn't exist in Review model
         skip,
         take: pageSize,
       }),
       prisma.review.count({
-        where: {
-          isPublished: true,
-          isDraft: false,
-        },
+        where: {},
       }),
     ])
 
@@ -96,7 +89,7 @@ export async function POST(request: Request) {
         ...validatedData,
         userId: session.user.id,
         type: 'USER',
-      },
+      } as any,
       include: {
         user: {
           select: {
@@ -117,17 +110,42 @@ export async function POST(request: Request) {
       },
     })
 
+    // ISRキャッシュを再検証して最新のレビューを反映
+    try {
+      revalidatePath('/')                           // ホームページ
+      revalidatePath('/reviews')                    // レビュー一覧
+      revalidatePath('/shoes')                      // シューズ一覧
+      revalidatePath(`/shoes/${validatedData.shoeId}`)  // 該当シューズページ
+    } catch (revalidateError) {
+      // 再検証エラーはログに記録するが、レビュー作成は成功として扱う
+      console.error('Revalidation error:', revalidateError)
+    }
+
     return NextResponse.json({ success: true, data: review }, { status: 201 })
   } catch (error) {
+    // Zodバリデーションエラー
     if (error instanceof Error && error.name === 'ZodError') {
+      const zodError = error as any
       return NextResponse.json(
-        { error: '入力データが正しくありません', details: error },
+        {
+          error: '入力データが正しくありません',
+          details: zodError.errors?.map((e: any) => `${e.path.join('.')}: ${e.message}`).join(', ') || error.message
+        },
         { status: 400 }
       )
     }
 
+    // Prismaエラー（データベース制約違反など）
+    if (error instanceof Error && error.message.includes('Prisma')) {
+      console.error('Prisma error:', error)
+      return NextResponse.json(
+        { error: 'データベースエラーが発生しました。サポートにお問い合わせください。', details: error.message },
+        { status: 500 }
+      )
+    }
+
     console.error('Create review error:', error)
-    return NextResponse.json({ error: 'レビューの作成に失敗しました' }, { status: 500 })
+    return NextResponse.json({ error: 'レビューの作成に失敗しました', details: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 })
   }
 }
 

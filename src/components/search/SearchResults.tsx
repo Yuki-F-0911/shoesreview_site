@@ -5,8 +5,7 @@ import type { SearchParams } from '@/types/api'
 
 async function searchReviews(params: SearchParams) {
   const where: any = {
-    isPublished: true,
-    isDraft: false,
+    // isPublished/isDraft removed
   }
 
   if (params.query) {
@@ -58,7 +57,7 @@ async function searchReviews(params: SearchParams) {
       },
     },
     orderBy: {
-      createdAt: 'desc',
+      postedAt: 'desc',
     },
     take: 20,
   })
@@ -66,8 +65,13 @@ async function searchReviews(params: SearchParams) {
   return reviews
 }
 
-export async function SearchResults({ searchParams }: { searchParams: SearchParams }) {
-  const reviews = await searchReviews(searchParams)
+export async function SearchResults({ searchParams }: { searchParams: SearchParams & { q?: string } }) {
+  // URLパラメータのqをqueryにマッピング
+  const params: SearchParams = {
+    ...searchParams,
+    query: searchParams.q || searchParams.query,
+  };
+  const reviews = await searchReviews(params)
 
   if (reviews.length === 0) {
     return (

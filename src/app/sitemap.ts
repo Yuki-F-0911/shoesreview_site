@@ -43,6 +43,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${SITE_URL}/about`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
       url: `${SITE_URL}/login`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
@@ -95,7 +101,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
       orderBy: {
         updatedAt: 'desc',
-      },
+      } as any,
     })
 
     shoePages = shoes.map(shoe => ({
@@ -113,24 +119,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let reviewPages: MetadataRoute.Sitemap = []
   try {
     const reviews = await prisma.review.findMany({
-      where: {
-        isPublished: true,
-        isDraft: false,
-      },
+      where: {},
       select: {
         id: true,
-        updatedAt: true,
+        postedAt: true,
         type: true,
       },
       orderBy: {
-        updatedAt: 'desc',
+        postedAt: 'desc',
       },
       take: 1000, // 最大1000件
     })
 
-    reviewPages = reviews.map(review => ({
+    reviewPages = reviews.map((review) => ({
       url: `${SITE_URL}/reviews/${review.id}`,
-      lastModified: review.updatedAt,
+      lastModified: review.postedAt,
       changeFrequency: 'monthly' as const,
       // AI要約レビューは優先度を高く
       priority: review.type === 'AI_SUMMARY' ? 0.7 : 0.6,

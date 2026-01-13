@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     if (sourceType === 'WEB_ARTICLE') {
       // Web記事スクレイピングは著作権保護のため無効化
       return NextResponse.json(
-        { 
+        {
           error: 'Web記事のスクレイピングは著作権保護のため無効化されています',
           details: '他サイトの記事を転載することは著作権侵害になる可能性があります。代わりにYouTube動画の要約機能をご利用ください。'
         },
@@ -151,8 +151,6 @@ export async function POST(request: Request) {
         pros: [],
         cons: [],
         sourceCount: 1,
-        isPublished: false, // 要約生成まで非公開
-        isDraft: true,
       },
     })
 

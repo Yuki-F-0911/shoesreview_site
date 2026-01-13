@@ -82,7 +82,7 @@ export async function PUT(
 
     const updatedReview = await prisma.review.update({
       where: { id: params.id },
-      data: validatedData,
+      data: validatedData as any,
       include: {
         user: {
           select: {

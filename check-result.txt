@@ -1,0 +1,39 @@
+Checking database content with PgBouncer fix...
+Checking database content...
+Database connection type: Supabase (Production?)
+Total Shoes: 62
+Total Reviews: 55
+First 5 Shoes: [
+  {
+    "id": "cmiiuqupo0002c2akt2dfalh7",
+    "brand": "Nike",
+    "modelName": "Air Max 90"
+  },
+  {
+    "id": "cmiiuqurl0003c2akmhsdwdhm",
+    "brand": "Adidas",
+    "modelName": "Ultraboost 23"
+  },
+  {
+    "id": "cmiiuqutl0004c2ako5w2cmvj",
+    "brand": "Converse",
+    "modelName": "Chuck Taylor All Star"
+  },
+  {
+    "id": "cmiivocs80000oe269w98lt66",
+    "brand": "Adidas",
+    "modelName": "Adizero Evo SL"
+  },
+  {
+    "id": "cmiivocw80001oe267k1w7snb",
+    "brand": "Under Armour",
+    "modelName": "Sonic 7"
+  }
+]
+Sample 5 Reviews:
+- [USER] Adidas Ultraboost 23: "クッション性が素晴らしい" by demouser (cmiiuquxw0008c2akxuabvo6v)
+- [USER] Adidas Ultraboost 23: "クッション性が素晴らしい" by demouser (cmiixdnor0008cu3d68wfeex8)
+- [AI_SUMMARY] New Balance Fresh Foam X Balos: "New Balance Fresh Foam X Balos：プレミアムな履き心地とユニークな走りを実現" by AI (cmilmz42400013ke540fdr9g8)
+- [AI_SUMMARY] Brooks Ghost Max 2: "Brooks Ghost Max 2の真価：スムーズな走り心地と安定性を徹底検証" by AI (cmilmzdy4000d3ke55w9oosoa)
+- [AI_SUMMARY] Nike Pegasus Plus: "Nike Pegasus Plus：大ヒット予感も走行感は「普通」？進化の真相" by AI (cmilmznt3000q3ke5e9bmhvf6)
+SUCCESS: All queries completed without error.

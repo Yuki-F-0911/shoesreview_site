@@ -1,0 +1,292 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CuratedSourceType {
+  OFFICIAL
+  MARKETPLACE
+  SNS
+  VIDEO
+  ARTICLE
+  COMMUNITY
+}
+
+enum CuratedSourceStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ShoeMediaSource {
+  ADMIN
+  USER
+  BRAND
+  EVENT
+}
+
+enum MediaStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  username    String   @unique
+  displayName String
+  password    String
+  avatarUrl   String?
+  bio         String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reviews  Review[]
+  comments Comment[]
+  likes    Like[]
+  accounts Account[]
+  sessions Session[]
+  curatedSources CuratedSource[]
+  uploadedMedia  ShoeMedia[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Shoe {
+  id           String    @id @default(cuid())
+  brand        String
+  modelName    String
+  category     String
+  releaseYear  Int?
+  officialPrice Int?
+  imageUrls    String[]
+  keywords     String[]  @default([])
+  locale       String    @default("ja-JP")
+  region       String    @default("JP")
+  description  String?   @db.Text
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  reviews         Review[]
+  media           ShoeMedia[]
+  curatedSources  CuratedSource[]
+
+  @@map("shoes")
+}
+
+model Review {
+  id               String   @id @default(cuid())
+  shoeId           String
+  userId           String?  // AI要約の場合はnull
+  type             String   @default("USER") // USER or AI_SUMMARY
+  overallRating    Decimal  @db.Decimal(3, 1) // 0.0-10.0
+  comfortRating    Decimal? @db.Decimal(3, 1) // 0.0-10.0
+  designRating     Decimal? @db.Decimal(3, 1) // 0.0-10.0
+  durabilityRating Decimal? @db.Decimal(3, 1) // 0.0-10.0
+  title            String
+  content          String   @db.Text
+  imageUrls        String[]
+  usagePeriod      String?
+  usageScene       String[]
+  pros             String[]
+  cons             String[]
+  recommendedFor  String?  // 推奨ランナータイプ（AI要約の場合）
+  sourceCount      Int      @default(0) // 情報源の数
+
+  // 詳細評価項目（CSVインポート用）
+  // ステップイン（足入れ時）
+  stepInToeWidth   Int?     // つま先の広さ (1-5)
+  stepInInstepHeight Int?   // 甲の高さ (1-5)
+  stepInHeelHold   Int?     // ヒールのホールド感 (1-5)
+
+  // ファーストステップ・クルージング（走行時）
+  runLightness     Int?     // 軽さの実感 (1-5)
+  runSinkDepth     Int?     // 沈み込みの深さ (1-5)
+  runStability     Int?     // 安定性 (1-5)
+  runTransition    Int?     // トランジション（転がり） (1-5)
+  runResponse      Int?     // 反発のリズム (1-5)
+
+  // 走行後の状態（疲労感）
+  fatigueSole      String?  // 足裏の疲労
+  fatigueCalf      String?  // ふくらはぎの張り
+  fatigueKnee      String?  // 膝への違和感
+  fatigueOther     String?  // その他
+
+  // SD法による採点 (1-5)
+  sdLanding        Int?     // 着地感 (1やわらかめ - 5地面を感じる)
+  sdResponse       Int?     // 反発性 (1ない - 5ある)
+  sdStability      Int?     // 安定性 (1自然 - 5コントロールされる)
+  sdWidth          Int?     // 足幅感 (1タイト - 5リラックス)
+  sdDesign         Int?     // デザインスタイル (1競技場らしい - 5街履き)
+
+  // その他詳細
+  onomatopoeia     String?  // オノマトペ
+  purchaseSize     String?  // 購入サイズ (cm)
+
+  // レビュアー属性（スナップショット）
+  reviewerGender         String?
+  reviewerHeight         Float?
+  reviewerWeight         Float?
+  reviewerWeeklyDistance Float?
+  reviewerPersonalBest   String?
+  reviewerFootShape      String?
+  reviewerLandingType    String?
+  isPublished      Boolean  @default(true)
+  isDraft          Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  shoe     Shoe      @relation(fields: [shoeId], references: [id], onDelete: Cascade)
+  user     User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  comments Comment[]
+  likes    Like[]
+  aiSources AISource[]
+
+  @@map("reviews")
+}
+
+model ShoeMedia {
+  id            String         @id @default(cuid())
+  shoeId        String
+  storagePath   String
+  publicUrl     String         @db.Text
+  altText       String?
+  sourceType    ShoeMediaSource @default(ADMIN)
+  status        MediaStatus     @default(PENDING)
+  width         Int?
+  height        Int?
+  fileSize      Int?
+  dominantColor String?
+  tags          String[]       @default([])
+  uploadedById  String?
+  isPrimary     Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  shoe       Shoe @relation(fields: [shoeId], references: [id], onDelete: Cascade)
+  uploadedBy User? @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  @@index([shoeId, status, isPrimary])
+}
+
+model CuratedSource {
+  id           String              @id @default(cuid())
+  shoeId       String
+  type         CuratedSourceType
+  platform     String
+  title        String
+  excerpt      String?             @db.Text
+  url          String              @db.Text
+  author       String?
+  language     String              @default("ja")
+  country      String?             @default("JP")
+  publishedAt  DateTime?
+  thumbnailUrl String?
+  engagement   Json?
+  tags         String[]            @default([])
+  curatedById  String?
+  status       CuratedSourceStatus @default(PUBLISHED)
+  reliability  Float               @default(0.7)
+  metadata     Json?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  shoe      Shoe @relation(fields: [shoeId], references: [id], onDelete: Cascade)
+  curatedBy User? @relation(fields: [curatedById], references: [id], onDelete: SetNull)
+
+  @@index([shoeId, type, status])
+  @@index([platform])
+}
+
+model AISource {
+  id              String   @id @default(cuid())
+  reviewId        String
+  sourceType      String   // WEB_ARTICLE, YOUTUBE_VIDEO, MANUAL
+  sourceUrl       String   @db.Text
+  sourceTitle     String?  // 記事タイトルまたは動画タイトル
+  sourceAuthor    String?  // 記事著者またはチャンネル名
+  youtubeVideoId  String?  // YouTube動画ID（埋め込み用）
+  summary         String?  @db.Text // 個別の要約（YouTube動画の場合）
+  rawData         Json?    // 収集した生データ
+  scrapedAt       DateTime @default(now())
+  reliability     Float    @default(0.5)
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@map("ai_sources")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  reviewId  String
+  userId    String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  reviewId  String
+  userId    String
+  createdAt DateTime @default(now())
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, userId])
+  @@map("likes")
+}
+

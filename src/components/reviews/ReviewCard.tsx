@@ -1,13 +1,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Avatar } from '@/components/ui/Avatar'
-import { Badge } from '@/components/ui/Badge'
-import { Card, CardContent } from '@/components/ui/Card'
+import { Card } from '@/components/ui/Card'
 import { formatDate } from '@/lib/utils/date'
-import { Star, ThumbsUp, MessageCircle, Sparkles } from 'lucide-react'
+import { ThumbsUp, MessageCircle } from 'lucide-react'
 import type { Prisma } from '@prisma/client'
 
-// Prismaから返される型を受け入れる
 type ReviewWithRelations = Prisma.ReviewGetPayload<{
   include: {
     user: {
@@ -44,126 +42,103 @@ export function ReviewCard({ review }: ReviewCardProps) {
   const shoe = review.shoe
   const user = review.user
   const isAISummary = review.type === 'AI_SUMMARY'
-
   const shoeImageUrl = shoe?.imageUrls && shoe.imageUrls.length > 0 ? shoe.imageUrls[0] : null
   const rating = parseFloat(String(review.overallRating))
 
-  // 評価に基づく色を決定
-  const getRatingColor = (rating: number) => {
-    if (rating >= 8) return 'text-green-600 bg-green-50'
-    if (rating >= 6) return 'text-blue-600 bg-blue-50'
-    if (rating >= 4) return 'text-yellow-600 bg-yellow-50'
-    return 'text-red-600 bg-red-50'
-  }
+  const contentText = review.content || (review as any).quickComment || ''
+  const contentPreview = contentText.length > 150
+    ? contentText.slice(0, 150) + '...'
+    : contentText
 
   return (
-    <Link href={`/reviews/${review.id}`}>
-      <Card className="group h-full overflow-hidden transition-all hover:shadow-lg">
-        {/* 画像セクション */}
-        <div className="relative h-44 w-full overflow-hidden bg-gradient-to-br from-gray-100 to-gray-50">
-          {shoeImageUrl ? (
+    <Link href={`/reviews/${review.id}`} className="block group">
+      <Card className="overflow-hidden card-hover">
+        {/* ヘッダー */}
+        <div className="flex items-center p-4 pb-3">
+          {user ? (
             <>
-              <Image
-                src={shoeImageUrl}
-                alt={shoe ? `${shoe.brand} ${shoe.modelName}` : 'シューズ画像'}
-                fill
-                className="object-contain p-3 transition-transform group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              <Avatar
+                src={user.avatarUrl}
+                fallback={user.displayName[0]}
+                className="h-9 w-9"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+              <div className="ml-3 flex-1 min-w-0">
+                <p className="text-sm font-medium text-neutral-900 truncate">{user.displayName}</p>
+                <p className="text-xs text-neutral-400">{formatDate((review as any).createdAt)}</p>
+              </div>
             </>
+          ) : isAISummary ? (
+            <>
+              <div className="h-9 w-9 bg-neutral-100 flex items-center justify-center text-xs font-medium text-neutral-500">
+                AI
+              </div>
+              <div className="ml-3 flex-1 min-w-0">
+                <p className="text-sm font-medium text-neutral-900">AI統合レビュー</p>
+                <p className="text-xs text-neutral-400">{review.sourceCount}件の情報源</p>
+              </div>
+            </>
+          ) : null}
+
+          {isAISummary && (
+            <span className="text-xs text-neutral-400 border border-neutral-200 px-2 py-0.5">
+              AI
+            </span>
+          )}
+        </div>
+
+        {/* 画像 */}
+        <div className="relative aspect-[4/3] bg-neutral-50 overflow-hidden">
+          {shoeImageUrl ? (
+            <Image
+              src={shoeImageUrl}
+              alt={`${shoe.brand} ${shoe.modelName}`}
+              fill
+              className="object-contain p-6 transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+            />
           ) : (
             <div className="flex h-full items-center justify-center">
-              <span className="text-4xl text-gray-300">👟</span>
-            </div>
-          )}
-
-          {/* AI要約バッジ */}
-          {isAISummary && (
-            <div className="absolute left-2 top-2">
-              <Badge className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white">
-                <Sparkles className="mr-1 h-3 w-3" />
-                AI統合
-              </Badge>
-            </div>
-          )}
-
-          {/* 評価スコア */}
-          <div className={`absolute right-2 top-2 flex items-center rounded-lg px-2 py-1 ${getRatingColor(rating)}`}>
-            <Star className="mr-1 h-3.5 w-3.5 fill-current" />
-            <span className="text-sm font-bold">{rating.toFixed(1)}</span>
-          </div>
-
-          {/* シューズ情報オーバーレイ */}
-          {shoe && (
-            <div className="absolute bottom-0 left-0 right-0 px-3 py-2">
-              <p className="text-xs font-medium text-white drop-shadow-md">
-                {shoe.brand} {shoe.modelName}
-              </p>
+              <span className="text-neutral-300 text-sm">No Image</span>
             </div>
           )}
         </div>
 
-        {/* コンテンツセクション */}
-        <CardContent className="p-4">
-          <h3 className="mb-2 line-clamp-2 font-semibold text-gray-900 transition-colors group-hover:text-blue-600">
-            {review.title}
-          </h3>
-          
-          <p className="mb-3 line-clamp-2 text-sm text-gray-600">{review.content}</p>
+        {/* コンテンツ */}
+        <div className="p-4">
+          {shoe && (
+            <div className="mb-3">
+              <p className="text-xs text-neutral-400 uppercase tracking-wider mb-0.5">
+                {shoe.brand}
+              </p>
+              <h3 className="text-base font-medium text-neutral-900 group-hover:underline">
+                {shoe.modelName}
+              </h3>
+            </div>
+          )}
 
-          {/* タグ */}
-          <div className="mb-3 flex flex-wrap gap-1.5">
-            {shoe && (
-              <Badge variant="outline" className="text-xs">
-                {shoe.category}
-              </Badge>
-            )}
-            {review.sourceCount > 0 && isAISummary && (
-              <Badge variant="secondary" className="text-xs">
-                {review.sourceCount}件の情報源
-              </Badge>
-            )}
+          {/* 評価 */}
+          <div className="flex items-center mb-3">
+            <span className="text-2xl font-semibold text-neutral-900">{rating.toFixed(1)}</span>
+            <span className="text-sm text-neutral-400 ml-1">/ 10</span>
           </div>
 
-          {/* フッター */}
-          <div className="flex items-center justify-between border-t border-gray-100 pt-3">
-            <div className="flex items-center space-x-2">
-              {user ? (
-                <>
-                  <Avatar 
-                    src={user.avatarUrl} 
-                    fallback={user.displayName[0]} 
-                    className="h-6 w-6"
-                  />
-                  <span className="text-xs text-gray-600">{user.displayName}</span>
-                </>
-              ) : isAISummary ? (
-                <div className="flex items-center text-xs text-gray-600">
-                  <Sparkles className="mr-1 h-4 w-4 text-purple-500" />
-                  AI要約
-                </div>
-              ) : null}
-            </div>
+          {/* 本文 */}
+          <p className="text-sm text-neutral-600 leading-relaxed mb-4 line-clamp-3">
+            {contentPreview}
+          </p>
 
-            <div className="flex items-center space-x-3 text-xs text-gray-500">
-              {review._count && (
-                <>
-                  <span className="flex items-center">
-                    <ThumbsUp className="mr-1 h-3 w-3" />
-                    {review._count.likes}
-                  </span>
-                  <span className="flex items-center">
-                    <MessageCircle className="mr-1 h-3 w-3" />
-                    {review._count.comments}
-                  </span>
-                </>
-              )}
-            </div>
+          {/* アクション */}
+          <div className="flex items-center space-x-4 pt-3 border-t border-neutral-100">
+            <button className="flex items-center text-neutral-400 hover:text-neutral-900 transition-colors">
+              <ThumbsUp className="h-4 w-4" />
+              <span className="ml-1.5 text-xs">{review._count?.likes || 0}</span>
+            </button>
+            <button className="flex items-center text-neutral-400 hover:text-neutral-900 transition-colors">
+              <MessageCircle className="h-4 w-4" />
+              <span className="ml-1.5 text-xs">{review._count?.comments || 0}</span>
+            </button>
           </div>
-
-          <p className="mt-2 text-xs text-gray-400">{formatDate(review.createdAt)}</p>
-        </CardContent>
+        </div>
       </Card>
     </Link>
   )

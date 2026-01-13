@@ -49,6 +49,18 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // ランナープロフィール（永続化）
+  runnerAge            Int?      // 年齢
+  runnerGender         String?   // 性別
+  runnerGenderPublic   Boolean   @default(true)  // 性別の公開設定
+  runnerHeight         Float?    // 身長 (cm)
+  runnerWeight         Float?    // 体重 (kg)
+  runnerWeeklyDistance Float?    // 週間走行距離 (km)
+  runnerPersonalBest   String?   // 自己ベスト
+  runnerExpertise      String[]  @default([])  // 専門種目（複数選択可）
+  runnerFootShape      String[]  @default([])  // 足の形状（複数選択可）
+  runnerLandingType    String?   // 接地タイプ
+
   reviews  Review[]
   comments Comment[]
   likes    Like[]
@@ -129,13 +141,20 @@ model Review {
   id               String   @id @default(cuid())
   shoeId           String
   userId           String?  // AI要約の場合はnull
+  postedAt         DateTime @default(now())  // 投稿日時
   type             String   @default("USER") // USER or AI_SUMMARY
   overallRating    Decimal  @db.Decimal(3, 1) // 0.0-10.0
   comfortRating    Decimal? @db.Decimal(3, 1) // 0.0-10.0
   designRating     Decimal? @db.Decimal(3, 1) // 0.0-10.0
   durabilityRating Decimal? @db.Decimal(3, 1) // 0.0-10.0
-  title            String
-  content          String   @db.Text
+  lightnessRating  Decimal? @db.Decimal(3, 1) // 軽量性 0.0-10.0
+  stabilityRating  Decimal? @db.Decimal(3, 1) // 安定性 0.0-10.0
+  cushioningRating Decimal? @db.Decimal(3, 1) // クッション性 0.0-10.0
+  gripRating       Decimal? @db.Decimal(3, 1) // グリップ力 0.0-10.0
+  responsivenessRating Decimal? @db.Decimal(3, 1) // 反発力 0.0-10.0
+  title            String?  // 任意（簡易入力モード対応）
+  content          String?  @db.Text  // 任意（簡易入力モード対応）
+  quickComment     String?  @db.Text  // 簡易入力用のコメント
   imageUrls        String[]
   usagePeriod      String?
   usageScene       String[]
@@ -143,10 +162,53 @@ model Review {
   cons             String[]
   recommendedFor  String?  // 推奨ランナータイプ（AI要約の場合）
   sourceCount      Int      @default(0) // 情報源の数
-  isPublished      Boolean  @default(true)
-  isDraft          Boolean  @default(false)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+
+  // 詳細評価項目（CSVインポート用）
+  // ステップイン（足入れ時）
+  stepInToeWidth   Int?     // つま先の広さ (1-5)
+  stepInInstepHeight Int?   // 甲の高さ (1-5)
+  stepInHeelHold   Int?     // ヒールのホールド感 (1-5)
+
+  // ファーストステップ・クルージング（走行時）
+  runLightness     Int?     // 軽さの実感 (1-5)
+  runSinkDepth     Int?     // 沈み込みの深さ (1-5)
+  runStability     Int?     // 安定性 (1-5)
+  runTransition    Int?     // トランジション（転がり） (1-5)
+  runResponse      Int?     // 反発のリズム (1-5)
+
+  // 走行後の状態（疲労感）1=強く感じる, 10=感じない
+  fatigueSole      Int?     // 足裏の疲労
+  fatigueCalf      Int?     // ふくらはぎの張り
+  fatigueKnee      Int?     // 膝への違和感
+  fatigueOther     String?  // その他
+
+  // SD法による採点 (1-5)
+  sdLanding        Int?     // 着地感 (1やわらかめ - 5地面を感じる)
+  sdResponse       Int?     // 反発性 (1ない - 5ある)
+  sdStability      Int?     // 安定性 (1自然 - 5コントロールされる)
+  sdWidth          Int?     // 足幅感 (1タイト - 5リラックス)
+  sdDesign         Int?     // デザインスタイル (1競技場らしい - 5街履き)
+
+  // その他詳細
+  onomatopoeia     String?  // オノマトペ
+  purchaseSize     String?  // 購入サイズ (cm)
+
+  // レビュアー属性（スナップショット）
+  reviewerAge            Int?      // 年齢
+  reviewerGender         String?
+  reviewerHeight         Float?
+  reviewerWeight         Float?
+  // プライバシー保護のための範囲選択
+  reviewerHeightRange    String?   // 身長範囲 (例: "170-179cm")
+  reviewerWeightRange    String?   // 体重範囲 (例: "60-69kg")
+  reviewerPersonalBestLevel String? // 走力レベル (例: "サブ4")
+  reviewerWeeklyDistance Float?
+  reviewerPersonalBest   String?
+  reviewerExpertise      String[]  @default([])  // 専門種目（複数選択可）
+  reviewerFootShape      String[]  @default([])  // 足の形状（複数選択可）
+  reviewerFootShapeDetail String? // 足の形状に関する詳細な補足
+  reviewerLandingType    String?
+  reviewerLandingTypeDetail String? // 接地タイプの補足
 
   shoe     Shoe      @relation(fields: [shoeId], references: [id], onDelete: Cascade)
   user     User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
