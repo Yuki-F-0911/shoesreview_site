@@ -74,8 +74,6 @@ export async function POST(request: Request) {
         recommendedFor: summarizedReview.recommendedFor,
         content: summarizedReview.summary,
         sourceCount: review.aiSources.length,
-        isPublished: true, // 要約生成後は公開
-        isDraft: false,
       },
       include: {
         shoe: {

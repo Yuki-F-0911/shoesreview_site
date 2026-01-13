@@ -3,7 +3,7 @@ const nextConfig = {
   // 本番環境での最適化設定
   reactStrictMode: true,
   swcMinify: true,
-  
+
   // webpack設定: cheerioとundiciをサーバーサイドのみで使用
   webpack: (config, { isServer }) => {
     if (isServer) {
@@ -30,68 +30,18 @@ const nextConfig = {
     }
     return config
   },
-  
+
   // 画像の最適化設定
   images: {
+    unoptimized: true,
     remotePatterns: [
-      // Cloudinary
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
-      // 楽天
-      {
-        protocol: 'https',
-        hostname: 'thumbnail.image.rakuten.co.jp',
+        hostname: '**',
       },
       {
-        protocol: 'https',
-        hostname: 'shop.r10s.jp',
-      },
-      // Amazon
-      {
-        protocol: 'https',
-        hostname: 'images-na.ssl-images-amazon.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'm.media-amazon.com',
-      },
-      // YouTube
-      {
-        protocol: 'https',
-        hostname: 'i.ytimg.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'img.youtube.com',
-      },
-      // Reddit
-      {
-        protocol: 'https',
-        hostname: 'i.redd.it',
-      },
-      {
-        protocol: 'https',
-        hostname: 'preview.redd.it',
-      },
-      // Imgur
-      {
-        protocol: 'https',
-        hostname: 'i.imgur.com',
-      },
-      // ブランド公式サイト
-      {
-        protocol: 'https',
-        hostname: '*.nike.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.adidas.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.asics.com',
+        protocol: 'http',
+        hostname: '**',
       },
     ],
     // 画像の最適化を有効化

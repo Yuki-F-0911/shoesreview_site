@@ -175,3 +175,104 @@ export async function searchShoeReviewArticles(
   return searchWebArticles(query, maxResults)
 }
 
+
+/**
+ * Google Custom Search APIを使用して画像を検索
+ * @param query 検索クエリ
+ * @param maxResults 最大結果数（デフォルト: 10）
+ * @returns 検索結果
+ */
+export async function searchImages(
+  query: string,
+  maxResults: number = 10
+): Promise<WebSearchResponse> {
+  const apiKey = process.env.GOOGLE_SEARCH_API_KEY
+  const searchEngineId = process.env.GOOGLE_SEARCH_ENGINE_ID
+
+  // Serper API for images
+  if (process.env.SERPER_API_KEY) {
+    try {
+      const response = await fetch('https://google.serper.dev/images', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY': process.env.SERPER_API_KEY,
+        },
+        body: JSON.stringify({
+          q: query,
+          num: maxResults,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error(`Serper Image API error: ${await response.text()}`)
+      }
+
+      const data = await response.json()
+      const items: WebSearchResult[] = (data.images || []).map((item: any) => ({
+        title: item.title,
+        url: item.imageUrl,
+        snippet: item.title,
+        displayUrl: item.source,
+      }))
+
+      return {
+        items,
+        totalResults: items.length,
+        searchTime: 0
+      }
+    } catch (e) {
+      console.error('Serper Image Search failed:', e)
+    }
+  }
+
+  // Fallback to Google Custom Search
+  if (!apiKey || !searchEngineId) {
+    throw new Error('GOOGLE_SEARCH_API_KEYとGOOGLE_SEARCH_ENGINE_ID環境変数が設定されていません')
+  }
+
+  try {
+    const params = new URLSearchParams({
+      key: apiKey,
+      cx: searchEngineId,
+      q: query,
+      searchType: 'image', // Enable image search
+      num: Math.min(maxResults, 10).toString(),
+    })
+
+    const response = await fetch(
+      `https://www.googleapis.com/customsearch/v1?${params.toString()}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+
+    if (!response.ok) {
+      const error = await response.text()
+      throw new Error(`Google Search API error: ${error}`)
+    }
+
+    const data = await response.json()
+
+    const items: WebSearchResult[] = (data.items || []).map((item: any) => ({
+      title: item.title,
+      url: item.link,
+      snippet: item.snippet,
+      displayUrl: item.displayLink,
+    }))
+
+    return {
+      items,
+      totalResults: parseInt(data.searchInformation?.totalResults || '0', 10),
+      searchTime: parseFloat(data.searchInformation?.searchTime || '0'),
+    }
+  } catch (error) {
+    console.error('Google Image Search error:', error)
+    throw new Error(
+      `画像検索に失敗しました: ${error instanceof Error ? error.message : String(error)}`
+    )
+  }
+}

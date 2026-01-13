@@ -9,8 +9,7 @@ interface Review {
   id: string
   title: string
   type: string
-  isDraft: boolean
-  isPublished: boolean
+  // isDraft, isPublished removed
   sourceCount: number
   overallRating: string
   createdAt: string
@@ -52,7 +51,7 @@ export default function SummarizeReviewsPage() {
   async function fetchDraftReviews() {
     setLoading(true)
     try {
-      const res = await fetch('/api/admin/reviews?type=AI_SUMMARY&draft=true')
+      const res = await fetch('/api/admin/reviews?type=AI_SUMMARY')
       const data = await res.json()
       setReviews(data.data?.items || [])
     } catch (error) {
@@ -96,7 +95,7 @@ export default function SummarizeReviewsPage() {
       const res = await fetch(`/api/reviews/${reviewId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isPublished: true, isDraft: false }),
+        body: JSON.stringify({}), // isPublished/isDraft removed
       })
 
       if (res.ok) {
@@ -182,9 +181,7 @@ export default function SummarizeReviewsPage() {
                           <Badge className="bg-slate-100 text-slate-700">
                             {review.shoe.category}
                           </Badge>
-                          {review.isDraft && (
-                            <Badge className="bg-yellow-100 text-yellow-800">下書き</Badge>
-                          )}
+                          {/* isDraft badge removed */}
                         </div>
                         <p className="text-sm text-slate-600 mb-2">{review.title}</p>
                         <div className="flex items-center gap-4 text-sm text-slate-500">
@@ -234,15 +231,13 @@ export default function SummarizeReviewsPage() {
                         >
                           {summarizing === review.id ? '要約中...' : '要約を生成'}
                         </Button>
-                        {!review.isDraft && (
-                          <Button
-                            onClick={() => handlePublish(review.id)}
-                            size="sm"
-                            className="bg-green-600 hover:bg-green-700"
-                          >
-                            公開する
-                          </Button>
-                        )}
+                        <Button
+                          onClick={() => handlePublish(review.id)}
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700"
+                        >
+                          公開する
+                        </Button>
                         <a
                           href={`/reviews/${review.id}`}
                           target="_blank"

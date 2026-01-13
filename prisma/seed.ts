@@ -19,17 +19,6 @@ async function main() {
     },
   })
 
-  const user2 = await prisma.user.upsert({
-    where: { email: 'demo@example.com' },
-    update: {},
-    create: {
-      email: 'demo@example.com',
-      username: 'demouser',
-      displayName: 'デモユーザー',
-      password: hashedPassword,
-    },
-  })
-
   // シューズの作成
   const shoe1 = await prisma.shoe.create({
     data: {
@@ -93,15 +82,13 @@ async function main() {
       usageScene: ['ランニング', 'ウォーキング'],
       pros: ['履き心地が良い', 'デザインが良い'],
       cons: ['少し高価'],
-      isPublished: true,
-      isDraft: false,
     },
   })
 
   await prisma.review.create({
     data: {
       shoeId: shoe2.id,
-      userId: user2.id,
+      userId: user1.id,
       type: 'USER',
       overallRating: 4,
       comfortRating: 5,
@@ -114,8 +101,6 @@ async function main() {
       usageScene: ['ランニング'],
       pros: ['クッション性が高い'],
       cons: ['価格が高い'],
-      isPublished: true,
-      isDraft: false,
     },
   })
 

@@ -10,10 +10,7 @@ export async function GET(
       where: { id: params.id },
       include: {
         reviews: {
-          where: {
-            isPublished: true,
-            isDraft: false,
-          },
+          where: {},
           include: {
             user: {
               select: {
@@ -32,7 +29,7 @@ export async function GET(
           },
           orderBy: {
             createdAt: 'desc',
-          },
+          } as any,
           take: 10,
         },
         _count: {

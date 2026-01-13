@@ -1,6 +1,9 @@
 import { Metadata } from 'next'
 import { generateFAQSchema, generateBreadcrumbSchema, combineSchemas } from '@/lib/seo/structured-data'
 
+// SSG: ビルド時に静的HTMLを生成（最速配信）
+export const dynamic = 'force-static'
+
 export const metadata: Metadata = {
   title: 'よくある質問（FAQ） - ランニングシューズ選びのQ&A',
   description: 'ランニングシューズ選びでよくある質問にお答えします。初心者からマラソンランナーまで、シューズ選びのコツ、サイズの選び方、おすすめブランドなど幅広い疑問を解決。',
