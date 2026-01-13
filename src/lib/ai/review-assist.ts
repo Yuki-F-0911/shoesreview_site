@@ -6,7 +6,8 @@
 
 import type { ReviewAssistInput, ReviewAssistOutput } from '@/types/ai'
 
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent'
+// gemini-1.5-flash を使用（gemini-proは非推奨）
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
 
 /**
  * Gemini APIを呼び出す共通関数
@@ -18,31 +19,47 @@ async function callGeminiAPI(prompt: string): Promise<string> {
         throw new Error('AIアシスト機能は現在利用できません（設定が必要です）')
     }
 
-    const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            contents: [
-                {
-                    parts: [{ text: prompt }],
-                },
-            ],
-            generationConfig: {
-                temperature: 0.7,
-                maxOutputTokens: 1000,
+    try {
+        const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
             },
-        }),
-    })
+            body: JSON.stringify({
+                contents: [
+                    {
+                        parts: [{ text: prompt }],
+                    },
+                ],
+                generationConfig: {
+                    temperature: 0.7,
+                    maxOutputTokens: 1000,
+                },
+            }),
+        })
 
-    if (!response.ok) {
-        const error = await response.json()
-        throw new Error(`Gemini APIエラー: ${JSON.stringify(error)}`)
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}))
+            console.error('Gemini API error response:', response.status, errorData)
+            throw new Error(`AI処理に失敗しました（エラーコード: ${response.status}）`)
+        }
+
+        const result = await response.json()
+        const text = result.candidates?.[0]?.content?.parts?.[0]?.text
+
+        if (!text) {
+            console.error('Gemini API returned empty response:', result)
+            throw new Error('AIからの応答が空でした')
+        }
+
+        return text
+    } catch (error) {
+        if (error instanceof Error && error.message.includes('AI')) {
+            throw error
+        }
+        console.error('Gemini API call failed:', error)
+        throw new Error('AI処理中にエラーが発生しました')
     }
-
-    const result = await response.json()
-    return result.candidates?.[0]?.content?.parts?.[0]?.text || ''
 }
 
 /**
