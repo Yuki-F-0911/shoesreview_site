@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { ReviewRating } from '@/components/reviews/ReviewRating'
+import { AIReviewAssist } from '@/components/reviews/AIReviewAssist'
 import type { Shoe } from '@/types/shoe'
 
 interface ReviewFormProps {
@@ -70,6 +71,25 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
   const comfortRating = watch('comfortRating')
   const designRating = watch('designRating')
   const durabilityRating = watch('durabilityRating')
+  const selectedShoeId = watch('shoeId')
+
+  // 選択されたシューズの情報を取得
+  const selectedShoe = shoes.find((s) => s.id === selectedShoeId)
+
+  // AIアシストで生成されたコンテンツを適用
+  const handleUseDraft = (draft: string) => {
+    setValue('content', draft)
+  }
+
+  const handleUseProsCons = (pros: string[], cons: string[]) => {
+    // 既存の長所短所をクリアして新しいものを設定
+    setValue('pros', pros)
+    setValue('cons', cons)
+  }
+
+  const handleUseTitle = (title: string) => {
+    setValue('title', title)
+  }
 
   const onSubmit = async (data: ReviewInput) => {
     setIsLoading(true)
@@ -233,6 +253,15 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
               <p className="mt-1 text-sm text-red-600">{errors.content.message}</p>
             )}
           </div>
+
+          {/* AIアシスト（オプション） */}
+          <AIReviewAssist
+            shoeBrand={selectedShoe?.brand}
+            shoeModel={selectedShoe?.modelName}
+            onUseDraft={handleUseDraft}
+            onUseProsCons={handleUseProsCons}
+            onUseTitle={handleUseTitle}
+          />
 
           <div>
             <label htmlFor="usagePeriod" className="block text-sm font-medium text-gray-700">

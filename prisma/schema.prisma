@@ -56,6 +56,9 @@ model User {
   sessions Session[]
   curatedSources CuratedSource[]
   uploadedMedia  ShoeMedia[]
+  integrations   UserIntegration[]
+  userShoes      UserShoe[]
+  runningActivities RunningActivity[]
 
   @@map("users")
 }
@@ -117,6 +120,7 @@ model Shoe {
   reviews         Review[]
   media           ShoeMedia[]
   curatedSources  CuratedSource[]
+  userShoes       UserShoe[]
 
   @@map("shoes")
 }
@@ -251,3 +255,71 @@ model Like {
   @@map("likes")
 }
 
+// ================================
+// Strava連携・ユーザーシューズ管理
+// ================================
+
+model UserIntegration {
+  id             String   @id @default(cuid())
+  userId         String
+  provider       String   // "strava", "garmin" など
+  accessToken    String   @db.Text
+  refreshToken   String   @db.Text
+  expiresAt      DateTime
+  providerUserId String?
+  scope          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, provider])
+  @@map("user_integrations")
+}
+
+model UserShoe {
+  id            String    @id @default(cuid())
+  userId        String
+  shoeId        String?   // サイト内のシューズとの紐付け（任意）
+  name          String    // ユーザー指定の名前
+  brand         String
+  model         String
+  totalDistance Float     @default(0) // km
+  maxDistance   Float     @default(800) // 交換目安距離（km）
+  purchaseDate  DateTime?
+  retiredAt     DateTime? // 引退日
+  stravaGearId  String?   // Stravaのgear_id（同期用）
+  imageUrl      String?
+  notes         String?   @db.Text
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shoe       Shoe?             @relation(fields: [shoeId], references: [id], onDelete: SetNull)
+  activities RunningActivity[]
+
+  @@index([userId, retiredAt])
+  @@map("user_shoes")
+}
+
+model RunningActivity {
+  id               String   @id @default(cuid())
+  userId           String
+  userShoeId       String?
+  stravaActivityId String?  // Stravaのactivity_id
+  name             String
+  distance         Float    // km
+  duration         Int      // 秒
+  pace             Float?   // min/km
+  elevationGain    Float?   // m
+  activityDate     DateTime
+  source           String   @default("manual") // "strava" or "manual"
+  createdAt        DateTime @default(now())
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userShoe UserShoe? @relation(fields: [userShoeId], references: [id], onDelete: SetNull)
+
+  @@unique([stravaActivityId])
+  @@index([userId, activityDate])
+  @@map("running_activities")
+}
