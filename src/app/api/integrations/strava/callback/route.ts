@@ -53,6 +53,15 @@ export async function GET(request: NextRequest) {
         // 認証コードをトークンに交換
         const tokens = await exchangeCodeForToken(code)
 
+        // アスリート情報をログ出力（デバッグ用）
+        console.log('Strava連携成功 - アスリート情報:', {
+            id: tokens.athlete.id,
+            firstname: tokens.athlete.firstname,
+            lastname: tokens.athlete.lastname,
+            email: tokens.athlete.email || '(メール取得には再認証が必要)',
+            username: tokens.athlete.username,
+        })
+
         // 連携情報を保存
         await saveStravaIntegration(
             session.user.id,
@@ -60,7 +69,7 @@ export async function GET(request: NextRequest) {
             tokens.refresh_token,
             new Date(tokens.expires_at * 1000),
             String(tokens.athlete.id),
-            'read,activity:read_all'
+            'read,profile:read_all,activity:read_all'
         )
 
         // シューズ情報を初期同期（バックグラウンドで）
