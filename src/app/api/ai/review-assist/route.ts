@@ -29,8 +29,11 @@ export async function POST(request: NextRequest) {
         const body = await request.json()
         const validated = requestSchema.parse(body)
 
-        // レート制限（簡易版）
-        // TODO: Redisなどを使った本格的なレート制限を実装
+        console.log('[AI Assist] Request received:', {
+            type: validated.type,
+            inputLength: validated.input.length,
+            userId: session.user.id
+        })
 
         const result = await generateReviewAssist({
             type: validated.type,
@@ -38,6 +41,8 @@ export async function POST(request: NextRequest) {
             shoeBrand: validated.shoeBrand,
             shoeModel: validated.shoeModel,
         })
+
+        console.log('[AI Assist] Success:', { type: validated.type })
 
         return NextResponse.json({
             success: true,
@@ -51,9 +56,12 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        console.error('AIアシストエラー:', error)
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+        console.error('[AI Assist] Error:', errorMessage)
+
+        // エラーメッセージをそのままクライアントに返す
         return NextResponse.json(
-            { error: 'AI処理に失敗しました' },
+            { error: errorMessage },
             { status: 500 }
         )
     }
