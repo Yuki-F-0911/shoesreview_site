@@ -18,6 +18,7 @@ export interface StravaAthlete {
   username: string | null
   firstname: string
   lastname: string
+  email?: string // profile:read_all スコープで取得可能
   city: string | null
   state: string | null
   country: string | null

@@ -19,7 +19,7 @@ const STRAVA_OAUTH_BASE = 'https://www.strava.com/oauth'
 export function getStravaAuthUrl(state?: string): string {
     const clientId = process.env.STRAVA_CLIENT_ID
     const redirectUri = process.env.STRAVA_REDIRECT_URI
-    const scope = 'read,activity:read_all'
+    const scope = 'read,profile:read_all,activity:read_all'
 
     if (!clientId || !redirectUri) {
         throw new Error('Strava環境変数が設定されていません')
