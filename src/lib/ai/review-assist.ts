@@ -6,8 +6,8 @@
 
 import type { ReviewAssistInput, ReviewAssistOutput } from '@/types/ai'
 
-// gemini-1.5-flash を使用（gemini-proは非推奨）
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
+// gemini-2.5-flash を使用（ドキュメント: https://ai.google.dev/gemini-api/docs）
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent'
 
 /**
  * Gemini APIを呼び出す共通関数
