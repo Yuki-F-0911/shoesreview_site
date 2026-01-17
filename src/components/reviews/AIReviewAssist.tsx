@@ -100,7 +100,6 @@ export function AIReviewAssist({
                     onClick={() => setIsOpen(true)}
                     className="text-purple-600 hover:text-purple-700 hover:bg-purple-50"
                 >
-                    <span className="mr-1">✨</span>
                     AIアシスト
                 </Button>
                 <span className="text-xs text-gray-400">（オプション）</span>
@@ -112,7 +111,6 @@ export function AIReviewAssist({
         <div className="rounded-lg border border-purple-200 bg-purple-50 p-4">
             <div className="mb-4 flex items-center justify-between">
                 <h3 className="font-semibold text-purple-800">
-                    <span className="mr-1">✨</span>
                     AIアシスタント
                 </h3>
                 <button
@@ -134,7 +132,7 @@ export function AIReviewAssist({
                             size="sm"
                             onClick={() => setMode('draft')}
                         >
-                            📝 下書き生成
+                            下書き生成
                         </Button>
                         <Button
                             type="button"
@@ -142,7 +140,7 @@ export function AIReviewAssist({
                             size="sm"
                             onClick={() => setMode('pros_cons')}
                         >
-                            ⚖️ 長所・短所提案
+                            長所・短所提案
                         </Button>
                         <Button
                             type="button"
@@ -150,7 +148,7 @@ export function AIReviewAssist({
                             size="sm"
                             onClick={() => setMode('title')}
                         >
-                            🏷️ タイトル提案
+                            タイトル提案
                         </Button>
                     </div>
                     <p className="mt-2 text-xs text-gray-500">
@@ -274,7 +272,7 @@ export function AIReviewAssist({
             {/* 結果表示: 下書き */}
             {result?.draft && (
                 <div className="space-y-3">
-                    <p className="text-sm font-medium text-gray-700">📝 生成された下書き：</p>
+                    <p className="text-sm font-medium text-gray-700">生成された下書き：</p>
                     <div className="rounded bg-white p-3 text-sm">
                         {result.draft}
                     </div>
@@ -305,10 +303,10 @@ export function AIReviewAssist({
             {/* 結果表示: 長所・短所 */}
             {(result?.pros || result?.cons) && (
                 <div className="space-y-3">
-                    <p className="text-sm font-medium text-gray-700">⚖️ 抽出された長所・短所：</p>
+                    <p className="text-sm font-medium text-gray-700">抽出された長所・短所：</p>
                     <div className="grid gap-3 md:grid-cols-2">
                         <div className="rounded bg-green-50 p-3">
-                            <p className="mb-2 text-sm font-medium text-green-700">👍 長所</p>
+                            <p className="mb-2 text-sm font-medium text-green-700">長所</p>
                             <ul className="space-y-1 text-sm">
                                 {result.pros?.map((pro, i) => (
                                     <li key={i}>• {pro}</li>
@@ -316,7 +314,7 @@ export function AIReviewAssist({
                             </ul>
                         </div>
                         <div className="rounded bg-red-50 p-3">
-                            <p className="mb-2 text-sm font-medium text-red-700">👎 短所</p>
+                            <p className="mb-2 text-sm font-medium text-red-700">短所</p>
                             <ul className="space-y-1 text-sm">
                                 {result.cons?.map((con, i) => (
                                     <li key={i}>• {con}</li>
@@ -343,7 +341,7 @@ export function AIReviewAssist({
             {/* 結果表示: タイトル */}
             {result?.titles && (
                 <div className="space-y-3">
-                    <p className="text-sm font-medium text-gray-700">🏷️ タイトル候補：</p>
+                    <p className="text-sm font-medium text-gray-700">タイトル候補：</p>
                     <div className="space-y-2">
                         {result.titles.map((title, i) => (
                             <div

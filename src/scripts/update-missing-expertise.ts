@@ -1,6 +1,7 @@
 
 import fs from 'fs';
 import path from 'path';
+// @ts-expect-error csv-parse/sync has no type declarations
 import { parse } from 'csv-parse/sync';
 import { PrismaClient } from '@prisma/client';
 
