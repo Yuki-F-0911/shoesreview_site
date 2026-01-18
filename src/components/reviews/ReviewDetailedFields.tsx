@@ -65,7 +65,19 @@ export function ReviewDetailedFields({ register, errors, watch, setValue }: Revi
                 setValue('reviewerWeightRange', range)
             }
             if (profile.runnerWeeklyDistance) setValue('reviewerWeeklyDistance', profile.runnerWeeklyDistance)
-            if (profile.runnerPersonalBest) setValue('reviewerPersonalBestLevel', profile.runnerPersonalBest)
+            if (profile.runnerPersonalBest) {
+                // プロフィールの値（短縮形）をフォームの選択肢（詳細形）にマッピング
+                const pbMapping: Record<string, string> = {
+                    '入門': '入門（走り始めたばかり）',
+                    '初級': '初級（ゆっくりペースで楽しむ）',
+                    '中級': '中級（継続的にトレーニング）',
+                    '中上級': '中上級（記録向上を目指す）',
+                    '上級': '上級（競技志向）',
+                    'エリート': 'エリート（トップレベル）'
+                }
+                const mappedValue = pbMapping[profile.runnerPersonalBest] || profile.runnerPersonalBest
+                setValue('reviewerPersonalBestLevel', mappedValue)
+            }
             if (profile.runnerLandingType) setValue('reviewerLandingType', profile.runnerLandingType)
             if (profile.runnerExpertise?.length > 0) setValue('reviewerExpertise', profile.runnerExpertise)
             if (profile.runnerFootShape?.length > 0) setValue('reviewerFootShape', profile.runnerFootShape)

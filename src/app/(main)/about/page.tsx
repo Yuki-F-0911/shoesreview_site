@@ -5,10 +5,10 @@ import { generateAboutPageSchema, generateBreadcrumbSchema, combineSchemas } fro
 export const dynamic = 'force-static'
 
 export const metadata: Metadata = {
-    title: '私たちについて - シューズレビューサイトの運営方針',
-    description: 'シューズレビューサイトの運営方針、ミッション、レビューの収集方法について。公平で信頼できるランニングシューズ情報を提供することを目指しています。',
+    title: '私たちについて | Stride',
+    description: 'Stride（ストライド）は、ランナーのための公正なシューズレビュープラットフォームです。実際のランナーの声とデータに基づいた信頼できる情報を提供します。',
     openGraph: {
-        title: '私たちについて | シューズレビューサイト',
+        title: '私たちについて | Stride',
         description: '公平で信頼できるランニングシューズ情報を提供することを目指しています。',
     },
 }
@@ -29,85 +29,96 @@ export default function AboutPage() {
                 }}
             />
 
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-                <div className="container mx-auto px-4 py-12">
-                    <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                        {/* ヘッダー画像エリア */}
-                        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-12 text-center text-white">
-                            <h1 className="text-3xl font-bold mb-4">私たちについて</h1>
-                            <p className="opacity-90">
-                                ランナーのための、公平で信頼できる情報源を目指して
+            <div className="min-h-screen bg-white">
+                <div className="container mx-auto px-4 py-16 max-w-4xl">
+                    {/* ヘッダーエリア */}
+                    <div className="text-center mb-16 space-y-4">
+                        <h1 className="text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl">
+                            私たちについて
+                        </h1>
+                        <p className="max-w-2xl mx-auto text-xl text-neutral-500">
+                            ランナーによる、ランナーのための公平な情報源
+                        </p>
+                    </div>
+
+                    <div className="space-y-16">
+                        {/* ビジョン */}
+                        <section className="bg-neutral-50 rounded-2xl p-8 md:p-12 border border-neutral-100">
+                            <h2 className="text-2xl font-bold text-neutral-900 mb-6">ビジョン</h2>
+                            <p className="text-neutral-700 leading-relaxed text-lg">
+                                Stride（ストライド）の目的はシンプルです。
+                                <br className="hidden md:block" />
+                                すべてのランナーが、広告や先入観に惑わされず、本当に自分に合った一足と出会える世界を作ること。
+                                膨大な選択肢の中から最適なパートナーを見つけるプロセスを、もっと透明で、もっと確実なものにします。
                             </p>
-                        </div>
+                        </section>
 
-                        <div className="p-8 space-y-12">
-                            {/* ミッション */}
-                            <section>
-                                <h2 className="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-2">
-                                    <span className="w-1 h-8 bg-indigo-600 rounded-full"></span>
-                                    ミッション
-                                </h2>
-                                <p className="text-slate-600 leading-relaxed">
-                                    私たちのミッションは、すべてのランナーが自分に最適な一足と出会えるようサポートすることです。
-                                    膨大な数のランニングシューズの中から、自分の足型、走り方、目標に合ったシューズを見つけるのは容易ではありません。
-                                    私たちは、実際のユーザーの声とAI技術を組み合わせることで、客観的で網羅的なレビュー情報を提供します。
-                                </p>
-                            </section>
-
-                            {/* レビューの収集方法 */}
-                            <section>
-                                <h2 className="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-2">
-                                    <span className="w-1 h-8 bg-indigo-600 rounded-full"></span>
-                                    情報の透明性と信頼性
-                                </h2>
-                                <div className="space-y-6">
-                                    <div className="bg-slate-50 p-6 rounded-xl">
-                                        <h3 className="font-bold text-slate-800 mb-2">ユーザーレビュー</h3>
-                                        <p className="text-slate-600 text-sm">
-                                            実際にシューズを購入し使用したランナーからの生の声を掲載しています。
-                                            良い点だけでなく、気になった点も含めて率直な評価を共有いただくことで、
-                                            リアルな使用感をお伝えします。
-                                        </p>
-                                    </div>
-
-                                    <div className="bg-slate-50 p-6 rounded-xl">
-                                        <h3 className="font-bold text-slate-800 mb-2">AI統合レビュー</h3>
-                                        <p className="text-slate-600 text-sm">
-                                            Web上の信頼できるレビュー記事や動画レビューをAIが分析・要約しています。
-                                            複数の情報源を横断的に分析することで、個人の主観に偏らない客観的な評価傾向を導き出します。
-                                            すべてのAIレビューには引用元を明記し、情報の出所を明確にしています。
-                                        </p>
-                                    </div>
+                        {/* 特徴・価値 */}
+                        <section>
+                            <h2 className="text-2xl font-bold text-neutral-900 mb-8 border-b border-neutral-200 pb-4">
+                                私たちが大切にしていること
+                            </h2>
+                            <div className="grid md:grid-cols-2 gap-8">
+                                <div className="space-y-4">
+                                    <h3 className="text-lg font-bold text-neutral-900 flex items-center">
+                                        <span className="bg-neutral-900 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs mr-3">1</span>
+                                        ユーザーレビューの透明性
+                                    </h3>
+                                    <p className="text-neutral-600 leading-relaxed">
+                                        実際にそのシューズを履いて走ったランナーの「生の声」を最優先します。
+                                        良い点も悪い点も包み隠さず公開し、レビュアーの走力や体格も併せて表示することで、
+                                        あなたに近いランナーの意見を参考にできます。
+                                    </p>
                                 </div>
-                            </section>
+                                <div className="space-y-4">
+                                    <h3 className="text-lg font-bold text-neutral-900 flex items-center">
+                                        <span className="bg-neutral-900 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs mr-3">2</span>
+                                        客観的なデータ分析
+                                    </h3>
+                                    <p className="text-neutral-600 leading-relaxed">
+                                        個人の感想に加え、Web上の膨大な情報源をAI技術で分析・要約。
+                                        主観的な意見と客観的な傾向を併せて提示することで、
+                                        より多角的な視点からシューズの特徴を理解できるようサポートします。
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
 
-                            {/* 運営体制 */}
-                            <section>
-                                <h2 className="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-2">
-                                    <span className="w-1 h-8 bg-indigo-600 rounded-full"></span>
-                                    運営体制
-                                </h2>
-                                <p className="text-slate-600 leading-relaxed mb-4">
-                                    当サイトは、ランニングを愛するエンジニアとデータサイエンティストによって運営されています。
-                                    常に最新のシューズ情報をキャッチアップし、システムの改善を続けています。
-                                </p>
-                                <div className="border-t border-slate-100 pt-4 mt-4">
-                                    <dl className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-                                        <div className="sm:col-span-1 font-bold text-slate-700">サイト名</div>
-                                        <div className="sm:col-span-2 text-slate-600">シューズレビューサイト</div>
-
-                                        <div className="sm:col-span-1 font-bold text-slate-700">設立</div>
-                                        <div className="sm:col-span-2 text-slate-600">2024年</div>
-
-                                        <div className="sm:col-span-1 font-bold text-slate-700">お問い合わせ</div>
-                                        <div className="sm:col-span-2 text-slate-600">contact@shoe-review.jp</div>
+                        {/* 運営情報 */}
+                        <section className="border-t border-neutral-200 pt-16">
+                            <div className="grid md:grid-cols-2 gap-12">
+                                <div>
+                                    <h2 className="text-xl font-bold text-neutral-900 mb-4">運営について</h2>
+                                    <p className="text-neutral-600 leading-relaxed mb-6">
+                                        当サイトは、シリアスランナーからファンランナーまで、
+                                        走ることを愛するエンジニアチームによって開発・運営されています。
+                                        常に中立的な立場を保ち、ランナーの利益を第一に考えた機能開発を行っています。
+                                    </p>
+                                </div>
+                                <div>
+                                    <dl className="space-y-4 text-sm bg-neutral-50 p-6 rounded-lg border border-neutral-100">
+                                        <div className="flex justify-between border-b border-neutral-200 pb-2">
+                                            <dt className="text-neutral-500">サイト名</dt>
+                                            <dd className="font-semibold text-neutral-900">Stride</dd>
+                                        </div>
+                                        <div className="flex justify-between border-b border-neutral-200 pb-2">
+                                            <dt className="text-neutral-500">設立</dt>
+                                            <dd className="font-semibold text-neutral-900">2024年</dd>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <dt className="text-neutral-500">お問い合わせ</dt>
+                                            <dd className="font-semibold text-neutral-900">
+                                                <a href="/support" className="hover:underline">サポートページへ</a>
+                                            </dd>
+                                        </div>
                                     </dl>
                                 </div>
-                            </section>
-                        </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
             </div>
         </>
     )
 }
+
