@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { generateFAQSchema, generateBreadcrumbSchema, combineSchemas } from '@/lib/seo/structured-data'
+import { Plus, Minus } from 'lucide-react'
 
 // SSG: ビルド時に静的HTMLを生成（最速配信）
 export const dynamic = 'force-static'
@@ -107,46 +108,46 @@ export default function FAQPage() {
         }}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-        <div className="container mx-auto px-4 py-12">
+      <div className="min-h-screen bg-white">
+        <div className="container mx-auto px-4 py-12 max-w-4xl">
           {/* ヘッダー */}
-          <header className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-slate-800 mb-4">
-              よくある質問（FAQ）
+          <header className="mb-12">
+            <h1 className="text-3xl font-bold text-neutral-900 mb-4 border-b pb-4">
+              よくある質問
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              ランニングシューズ選びでよくある質問にお答えします。
-              初心者からマラソンランナーまで、シューズ選びのコツを解説。
+            <p className="text-neutral-600">
+              ランニングシューズ選びに関する疑問にお答えします。
             </p>
           </header>
 
           {/* カテゴリ別FAQ */}
-          <div className="space-y-12">
+          <div className="space-y-10">
             {faqs.map((category, categoryIndex) => (
-              <section key={categoryIndex} className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <h2 className="text-xl font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">
+              <section key={categoryIndex}>
+                <h2 className="text-xl font-bold text-neutral-900 mb-6 flex items-center">
+                  <span className="w-1 h-6 bg-neutral-900 mr-3"></span>
                   {category.category}
                 </h2>
-                <div className="divide-y divide-slate-100">
+                <div className="border border-neutral-200 rounded-lg divide-y divide-neutral-100 overflow-hidden">
                   {category.questions.map((faq, index) => (
                     <details
                       key={index}
-                      className="group"
+                      className="group bg-white"
                     >
-                      <summary className="flex items-center justify-between cursor-pointer px-6 py-4 hover:bg-slate-50 transition-colors">
-                        <h3 className="text-base font-medium text-slate-800 pr-4">
-                          {faq.question}
+                      <summary className="flex items-center justify-between cursor-pointer p-6 hover:bg-neutral-50 transition-colors list-none">
+                        <h3 className="text-base font-medium text-neutral-800 pr-4">
+                          Q. {faq.question}
                         </h3>
-                        <span className="text-indigo-600 group-open:rotate-180 transition-transform">
-                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </span>
+                        <div className="text-neutral-400 group-open:rotate-180 transition-transform duration-200">
+                          <Plus className="h-5 w-5 group-open:hidden" />
+                          <Minus className="h-5 w-5 hidden group-open:block" />
+                        </div>
                       </summary>
-                      <div className="px-6 pb-4">
-                        <p className="text-slate-600 leading-relaxed">
+                      <div className="px-6 pb-6 pt-0 animate-accordion-down">
+                        <div className="text-neutral-600 leading-relaxed pl-4 border-l-2 border-neutral-100">
+                          <span className="font-bold text-neutral-400 mr-2">A.</span>
                           {faq.answer}
-                        </p>
+                        </div>
                       </div>
                     </details>
                   ))}
@@ -156,25 +157,25 @@ export default function FAQPage() {
           </div>
 
           {/* 関連リンク */}
-          <section className="mt-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white">
-            <h2 className="text-2xl font-bold mb-4">
-              シューズレビューを探す
+          <section className="mt-16 bg-neutral-900 rounded-lg p-8 text-center text-white">
+            <h2 className="text-xl font-bold mb-3">
+              解決しない場合
             </h2>
-            <p className="mb-6 opacity-90">
-              実際のユーザーレビューやAI統合レビューで、最適なシューズを見つけましょう
+            <p className="mb-6 text-neutral-300 text-sm">
+              サポートページからお問い合わせください
             </p>
-            <div className="flex justify-center gap-4 flex-wrap">
+            <div className="flex justify-center gap-4">
               <a
-                href="/shoes"
-                className="bg-white text-indigo-600 font-medium px-6 py-3 rounded-lg hover:bg-slate-100 transition-colors"
+                href="/support"
+                className="bg-white text-neutral-900 font-medium px-6 py-2.5 rounded hover:bg-neutral-100 transition-colors text-sm"
               >
-                シューズ一覧を見る
+                問い合わせる
               </a>
               <a
-                href="/search"
-                className="border-2 border-white text-white font-medium px-6 py-3 rounded-lg hover:bg-white/10 transition-colors"
+                href="/shoes"
+                className="border border-white/30 text-white font-medium px-6 py-2.5 rounded hover:bg-white/10 transition-colors text-sm"
               >
-                シューズを検索
+                シューズを探す
               </a>
             </div>
           </section>
