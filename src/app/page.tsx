@@ -114,11 +114,11 @@ async function getStats() {
 
 // タグはキーワード検索として機能（シューズ名やキーワードで検索）
 const CATEGORIES = [
-  { name: 'マラソン', query: 'marathon' },      // マラソン・レース向けシューズ
-  { name: 'トレーニング', query: 'training' },  // トレーニングシューズ
-  { name: 'トレイル', query: 'trail' },         // トレイルランニング
-  { name: 'レーシング', query: 'racing' },      // レーシングフラット
-  { name: 'デイリー', query: 'daily' },         // デイリートレーナー
+  { name: 'マラソン', query: 'マラソン' },      // マラソン・レース向けシューズ
+  { name: 'トレーニング', query: 'トレーニング' },  // トレーニングシューズ
+  { name: 'トレイル', query: 'トレイル' },         // トレイルランニング
+  { name: 'レーシング', query: 'レーシング' },      // レーシングフラット
+  { name: 'デイリー', query: 'デイリー' },         // デイリートレーナー
 ]
 
 const BRANDS = ['Nike', 'Adidas', 'ASICS', 'New Balance', 'Hoka', 'On', 'Saucony', 'Brooks', 'Mizuno']

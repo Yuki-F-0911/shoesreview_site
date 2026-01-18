@@ -108,7 +108,7 @@ export function Header() {
                 <Link href="/profile" className="hover:opacity-80 transition-opacity">
                   <Avatar src={null} fallback={session.user?.name?.[0] || 'U'} className="h-8 w-8" />
                 </Link>
-                <button onClick={() => signOut()} className="text-sm text-neutral-500 hover:text-neutral-700">
+                <button onClick={() => signOut({ callbackUrl: '/' })} className="text-sm text-neutral-500 hover:text-neutral-700">
                   ログアウト
                 </button>
               </>
@@ -170,7 +170,7 @@ export function Header() {
                   <Link href="/reviews/new" className="block px-3 py-2 font-medium text-neutral-900 hover:bg-neutral-50" onClick={() => setShowMobileMenu(false)}>
                     レビューを投稿
                   </Link>
-                  <button onClick={() => { signOut(); setShowMobileMenu(false); }} className="w-full text-left px-3 py-2 text-neutral-500 hover:bg-neutral-50">
+                  <button onClick={() => { signOut({ callbackUrl: '/' }); setShowMobileMenu(false); }} className="w-full text-left px-3 py-2 text-neutral-500 hover:bg-neutral-50">
                     ログアウト
                   </button>
                 </>

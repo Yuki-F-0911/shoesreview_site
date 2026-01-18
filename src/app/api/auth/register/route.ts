@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma/client'
 import { registerSchema } from '@/lib/validations/user'
 import * as bcrypt from 'bcryptjs'
+import { z } from 'zod'
 
 export async function POST(request: Request) {
   try {
@@ -44,9 +45,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, data: user }, { status: 201 })
   } catch (error) {
-    if (error instanceof Error && error.name === 'ZodError') {
+    if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: '入力データが正しくありません', details: error },
+        {
+          error: '入力データが正しくありません',
+          details: error.errors.map(e => e.message).join(', ')
+        },
         { status: 400 }
       )
     }
