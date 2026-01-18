@@ -38,7 +38,10 @@ export function RegisterForm() {
       const result = await response.json()
 
       if (!response.ok) {
-        setError(result.error || '登録に失敗しました')
+        const errorMessage = result.details
+          ? `${result.error}: ${result.details}`
+          : result.error || '登録に失敗しました'
+        setError(errorMessage)
         return
       }
 
