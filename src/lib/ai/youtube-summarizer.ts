@@ -18,7 +18,6 @@ export interface YouTubeVideoInfo {
 
 export interface YouTubeSummary {
   title: string
-  overallRating: number
   pros: string[]
   cons: string[]
   recommendedFor: string
@@ -49,7 +48,7 @@ export async function summarizeYouTubeVideo(
   try {
     // Pythonスクリプトのパス
     const scriptPath = path.join(process.cwd(), 'youtube_summarizer.py')
-    
+
     // Pythonスクリプトを実行
     const args = [
       videoUrl,

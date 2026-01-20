@@ -109,7 +109,6 @@ async function main() {
                     data: {
                         title: summary.title,
                         content: summary.summary,
-                        overallRating: summary.overallRating,
                         pros: summary.pros,
                         cons: summary.cons,
                         recommendedFor: summary.recommendedFor,
@@ -125,7 +124,6 @@ async function main() {
                         type: 'AI_SUMMARY',
                         title: summary.title,
                         content: summary.summary,
-                        overallRating: summary.overallRating,
                         pros: summary.pros,
                         cons: summary.cons,
                         recommendedFor: summary.recommendedFor,
