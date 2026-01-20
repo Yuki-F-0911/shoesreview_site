@@ -68,7 +68,6 @@ export async function POST(request: Request) {
       where: { id: reviewId },
       data: {
         title: summarizedReview.title,
-        overallRating: new Prisma.Decimal(summarizedReview.overallRating),
         pros: summarizedReview.pros,
         cons: summarizedReview.cons,
         recommendedFor: summarizedReview.recommendedFor,

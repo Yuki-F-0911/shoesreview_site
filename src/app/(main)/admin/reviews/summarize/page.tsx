@@ -11,7 +11,7 @@ interface Review {
   type: string
   // isDraft, isPublished removed
   sourceCount: number
-  overallRating: string
+  overallRating: string | null
   createdAt: string
   shoe: {
     id: string
@@ -186,7 +186,9 @@ export default function SummarizeReviewsPage() {
                         <p className="text-sm text-slate-600 mb-2">{review.title}</p>
                         <div className="flex items-center gap-4 text-sm text-slate-500">
                           <span>情報源: {review.sourceCount}件</span>
-                          <span>評価: {parseFloat(review.overallRating).toFixed(1)}/10</span>
+                          {review.overallRating && (
+                            <span>評価: {parseFloat(review.overallRating).toFixed(1)}/10</span>
+                          )}
                           <span>作成: {new Date(review.createdAt).toLocaleDateString('ja-JP')}</span>
                         </div>
 
