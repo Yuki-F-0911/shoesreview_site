@@ -43,7 +43,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
   const user = review.user
   const isAISummary = review.type === 'AI_SUMMARY'
   const shoeImageUrl = shoe?.imageUrls && shoe.imageUrls.length > 0 ? shoe.imageUrls[0] : null
-  const rating = parseFloat(String(review.overallRating))
+  const rating = review.overallRating ? parseFloat(String(review.overallRating)) : null
 
   const contentText = review.content || (review as any).quickComment || ''
   const contentPreview = contentText.length > 150
@@ -117,10 +117,12 @@ export function ReviewCard({ review }: ReviewCardProps) {
           )}
 
           {/* 評価 */}
-          <div className="flex items-center mb-3">
-            <span className="text-2xl font-semibold text-neutral-900">{rating.toFixed(1)}</span>
-            <span className="text-sm text-neutral-400 ml-1">/ 10</span>
-          </div>
+          {rating !== null && !isNaN(rating) && (
+            <div className="flex items-center mb-3">
+              <span className="text-2xl font-semibold text-neutral-900">{rating.toFixed(1)}</span>
+              <span className="text-sm text-neutral-400 ml-1">/ 10</span>
+            </div>
+          )}
 
           {/* 本文 */}
           <p className="text-sm text-neutral-600 leading-relaxed mb-4 line-clamp-3">
