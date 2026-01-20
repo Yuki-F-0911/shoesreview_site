@@ -14,12 +14,12 @@ export interface ReviewSource {
 
 export interface SummarizedReview {
   title: string
-  overallRating: number
   pros: string[]
   cons: string[]
   recommendedFor?: string
   summary: string
 }
+
 
 /**
  * 複数のレビューソースを統合して要約レビューを生成
@@ -54,12 +54,13 @@ ${source.author ? `著者: ${source.author}\n` : ''}内容: ${content.substring(
 
     const prompt = `あなたはシューズレビューを要約する専門家です。以下の複数の情報源から「${shoeBrand} ${shoeModel}」というシューズのレビューを統合し、構造化された要約を作成してください。
 
+重要：引用している記事や情報源が、指定されたシューズ（${shoeBrand} ${shoeModel}）についてのものであるかを十分に精査してください。別のモデルや全く関係のない記事が含まれている場合は、それらを無視して要約を行ってください。
+
 ${sourcesText}
 
 以下のフォーマットでJSON形式で出力してください：
 {
   "title": "レビューのタイトル（40-60文字、必ず「${shoeBrand} ${shoeModel}」を含める。引き付けられる表現を使用。例：「${shoeBrand} ${shoeModel}を3ヶ月履いてみた本音レビュー」「はじめて履いた${shoeBrand} ${shoeModel}の感想」「${shoeBrand} ${shoeModel}を100km走って分かったこと」など）",
-  "overall_rating": 0.0-10.0の数値（総合評価、小数点第1位まで）,
   "pros": ["良い点1", "良い点2", "良い点3"],
   "cons": ["悪い点1", "悪い点2"],
   "recommended_for": "推奨ランナータイプ（例: 初心者向け、マラソンランナー向け、スピード重視のランナー向けなど）",
@@ -127,7 +128,6 @@ async function generateWithOpenAI(prompt: string, apiKey: string): Promise<Summa
   const result = JSON.parse(content)
   return {
     title: result.title || 'レビュー要約',
-    overallRating: result.overall_rating || 3,
     pros: result.pros || [],
     cons: result.cons || [],
     recommendedFor: result.recommended_for,
@@ -184,7 +184,6 @@ async function generateWithGemini(prompt: string, apiKey: string): Promise<Summa
 
     return {
       title: result.title || 'レビュー要約',
-      overallRating: result.overall_rating || 3,
       pros: result.pros || [],
       cons: result.cons || [],
       recommendedFor: result.recommended_for,

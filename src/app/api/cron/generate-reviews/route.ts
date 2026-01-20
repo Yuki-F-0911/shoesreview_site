@@ -48,7 +48,8 @@ export async function GET(request: NextRequest) {
         // 対象シューズを取得（最大10件/回で制限）
         const targetShoes = await prisma.shoe.findMany({
             where: {
-                id: { notIn: existingShoeIds }
+                id: { notIn: existingShoeIds },
+                category: { in: ['Running', 'RUNNING', 'ランニング'] }
             },
             orderBy: { createdAt: 'desc' },
             take: 10
@@ -109,7 +110,7 @@ export async function GET(request: NextRequest) {
                         type: 'AI_SUMMARY',
                         title: summary.title,
                         content: summary.summary,
-                        overallRating: summary.overallRating,
+                        // overallRating removed for AI reviews
                         pros: summary.pros,
                         cons: summary.cons,
                         recommendedFor: summary.recommendedFor,

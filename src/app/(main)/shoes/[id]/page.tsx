@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma/client'
 import { ReviewCard } from '@/components/reviews/ReviewCard'
+import { ReviewList } from '@/components/reviews/ReviewList'
 import { Badge } from '@/components/ui/Badge'
 import { RatingRadarChart } from '@/components/shoes/RatingRadarChart'
 import { ProsConsList } from '@/components/shoes/ProsConsList'
@@ -418,11 +419,7 @@ export default async function ShoeDetailPage({ params }: { params: { id: string 
             </div>
 
             {shoe.reviews.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {shoe.reviews.map((review) => (
-                  <ReviewCard key={review.id} review={review} />
-                ))}
-              </div>
+              <ReviewList reviews={shoe.reviews} />
             ) : (
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-12 text-center">
                 <div className="text-slate-400 mb-4">
