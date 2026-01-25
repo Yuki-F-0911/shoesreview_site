@@ -18,6 +18,7 @@ export interface SummarizedReview {
   cons: string[]
   recommendedFor?: string
   summary: string
+  isRunningShoe?: boolean // ランニングシューズ判定フラグ
 }
 
 
@@ -52,7 +53,13 @@ ${source.author ? `著者: ${source.author}\n` : ''}内容: ${content.substring(
       })
       .join('\n\n')
 
-    const prompt = `あなたはシューズレビューを要約する専門家です。以下の複数の情報源から「${shoeBrand} ${shoeModel}」というシューズのレビューを統合し、構造化された要約を作成してください。
+    const prompt = `あなたはランニングシューズの専門家です。以下の複数の情報源から「${shoeBrand} ${shoeModel}」というシューズのレビューを統合し、構造化された要約を作成してください。
+
+最重要事項：
+このレビューは「ランニング（特に本格的なランニング、マラソン、ジョギング）」を目的としたものです。
+情報源が「ファッション用途」「街履き」としてのスニーカー（例：Converse All Star, Air Force 1, Air Maxのライフスタイルモデルなど）について言及している場合でも、可能な限り「走ること」に関するパフォーマンス（クッション性、反発性、フィット感、通気性など）に焦点を当てて抽出してください。
+
+情報源を確認し、もし対象のシューズが「走るためのシューズ（ランニングシューズ）」ではなく、「完全にファッション目的のカジュアルスニーカー」であると判断される場合は、JSON出力の "is_running_shoe" フィールドを false にしてください。ランニングに使用可能なシューズであれば true にしてください。
 
 重要：引用している記事や情報源が、指定されたシューズ（${shoeBrand} ${shoeModel}）についてのものであるかを十分に精査してください。別のモデルや全く関係のない記事が含まれている場合は、それらを無視して要約を行ってください。
 
@@ -64,7 +71,8 @@ ${sourcesText}
   "pros": ["良い点1", "良い点2", "良い点3"],
   "cons": ["悪い点1", "悪い点2"],
   "recommended_for": "推奨ランナータイプ（例: 初心者向け、マラソンランナー向け、スピード重視のランナー向けなど）",
-  "summary": "レビューの要約文（200-300文字）"
+  "summary": "レビューの要約文（200-300文字）",
+  "is_running_shoe": true または false
 }`
 
     // OpenAI APIを使用（優先）
@@ -95,11 +103,11 @@ async function generateWithOpenAI(prompt: string, apiKey: string): Promise<Summa
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'gpt-4',
+      model: 'gpt-4-turbo', // より安価で高性能なモデルに変更
       messages: [
         {
           role: 'system',
-          content: 'あなたはシューズレビューを要約する専門家です。JSON形式で正確に出力してください。',
+          content: 'あなたはランニングシューズレビューを要約する専門家です。JSON形式で正確に出力してください。',
         },
         {
           role: 'user',
@@ -132,6 +140,7 @@ async function generateWithOpenAI(prompt: string, apiKey: string): Promise<Summa
     cons: result.cons || [],
     recommendedFor: result.recommended_for,
     summary: result.summary || '',
+    isRunningShoe: result.is_running_shoe !== false, // デフォルトはtrueとして扱う
   }
 }
 
@@ -188,6 +197,7 @@ async function generateWithGemini(prompt: string, apiKey: string): Promise<Summa
       cons: result.cons || [],
       recommendedFor: result.recommended_for,
       summary: result.summary || '',
+      isRunningShoe: result.is_running_shoe !== false,
     }
   } catch (error) {
     console.error('Failed to parse JSON from Gemini:', content);

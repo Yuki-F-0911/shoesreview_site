@@ -1,41 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server'
+import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
 import { refreshCuratedSourcesForShoe } from '@/lib/curation/service'
 import { generateSummarizedReview } from '@/lib/ai/summarizer'
 
 const prisma = new PrismaClient()
 
-// 認証チェック
-function isAuthorized(request: NextRequest): boolean {
-    const authHeader = request.headers.get('authorization')
-    const cronSecret = process.env.CRON_SECRET
-
-    // Vercel Cron Jobsからの呼び出し
-    if (authHeader === `Bearer ${cronSecret}`) {
-        return true
-    }
-
-    // または直接CRON_SECRETをクエリパラメータで渡す（デバッグ用）
-    const url = new URL(request.url)
-    const secret = url.searchParams.get('secret')
-    if (secret === cronSecret) {
-        return true
-    }
-
-    return false
-}
-
-export async function GET(request: NextRequest) {
-    // 認証チェック
-    if (!isAuthorized(request)) {
-        return NextResponse.json(
-            { error: 'Unauthorized' },
-            { status: 401 }
-        )
-    }
-
+async function main() {
     try {
-        console.log('Starting daily review generation via Cron...')
+        console.log('Starting daily review generation...')
 
         // AI_SUMMARYレビューが存在しないシューズを取得
         const existingReviews = await prisma.review.findMany({
@@ -62,7 +34,6 @@ export async function GET(request: NextRequest) {
             success: 0,
             failed: 0,
             skipped: 0,
-            details: [] as { shoe: string; status: string; error?: string }[]
         }
 
         for (const shoe of targetShoes) {
@@ -86,7 +57,7 @@ export async function GET(request: NextRequest) {
                 })
 
                 if (sources.length === 0) {
-                    results.details.push({ shoe: shoeName, status: 'skipped', error: 'No sources found' })
+                    console.log('  -> No sources found, skipping.')
                     results.failed++
                     continue
                 }
@@ -114,8 +85,7 @@ export async function GET(request: NextRequest) {
                         data: { category: 'Casual' }
                     })
 
-                    results.details.push({ shoe: shoeName, status: 'skipped', error: 'Not a running shoe' })
-                    results.skipped++ // results object needs 'skipped' property, need to check if it exists
+                    results.skipped++
                     continue
                 }
 
@@ -126,7 +96,6 @@ export async function GET(request: NextRequest) {
                         type: 'AI_SUMMARY',
                         title: summary.title,
                         content: summary.summary,
-                        // overallRating removed for AI reviews
                         pros: summary.pros,
                         cons: summary.cons,
                         recommendedFor: summary.recommendedFor,
@@ -149,7 +118,7 @@ export async function GET(request: NextRequest) {
                     })
                 }
 
-                results.details.push({ shoe: shoeName, status: 'success' })
+                console.log(`  -> Success! Review ID: ${createdReview.id}`)
                 results.success++
 
                 // レート制限対策
@@ -158,7 +127,6 @@ export async function GET(request: NextRequest) {
             } catch (error) {
                 const errorMessage = error instanceof Error ? error.message : String(error)
                 console.error(`  -> Error: ${errorMessage}`)
-                results.details.push({ shoe: shoeName, status: 'failed', error: errorMessage })
                 results.failed++
                 await new Promise(resolve => setTimeout(resolve, 2000))
             }
@@ -166,28 +134,14 @@ export async function GET(request: NextRequest) {
             results.processed++
         }
 
-        console.log(`Cron job completed. Success: ${results.success}, Failed: ${results.failed}`)
-
-        return NextResponse.json({
-            success: true,
-            message: 'Daily review generation completed',
-            results
-        })
+        console.log(`Job completed. Success: ${results.success}, Failed: ${results.failed}, Skipped: ${results.skipped}`)
 
     } catch (error) {
-        console.error('Cron job error:', error)
-        return NextResponse.json(
-            {
-                error: 'Internal server error',
-                message: error instanceof Error ? error.message : String(error)
-            },
-            { status: 500 }
-        )
+        console.error('Job error:', error)
+        process.exit(1)
     } finally {
         await prisma.$disconnect()
     }
 }
 
-// Vercel Cron Jobの設定
-export const runtime = 'nodejs'
-export const maxDuration = 300 // 5分（Pro planが必要）
+main()
