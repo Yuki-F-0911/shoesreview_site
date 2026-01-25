@@ -1,0 +1,5 @@
+Checking for casual sneakers...
+Found 0 Converse shoes.
+Found 0 Air Max shoes.
+Found 0 Vans shoes.
+Categories: [{"_count":{"id":12},"category":"ランニング"}]

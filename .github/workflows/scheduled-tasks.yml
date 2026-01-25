@@ -1,0 +1,58 @@
+name: Scheduled Tasks
+
+on:
+  schedule:
+    # 毎日 3:00 UTC (日本時間 12:00) - Generate Reviews
+    - cron: '0 3 * * *'
+    # 毎日 4:00 UTC (日本時間 13:00) - Collect Images
+    - cron: '0 4 * * *'
+    # 毎日 5:00 UTC (日本時間 14:00) - Backup to Sheets
+    - cron: '0 5 * * *'
+  # 手動実行用
+  workflow_dispatch:
+
+jobs:
+  run-tasks:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Run Generate Reviews (03:00 UTC)
+        if: github.event.schedule == '0 3 * * *' || github.event_name == 'workflow_dispatch'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GOOGLE_SEARCH_ENGINE_ID: ${{ secrets.GOOGLE_SEARCH_ENGINE_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: npx tsx src/scripts/cron-generate-reviews.ts
+
+      - name: Run Collect Images (04:00 UTC)
+        if: github.event.schedule == '0 4 * * *' || github.event_name == 'workflow_dispatch'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GOOGLE_SEARCH_ENGINE_ID: ${{ secrets.GOOGLE_SEARCH_ENGINE_ID }}
+        run: npx tsx src/scripts/cron-collect-images.ts
+
+      - name: Run Backup to Sheets (05:00 UTC)
+        if: github.event.schedule == '0 5 * * *' || github.event_name == 'workflow_dispatch'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+          GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
+          GOOGLE_SPREADSHEET_ID: ${{ secrets.GOOGLE_SPREADSHEET_ID }}
+        run: npx tsx src/scripts/cron-backup.ts

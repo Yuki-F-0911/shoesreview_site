@@ -1,0 +1,5 @@
+Checking for admin user and reviews...
+Found 1 potential admin users:
+User: admin (yuki0911hanshin@gmail.com), ID: cmkm4823x0000m3jat6pnoglk
+ - Reviews count: 1
+   - Review ID: cmkm4827n0007m3ja1rekpk2o, Shoe: Adidas Ultraboost 23, Title: クッション性が素晴らしい
