@@ -50,27 +50,42 @@ model User {
   updatedAt   DateTime @updatedAt
 
   // ランナープロフィール（永続化）
-  runnerAge            Int?      // 年齢
-  runnerGender         String?   // 性別
-  runnerGenderPublic   Boolean   @default(true)  // 性別の公開設定
-  runnerHeight         Float?    // 身長 (cm)
-  runnerWeight         Float?    // 体重 (kg)
-  runnerWeeklyDistance Float?    // 週間走行距離 (km)
-  runnerPersonalBest   String?   // 自己ベスト
-  runnerExpertise      String[]  @default([])  // 専門種目（複数選択可）
-  runnerFootShape      String[]  @default([])  // 足の形状（複数選択可）
-  runnerLandingType    String?   // 接地タイプ
+  runnerAge            Int? // 年齢
+  runnerGender         String? // 性別
+  runnerGenderPublic   Boolean  @default(true) // 性別の公開設定
+  runnerHeight         Float? // 身長 (cm)
+  runnerWeight         Float? // 体重 (kg)
+  runnerWeeklyDistance Float? // 週間走行距離 (km)
+  runnerPersonalBest   String? // 自己ベスト
+  runnerExpertise      String[] @default([]) // 専門種目（複数選択可）
+  runnerFootShape      String[] @default([]) // 足の形状（複数選択可）
+  runnerLandingType    String? // 接地タイプ
 
-  reviews  Review[]
-  comments Comment[]
-  likes    Like[]
-  accounts Account[]
-  sessions Session[]
-  curatedSources CuratedSource[]
-  uploadedMedia  ShoeMedia[]
-  integrations   UserIntegration[]
-  userShoes      UserShoe[]
-  runningActivities RunningActivity[]
+  // プロピッカー・認証バッジ
+  isVerified       Boolean   @default(false) // 認証済みユーザー
+  verifiedAt       DateTime? // 認証日時
+  expertiseLevel   String? // 専門家レベル（BEGINNER, INTERMEDIATE, ADVANCED, EXPERT）
+  verificationNote String? // 認証理由（管理者が記入）
+
+  // 貢献度・活動統計
+  contributionScore Int @default(0) // 貢献度スコア
+  reviewCount       Int @default(0) // レビュー数（キャッシュ）
+  helpfulVoteCount  Int @default(0) // 役立った票数（キャッシュ）
+
+  reviews             Review[]
+  comments            Comment[]
+  likes               Like[]
+  accounts            Account[]
+  sessions            Session[]
+  curatedSources      CuratedSource[]
+  uploadedMedia       ShoeMedia[]
+  integrations        UserIntegration[]
+  userShoes           UserShoe[]
+  runningActivities   RunningActivity[]
+  followers           Follow[]             @relation("following")
+  following           Follow[]             @relation("follower")
+  reviewVotes         ReviewVote[]
+  shoeRecommendations ShoeRecommendation[]
 
   @@map("users")
 }
@@ -115,115 +130,137 @@ model VerificationToken {
 }
 
 model Shoe {
-  id           String    @id @default(cuid())
-  brand        String
-  modelName    String
-  category     String
-  releaseYear  Int?
+  id            String   @id @default(cuid())
+  brand         String
+  modelName     String
+  category      String
+  releaseYear   Int?
   officialPrice Int?
-  imageUrls    String[]
-  keywords     String[]  @default([])
-  locale       String    @default("ja-JP")
-  region       String    @default("JP")
-  description  String?   @db.Text
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  imageUrls     String[]
+  keywords      String[] @default([])
+  locale        String   @default("ja-JP")
+  region        String   @default("JP")
+  description   String?  @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // マスタデータ拡張
+  isOfficialData      Boolean   @default(false) // メーカー公式データかどうか
+  officialDescription String?   @db.Text // メーカー公式説明
+  specifications      Json? // 詳細スペック（重量、ドロップ、スタック等）
+  targetRunner        String[]  @default([]) // ターゲットランナータイプ
+  releaseDate         DateTime? // 発売日
+  isMinorModel        Boolean   @default(false) // マイナー/ニッチモデルフラグ
+  registeredByUserId  String? // ユーザー登録の場合の登録者ID
+  registrationStatus  String    @default("approved") // pending, approved, rejected
 
   reviews         Review[]
   media           ShoeMedia[]
   curatedSources  CuratedSource[]
   userShoes       UserShoe[]
+  recommendations ShoeRecommendation[]
 
   @@map("shoes")
 }
 
 model Review {
-  id               String   @id @default(cuid())
-  shoeId           String
-  userId           String?  // AI要約の場合はnull
-  postedAt         DateTime @default(now())  // 投稿日時
-  type             String   @default("USER") // USER or AI_SUMMARY
-  overallRating    Decimal? @db.Decimal(3, 1) // 0.0-10.0
-  comfortRating    Decimal? @db.Decimal(3, 1) // 0.0-10.0
-  designRating     Decimal? @db.Decimal(3, 1) // 0.0-10.0
-  durabilityRating Decimal? @db.Decimal(3, 1) // 0.0-10.0
-  lightnessRating  Decimal? @db.Decimal(3, 1) // 軽量性 0.0-10.0
-  stabilityRating  Decimal? @db.Decimal(3, 1) // 安定性 0.0-10.0
-  cushioningRating Decimal? @db.Decimal(3, 1) // クッション性 0.0-10.0
-  gripRating       Decimal? @db.Decimal(3, 1) // グリップ力 0.0-10.0
+  id                   String   @id @default(cuid())
+  shoeId               String
+  userId               String? // AI要約の場合はnull
+  postedAt             DateTime @default(now()) // 投稿日時
+  type                 String   @default("USER") // USER or AI_SUMMARY
+  overallRating        Decimal? @db.Decimal(3, 1) // 0.0-10.0
+  comfortRating        Decimal? @db.Decimal(3, 1) // 0.0-10.0
+  designRating         Decimal? @db.Decimal(3, 1) // 0.0-10.0
+  durabilityRating     Decimal? @db.Decimal(3, 1) // 0.0-10.0
+  lightnessRating      Decimal? @db.Decimal(3, 1) // 軽量性 0.0-10.0
+  stabilityRating      Decimal? @db.Decimal(3, 1) // 安定性 0.0-10.0
+  cushioningRating     Decimal? @db.Decimal(3, 1) // クッション性 0.0-10.0
+  gripRating           Decimal? @db.Decimal(3, 1) // グリップ力 0.0-10.0
   responsivenessRating Decimal? @db.Decimal(3, 1) // 反発力 0.0-10.0
-  title            String?  // 任意（簡易入力モード対応）
-  content          String?  @db.Text  // 任意（簡易入力モード対応）
-  quickComment     String?  @db.Text  // 簡易入力用のコメント
-  imageUrls        String[]
-  usagePeriod      String?
-  usageScene       String[]
-  pros             String[]
-  cons             String[]
-  recommendedFor  String?  // 推奨ランナータイプ（AI要約の場合）
-  sourceCount      Int      @default(0) // 情報源の数
+  title                String? // 任意（簡易入力モード対応）
+  content              String?  @db.Text // 任意（簡易入力モード対応）
+  quickComment         String?  @db.Text // 簡易入力用のコメント
+  imageUrls            String[]
+  usagePeriod          String?
+  usageScene           String[]
+  pros                 String[]
+  cons                 String[]
+  recommendedFor       String? // 推奨ランナータイプ（AI要約の場合）
+  sourceCount          Int      @default(0) // 情報源の数
 
   // 詳細評価項目（CSVインポート用）
   // ステップイン（足入れ時）
-  stepInToeWidth   Int?     // つま先の広さ (1-5)
-  stepInInstepHeight Int?   // 甲の高さ (1-5)
-  stepInHeelHold   Int?     // ヒールのホールド感 (1-5)
+  stepInToeWidth     Int? // つま先の広さ (1-5)
+  stepInInstepHeight Int? // 甲の高さ (1-5)
+  stepInHeelHold     Int? // ヒールのホールド感 (1-5)
 
   // ファーストステップ・クルージング（走行時）
-  runLightness     Int?     // 軽さの実感 (1-5)
-  runSinkDepth     Int?     // 沈み込みの深さ (1-5)
-  runStability     Int?     // 安定性 (1-5)
-  runTransition    Int?     // トランジション（転がり） (1-5)
-  runResponse      Int?     // 反発のリズム (1-5)
+  runLightness  Int? // 軽さの実感 (1-5)
+  runSinkDepth  Int? // 沈み込みの深さ (1-5)
+  runStability  Int? // 安定性 (1-5)
+  runTransition Int? // トランジション（転がり） (1-5)
+  runResponse   Int? // 反発のリズム (1-5)
 
   // 走行後の状態（疲労感）1=強く感じる, 10=感じない
-  fatigueSole      Int?     // 足裏の疲労
-  fatigueCalf      Int?     // ふくらはぎの張り
-  fatigueKnee      Int?     // 膝への違和感
-  fatigueOther     String?  // その他
+  fatigueSole  Int? // 足裏の疲労
+  fatigueCalf  Int? // ふくらはぎの張り
+  fatigueKnee  Int? // 膝への違和感
+  fatigueOther String? // その他
 
   // SD法による採点 (1-5)
-  sdLanding        Int?     // 着地感 (1やわらかめ - 5地面を感じる)
-  sdResponse       Int?     // 反発性 (1ない - 5ある)
-  sdStability      Int?     // 安定性 (1自然 - 5コントロールされる)
-  sdWidth          Int?     // 足幅感 (1タイト - 5リラックス)
-  sdDesign         Int?     // デザインスタイル (1競技場らしい - 5街履き)
+  sdLanding   Int? // 着地感 (1やわらかめ - 5地面を感じる)
+  sdResponse  Int? // 反発性 (1ない - 5ある)
+  sdStability Int? // 安定性 (1自然 - 5コントロールされる)
+  sdWidth     Int? // 足幅感 (1タイト - 5リラックス)
+  sdDesign    Int? // デザインスタイル (1競技場らしい - 5街履き)
 
   // その他詳細
-  onomatopoeia     String?  // オノマトペ
-  purchaseSize     String?  // 購入サイズ (cm)
+  onomatopoeia String? // オノマトペ
+  purchaseSize String? // 購入サイズ (cm)
 
   // レビュアー属性（スナップショット）
-  reviewerAge            Int?      // 年齢
-  reviewerGender         String?
-  reviewerHeight         Float?
-  reviewerWeight         Float?
+  reviewerAge               Int? // 年齢
+  reviewerGender            String?
+  reviewerHeight            Float?
+  reviewerWeight            Float?
   // プライバシー保護のための範囲選択
-  reviewerHeightRange    String?   // 身長範囲 (例: "170-179cm")
-  reviewerWeightRange    String?   // 体重範囲 (例: "60-69kg")
+  reviewerHeightRange       String? // 身長範囲 (例: "170-179cm")
+  reviewerWeightRange       String? // 体重範囲 (例: "60-69kg")
   reviewerPersonalBestLevel String? // 走力レベル (例: "サブ4")
-  reviewerWeeklyDistance Float?
-  reviewerPersonalBest   String?
-  reviewerExpertise      String[]  @default([])  // 専門種目（複数選択可）
-  reviewerFootShape      String[]  @default([])  // 足の形状（複数選択可）
-  reviewerFootShapeDetail String? // 足の形状に関する詳細な補足
-  reviewerLandingType    String?
+  reviewerWeeklyDistance    Float?
+  reviewerPersonalBest      String?
+  reviewerExpertise         String[] @default([]) // 専門種目（複数選択可）
+  reviewerFootShape         String[] @default([]) // 足の形状（複数選択可）
+  reviewerFootShapeDetail   String? // 足の形状に関する詳細な補足
+  reviewerLandingType       String?
   reviewerLandingTypeDetail String? // 接地タイプの補足
 
-  shoe     Shoe      @relation(fields: [shoeId], references: [id], onDelete: Cascade)
-  user     User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
-  comments Comment[]
-  likes    Like[]
-  aiSources AISource[]
+  // 使用条件の詳細メタデータ
+  totalDistanceKm   Float? // 総走行距離（km）
+  usageMonths       Int? // 使用期間（月）
+  terrainType       String[] @default([]) // 地形タイプ（ロード、トレイル、トラック等）
+  weatherConditions String[] @default([]) // 使用した天候条件
+
+  // レビューの有用性スコア
+  helpfulCount    Int @default(0) // 「役に立った」の数
+  notHelpfulCount Int @default(0) // 「役に立たなかった」の数
+
+  shoe        Shoe         @relation(fields: [shoeId], references: [id], onDelete: Cascade)
+  user        User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  comments    Comment[]
+  likes       Like[]
+  aiSources   AISource[]
+  reviewVotes ReviewVote[]
 
   @@map("reviews")
 }
 
 model ShoeMedia {
-  id            String         @id @default(cuid())
+  id            String          @id @default(cuid())
   shoeId        String
   storagePath   String
-  publicUrl     String         @db.Text
+  publicUrl     String          @db.Text
   altText       String?
   sourceType    ShoeMediaSource @default(ADMIN)
   status        MediaStatus     @default(PENDING)
@@ -231,13 +268,13 @@ model ShoeMedia {
   height        Int?
   fileSize      Int?
   dominantColor String?
-  tags          String[]       @default([])
+  tags          String[]        @default([])
   uploadedById  String?
-  isPrimary     Boolean        @default(false)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  isPrimary     Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 
-  shoe       Shoe @relation(fields: [shoeId], references: [id], onDelete: Cascade)
+  shoe       Shoe  @relation(fields: [shoeId], references: [id], onDelete: Cascade)
   uploadedBy User? @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
 
   @@index([shoeId, status, isPrimary])
@@ -265,7 +302,7 @@ model CuratedSource {
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
 
-  shoe      Shoe @relation(fields: [shoeId], references: [id], onDelete: Cascade)
+  shoe      Shoe  @relation(fields: [shoeId], references: [id], onDelete: Cascade)
   curatedBy User? @relation(fields: [curatedById], references: [id], onDelete: SetNull)
 
   @@index([shoeId, type, status])
@@ -273,17 +310,17 @@ model CuratedSource {
 }
 
 model AISource {
-  id              String   @id @default(cuid())
-  reviewId        String
-  sourceType      String   // WEB_ARTICLE, YOUTUBE_VIDEO, MANUAL
-  sourceUrl       String   @db.Text
-  sourceTitle     String?  // 記事タイトルまたは動画タイトル
-  sourceAuthor    String?  // 記事著者またはチャンネル名
-  youtubeVideoId  String?  // YouTube動画ID（埋め込み用）
-  summary         String?  @db.Text // 個別の要約（YouTube動画の場合）
-  rawData         Json?    // 収集した生データ
-  scrapedAt       DateTime @default(now())
-  reliability     Float    @default(0.5)
+  id             String   @id @default(cuid())
+  reviewId       String
+  sourceType     String // WEB_ARTICLE, YOUTUBE_VIDEO, MANUAL
+  sourceUrl      String   @db.Text
+  sourceTitle    String? // 記事タイトルまたは動画タイトル
+  sourceAuthor   String? // 記事著者またはチャンネル名
+  youtubeVideoId String? // YouTube動画ID（埋め込み用）
+  summary        String?  @db.Text // 個別の要約（YouTube動画の場合）
+  rawData        Json? // 収集した生データ
+  scrapedAt      DateTime @default(now())
+  reliability    Float    @default(0.5)
 
   review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 
@@ -324,7 +361,7 @@ model Like {
 model UserIntegration {
   id             String   @id @default(cuid())
   userId         String
-  provider       String   // "strava", "garmin" など
+  provider       String // "strava", "garmin" など
   accessToken    String   @db.Text
   refreshToken   String   @db.Text
   expiresAt      DateTime
@@ -342,15 +379,15 @@ model UserIntegration {
 model UserShoe {
   id            String    @id @default(cuid())
   userId        String
-  shoeId        String?   // サイト内のシューズとの紐付け（任意）
-  name          String    // ユーザー指定の名前
+  shoeId        String? // サイト内のシューズとの紐付け（任意）
+  name          String // ユーザー指定の名前
   brand         String
   model         String
   totalDistance Float     @default(0) // km
   maxDistance   Float     @default(800) // 交換目安距離（km）
   purchaseDate  DateTime?
   retiredAt     DateTime? // 引退日
-  stravaGearId  String?   // Stravaのgear_id（同期用）
+  stravaGearId  String? // Stravaのgear_id（同期用）
   imageUrl      String?
   notes         String?   @db.Text
   createdAt     DateTime  @default(now())
@@ -368,12 +405,12 @@ model RunningActivity {
   id               String   @id @default(cuid())
   userId           String
   userShoeId       String?
-  stravaActivityId String?  // Stravaのactivity_id
+  stravaActivityId String? // Stravaのactivity_id
   name             String
-  distance         Float    // km
-  duration         Int      // 秒
-  pace             Float?   // min/km
-  elevationGain    Float?   // m
+  distance         Float // km
+  duration         Int // 秒
+  pace             Float? // min/km
+  elevationGain    Float? // m
   activityDate     DateTime
   source           String   @default("manual") // "strava" or "manual"
   createdAt        DateTime @default(now())
@@ -384,4 +421,58 @@ model RunningActivity {
   @@unique([stravaActivityId])
   @@index([userId, activityDate])
   @@map("running_activities")
+}
+
+// ================================
+// ソーシャル機能・マッチング機能
+// ================================
+
+// フォロー機能
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+  @@map("follows")
+}
+
+// レビューの有用性投票
+model ReviewVote {
+  id        String   @id @default(cuid())
+  reviewId  String
+  userId    String
+  isHelpful Boolean
+  createdAt DateTime @default(now())
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, userId])
+  @@map("review_votes")
+}
+
+// AIシューズレコメンド結果
+model ShoeRecommendation {
+  id             String   @id @default(cuid())
+  userId         String
+  shoeId         String
+  matchScore     Float // マッチ度（0-100）
+  reasons        String[] // レコメンド理由
+  similarUserIds String[] // 類似ユーザーID（参考）
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shoe Shoe @relation(fields: [shoeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, shoeId])
+  @@index([userId, matchScore])
+  @@map("shoe_recommendations")
 }

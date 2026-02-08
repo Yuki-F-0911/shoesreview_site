@@ -16,6 +16,7 @@ import { ArrowLeft, ExternalLink } from 'lucide-react'
 import { ReviewDetailedStats } from '@/components/reviews/ReviewDetailedStats'
 import { LikeButton } from '@/components/reviews/LikeButton'
 import { CommentSection } from '@/components/reviews/CommentSection'
+import { ReviewContentGate } from '@/components/reviews/ReviewContentGate'
 
 // メタデータ生成
 export async function generateMetadata({
@@ -204,7 +205,9 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
                 </div>
 
                 <div className="prose max-w-none">
-                  <p className="whitespace-pre-wrap text-gray-700">{displayContent}</p>
+                  <ReviewContentGate content={displayContent} type={review.type}>
+                    <p className="whitespace-pre-wrap text-gray-700">{displayContent}</p>
+                  </ReviewContentGate>
                 </div>
 
                 {review.imageUrls.length > 0 && (

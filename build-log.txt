@@ -1,0 +1,550 @@
+﻿
+> shoes-review-site@0.1.0 build
+> prisma generate && next build
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+
+笨・Generated Prisma Client (v5.11.0) to .\node_modules\@prisma\client in 665ms
+
+Start using Prisma Client in Node.js (See: https://pris.ly/d/client)
+```
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+```
+or start using Prisma Client at the edge (See: https://pris.ly/d/accelerate)
+```
+import { PrismaClient } from '@prisma/client/edge'
+const prisma = new PrismaClient()
+```
+
+See other ways of importing Prisma Client: http://pris.ly/d/importing-client
+
+笏娯楳笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏・笏・ Deploying your app to serverless or edge functions?        笏・笏・ Try Prisma Accelerate for connection pooling and caching.  笏・笏・ https://pris.ly/cli/accelerate                             笏・笏披楳笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏笏・
+  笆ｲ Next.js 14.2.0
+  - Environments: .env.local, .env.production, .env
+
+   Creating an optimized production build ...
+node.exe : [baseline-
+browser-mapping] The 
+data in this module i
+s over two months old
+.  To ensure accurate
+ Baseline data, pleas
+e update: `npm i base
+line-browser-mapping@
+latest -D`
+発生場所 行:1 文字:1
++ & "C:\Program Files
+\nodejs/node.exe" "C:
+\Users\yuki0\AppData\
+Roaming\ ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: ([baseli   
+ ne-brows...ping@    
+latest -D`:Strin    g
+) [], RemoteExc    ep
+tion
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+ 笨・Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/52) ...
+Strava隱崎ｨｼ髢句ｧ九お繝ｩ繝ｼ: 
+n [Error]: Dynamic se
+rver usage: Route /ap
+i/integrations/strava
+/authorize couldn't b
+e rendered statically
+ because it used head
+ers. See more info he
+re: https://nextjs.or
+g/docs/messages/dynam
+ic-server-error
+    at l (C:\Users\yu
+ki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ
+繧､繝・.next\server\chun
+ks\8948.js:1:37211)
+    at d (C:\Users\yu
+ki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ
+繧､繝・.next\server\chun
+ks\5279.js:6:3871)
+    at C:\Users\yuki0
+\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧､繝
+・.next\server\chunks\
+5279.js:373:60067
+    at l (C:\Users\yu
+ki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ
+繧､繝・.next\server\app\
+api\integrations\stra
+va\authorize\route.js
+:1:1079)
+    at C:\Users\yuki0
+\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧､繝
+・node_modules\next\di
+st\compiled\next-serv
+er\app-route.runtime.
+prod.js:6:34807
+    at C:\Users\yuki0
+\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧､繝
+・node_modules\next\di
+st\server\lib\trace\t
+racer.js:140:36
+    at NoopContextMan
+ager.with (C:\Users\y
+uki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧
+ｵ繧､繝・node_modules\nex
+t\dist\compiled\@open
+telemetry\api\index.j
+s:1:7062)
+    at ContextAPI.wit
+h (C:\Users\yuki0\繧ｷ繝
+･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧､繝・nod
+e_modules\next\dist\c
+ompiled\@opentelemetr
+y\api\index.js:1:518)
+    at NoopTracer.sta
+rtActiveSpan (C:\User
+s\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η
+繝ｼ繧ｵ繧､繝・node_modules\
+next\dist\compiled\@o
+pentelemetry\api\inde
+x.js:1:18093)
+    at ProxyTracer.st
+artActiveSpan (C:\Use
+rs\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙
+Η繝ｼ繧ｵ繧､繝・node_modules
+\next\dist\compiled\@
+opentelemetry\api\ind
+ex.js:1:18854) {
+  description: "Route
+ /api/integrations/st
+rava/authorize couldn
+'t be rendered static
+ally because it used 
+headers. See more inf
+o here: https://nextj
+s.org/docs/messages/d
+ynamic-server-error",
+  digest: 'DYNAMIC_SE
+RVER_USAGE'
+}
+   Generating static pages (13/52) 
+Strava繧ｳ繝ｼ繝ｫ繝舌ャ繧ｯ蜃ｦ逅・
+お繝ｩ繝ｼ: q [Error]: Dyn
+amic server usage: Ro
+ute /api/integrations
+/strava/callback coul
+dn't be rendered stat
+ically because it acc
+essed `nextUrl.search
+Params`. See more inf
+o here: https://nextj
+s.org/docs/messages/d
+ynamic-server-error
+    at Object.get (C:
+\Users\yuki0\繧ｷ繝･繝ｼ繧ｺ
+繝ｬ繝薙Η繝ｼ繧ｵ繧､繝・node_mod
+ules\next\dist\compil
+ed\next-server\app-ro
+ute.runtime.prod.js:6
+:38424)
+    at d (C:\Users\yu
+ki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ
+繧､繝・.next\server\app\
+api\integrations\stra
+va\callback\route.js:
+1:1079)
+    at C:\Users\yuki0
+\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧､繝
+・node_modules\next\di
+st\compiled\next-serv
+er\app-route.runtime.
+prod.js:6:34807
+    at C:\Users\yuki0
+\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧､繝
+・node_modules\next\di
+st\server\lib\trace\t
+racer.js:140:36
+    at NoopContextMan
+ager.with (C:\Users\y
+uki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧
+ｵ繧､繝・node_modules\nex
+t\dist\compiled\@open
+telemetry\api\index.j
+s:1:7062)
+    at ContextAPI.wit
+h (C:\Users\yuki0\繧ｷ繝
+･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧､繝・nod
+e_modules\next\dist\c
+ompiled\@opentelemetr
+y\api\index.js:1:518)
+    at NoopTracer.sta
+rtActiveSpan (C:\User
+s\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η
+繝ｼ繧ｵ繧､繝・node_modules\
+next\dist\compiled\@o
+pentelemetry\api\inde
+x.js:1:18093)
+    at ProxyTracer.st
+artActiveSpan (C:\Use
+rs\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙
+Η繝ｼ繧ｵ繧､繝・node_modules
+\next\dist\compiled\@
+opentelemetry\api\ind
+ex.js:1:18854)
+    at C:\Users\yuki0
+\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧､繝
+・node_modules\next\di
+st\server\lib\trace\t
+racer.js:122:103
+    at NoopContextMan
+ager.with (C:\Users\y
+uki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧
+ｵ繧､繝・node_modules\nex
+t\dist\compiled\@open
+telemetry\api\index.j
+s:1:7062) {
+  description: "Route
+ /api/integrations/st
+rava/callback couldn'
+t be rendered statica
+lly because it access
+ed `nextUrl.searchPar
+ams`. See more info h
+ere: https://nextjs.o
+rg/docs/messages/dyna
+mic-server-error",
+  digest: 'DYNAMIC_SE
+RVER_USAGE'
+}
+Failed to fetch profi
+le: n [Error]: Dynami
+c server usage: Route
+ /api/users/profile c
+ouldn't be rendered s
+tatically because it 
+used headers. See mor
+e info here: https://
+nextjs.org/docs/messa
+ges/dynamic-server-er
+ror
+    at l (C:\Users\yu
+ki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ
+繧､繝・.next\server\chun
+ks\8948.js:1:37211)
+    at d (C:\Users\yu
+ki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ
+繧､繝・.next\server\chun
+ks\5279.js:6:3871)
+    at C:\Users\yuki0
+\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧､繝
+・.next\server\chunks\
+5279.js:373:60067
+    at c (C:\Users\yu
+ki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ
+繧､繝・.next\server\app\
+api\users\profile\rou
+te.js:1:1626)
+    at C:\Users\yuki0
+\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧､繝
+・node_modules\next\di
+st\compiled\next-serv
+er\app-route.runtime.
+prod.js:6:34807
+    at C:\Users\yuki0
+\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧､繝
+・node_modules\next\di
+st\server\lib\trace\t
+racer.js:140:36
+    at NoopContextMan
+ager.with (C:\Users\y
+uki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧
+ｵ繧､繝・node_modules\nex
+t\dist\compiled\@open
+telemetry\api\index.j
+s:1:7062)
+    at ContextAPI.wit
+h (C:\Users\yuki0\繧ｷ繝
+･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧､繝・nod
+e_modules\next\dist\c
+ompiled\@opentelemetr
+y\api\index.js:1:518)
+    at NoopTracer.sta
+rtActiveSpan (C:\User
+s\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η
+繝ｼ繧ｵ繧､繝・node_modules\
+next\dist\compiled\@o
+pentelemetry\api\inde
+x.js:1:18093)
+    at ProxyTracer.st
+artActiveSpan (C:\Use
+rs\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙
+Η繝ｼ繧ｵ繧､繝・node_modules
+\next\dist\compiled\@
+opentelemetry\api\ind
+ex.js:1:18854) {
+  description: "Route
+ /api/users/profile c
+ouldn't be rendered s
+tatically because it 
+used headers. See mor
+e info here: https://
+nextjs.org/docs/messa
+ges/dynamic-server-er
+ror",
+  digest: 'DYNAMIC_SE
+RVER_USAGE'
+}
+   Generating static pages (26/52) 
+   Generating static pages (39/52) 
+prisma:error 
+Invalid `prisma.review.findMany()` invocation:
+
+
+Error querying the database: FATAL: MaxClientsInSessionMode: max clients reached - in Session mode max clients are limited to pool_size
+prisma:error 
+Invalid `prisma.shoe.findMany()` invocation:
+
+
+Error querying the database: FATAL: MaxClientsInSessionMode: max clients reached - in Session mode max clients are limited to pool_size
+prisma:error 
+Invalid `prisma.shoe.count()` invocation:
+
+
+Error querying the database: FATAL: MaxClientsInSessionMode: max clients reached - in Session mode max clients are limited to pool_size
+prisma:error 
+Invalid `prisma.review.count()` invocation:
+
+
+Error querying the database: FATAL: MaxClientsInSessionMode: max clients reached - in Session mode max clients are limited to pool_size
+prisma:error 
+Invalid `prisma.user.count()` invocation:
+
+
+Error querying the database: FATAL: MaxClientsInSessionMode: max clients reached - in Session mode max clients are limited to pool_size
+prisma:error 
+Invalid `prisma.review.findMany()` invocation:
+
+
+Error querying the database: FATAL: MaxClientsInSessionMode: max clients reached - in Session mode max clients are limited to pool_size
+prisma:error 
+Invalid `prisma.shoe.findMany()` invocation:
+
+
+Error querying the database: FATAL: MaxClientsInSessionMode: max clients reached - in Session mode max clients are limited to pool_size
+prisma:error 
+Invalid `prisma.shoe.count()` invocation:
+
+
+Error querying the database: FATAL: MaxClientsInSessionMode: max clients reached - in Session mode max clients are limited to pool_size
+prisma:error 
+Invalid `prisma.review.count()` invocation:
+
+
+Error querying the database: FATAL: MaxClientsInSessionMode: max clients reached - in Session mode max clients are limited to pool_size
+prisma:error 
+Invalid `prisma.user.count()` invocation:
+
+
+Error querying the database: FATAL: MaxClientsInSessionMode: max clients reached - in Session mode max clients are limited to pool_size
+Failed to fetch revie
+ws: PrismaClientIniti
+alizationError: 
+Invalid `prisma.revie
+w.findMany()` invocat
+ion:
+
+
+Error querying the da
+tabase: FATAL: MaxCli
+entsInSessionMode: ma
+x clients reached - i
+n Session mode max cl
+ients are limited to 
+pool_size
+    at In.handleReque
+stError (C:\Users\yuk
+i0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧
+､繝・node_modules\@pris
+ma\client\runtime\lib
+rary.js:122:7154)
+    at In.handleAndLo
+gRequestError (C:\Use
+rs\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙
+Η繝ｼ繧ｵ繧､繝・node_modules
+\@prisma\client\runti
+me\library.js:122:618
+8)
+    at In.request (C:
+\Users\yuki0\繧ｷ繝･繝ｼ繧ｺ
+繝ｬ繝薙Η繝ｼ繧ｵ繧､繝・node_mod
+ules\@prisma\client\r
+untime\library.js:122
+:5896)
+    at async l (C:\Us
+ers\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝
+薙Η繝ｼ繧ｵ繧､繝・node_module
+s\@prisma\client\runt
+ime\library.js:127:10
+871)
+    at async v (C:\Us
+ers\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝
+薙Η繝ｼ繧ｵ繧､繝・.next\serve
+r\app\page.js:11:468)
+    at async Promise.
+all (index 0)
+    at async w (C:\Us
+ers\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝
+薙Η繝ｼ繧ｵ繧､繝・.next\serve
+r\app\page.js:11:1675
+) {
+  clientVersion: '5.1
+1.0',
+  errorCode: undefine
+d
+}
+Failed to fetch revie
+ws: PrismaClientIniti
+alizationError: 
+Invalid `prisma.revie
+w.findMany()` invocat
+ion:
+
+
+Error querying the da
+tabase: FATAL: MaxCli
+entsInSessionMode: ma
+x clients reached - i
+n Session mode max cl
+ients are limited to 
+pool_size
+    at In.handleReque
+stError (C:\Users\yuk
+i0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙Η繝ｼ繧ｵ繧
+､繝・node_modules\@pris
+ma\client\runtime\lib
+rary.js:122:7154)
+    at In.handleAndLo
+gRequestError (C:\Use
+rs\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝薙
+Η繝ｼ繧ｵ繧､繝・node_modules
+\@prisma\client\runti
+me\library.js:122:618
+8)
+    at In.request (C:
+\Users\yuki0\繧ｷ繝･繝ｼ繧ｺ
+繝ｬ繝薙Η繝ｼ繧ｵ繧､繝・node_mod
+ules\@prisma\client\r
+untime\library.js:122
+:5896)
+    at async l (C:\Us
+ers\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝
+薙Η繝ｼ繧ｵ繧､繝・node_module
+s\@prisma\client\runt
+ime\library.js:127:10
+871)
+    at async v (C:\Us
+ers\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝
+薙Η繝ｼ繧ｵ繧､繝・.next\serve
+r\app\page.js:11:468)
+    at async Promise.
+all (index 0)
+    at async w (C:\Us
+ers\yuki0\繧ｷ繝･繝ｼ繧ｺ繝ｬ繝
+薙Η繝ｼ繧ｵ繧､繝・.next\serve
+r\app\page.js:11:1675
+) {
+  clientVersion: '5.1
+1.0',
+  errorCode: undefine
+d
+}
+ 笨・Generating static pages (52/52)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size     First Load JS
+笏・笳・/                                       183 B            99 kB
+笏・笳・/_not-found                             163 B          87.1 kB
+笏・笳・/about                                  163 B          87.1 kB
+笏・ﾆ・/admin/curation                         2.92 kB        96.6 kB
+笏・笳・/admin/media                            2.5 kB          101 kB
+笏・笳・/admin/reviews/collect                  3.85 kB        97.6 kB
+笏・笳・/admin/reviews/summarize                3.67 kB        97.4 kB
+笏・笳・/admin/shoes                            3.15 kB         102 kB
+笏・ﾆ・/admin/shoes/[id]/images                3.3 kB          102 kB
+笏・笳・/admin/system                           4.07 kB        97.8 kB
+笏・笳・/ai.txt                                 0 B                0 B
+笏・ﾆ・/api/admin/media                        0 B                0 B
+笏・ﾆ・/api/admin/reviews                      0 B                0 B
+笏・ﾆ・/api/admin/reviews/collect              0 B                0 B
+笏・ﾆ・/api/admin/reviews/summarize            0 B                0 B
+笏・ﾆ・/api/admin/shoes/[id]/curation/refresh  0 B                0 B
+笏・ﾆ・/api/ai/review-assist                   0 B                0 B
+笏・ﾆ・/api/auth/[...nextauth]                 0 B                0 B
+笏・ﾆ・/api/auth/register                      0 B                0 B
+笏・ﾆ・/api/cron/backup-to-sheets              0 B                0 B
+笏・ﾆ・/api/cron/collect-images                0 B                0 B
+笏・ﾆ・/api/cron/generate-reviews              0 B                0 B
+笏・ﾆ・/api/curation                           0 B                0 B
+笏・笳・/api/curation/check-env                 0 B                0 B
+笏・ﾆ・/api/curation/diagnose                  0 B                0 B
+笏・ﾆ・/api/curation/test                      0 B                0 B
+笏・ﾆ・/api/integrations/strava/authorize      0 B                0 B
+笏・ﾆ・/api/integrations/strava/callback       0 B                0 B
+笏・ﾆ・/api/integrations/strava/disconnect     0 B                0 B
+笏・ﾆ・/api/integrations/strava/sync           0 B                0 B
+笏・ﾆ・/api/media/upload                       0 B                0 B
+笏・ﾆ・/api/revalidate                         0 B                0 B
+笏・ﾆ・/api/reviews                            0 B                0 B
+笏・ﾆ・/api/reviews/[id]                       0 B                0 B
+笏・ﾆ・/api/reviews/[id]/comments              0 B                0 B
+笏・ﾆ・/api/reviews/[id]/like                  0 B                0 B
+笏・ﾆ・/api/reviews/[id]/vote                  0 B                0 B
+笏・ﾆ・/api/shoes                              0 B                0 B
+笏・ﾆ・/api/shoes/[id]                         0 B                0 B
+笏・ﾆ・/api/shoes/[id]/curation                0 B                0 B
+笏・ﾆ・/api/upload                             0 B                0 B
+笏・ﾆ・/api/user/shoes                         0 B                0 B
+笏・ﾆ・/api/user/shoes/[id]                    0 B                0 B
+笏・ﾆ・/api/users/[id]/follow                  0 B                0 B
+笏・ﾆ・/api/users/[id]/followers               0 B                0 B
+笏・ﾆ・/api/users/[id]/following               0 B                0 B
+笏・ﾆ・/api/users/profile                      0 B                0 B
+笏・笳・/developer                              163 B          87.1 kB
+笏・笳・/faq                                    163 B          87.1 kB
+笏・笳・/llms.txt                               0 B                0 B
+笏・笳・/login                                  2.19 kB         129 kB
+笏・笳・/privacy                                163 B          87.1 kB
+笏・ﾆ・/profile                                3.38 kB         113 kB
+笏・ﾆ・/profile/integrations                   1.91 kB        95.6 kB
+笏・笳・/profile/shoes                          3.01 kB         104 kB
+笏・笳・/register                               2.67 kB         125 kB
+笏・ﾆ・/reviews                                2.2 kB          108 kB
+笏・ﾆ・/reviews/[id]                           7.51 kB         117 kB
+笏・ﾆ・/reviews/new                            9.83 kB         125 kB
+笏・笳・/robots.txt                             0 B                0 B
+笏・ﾆ・/search                                 1.65 kB         107 kB
+笏・ﾆ・/shoes                                  3.04 kB         109 kB
+笏・ﾆ・/shoes/[id]                             3.4 kB          109 kB
+笏・笳・/sitemap.xml                            0 B                0 B
+笏・笳・/support                                163 B          87.1 kB
+笏・笳・/terms                                  163 B          87.1 kB
++ First Load JS shared by all               87 kB
+  笏・chunks/23-bf833eff29e7ebcc.js           31.3 kB
+  笏・chunks/fd9d1056-cad794c1239835ff.js     53.6 kB
+  笏・other shared chunks (total)             1.97 kB
+
+
+笳・ (Static)   prerendered as static content
+ﾆ・ (Dynamic)  server-rendered on demand
+

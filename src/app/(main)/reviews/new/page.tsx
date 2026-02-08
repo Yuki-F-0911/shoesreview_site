@@ -2,14 +2,17 @@ import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth/auth'
 import { prisma } from '@/lib/prisma/client'
 import { ReviewForm } from '@/components/reviews/ReviewForm'
+import type { Shoe } from '@/types/shoe'
 
-async function getShoes() {
-  return await prisma.shoe.findMany({
+async function getShoes(): Promise<Shoe[]> {
+  const shoes = await prisma.shoe.findMany({
     orderBy: [
       { brand: 'asc' },
       { modelName: 'asc' },
     ],
   })
+  // Prisma JsonValue型をShoe型に変換
+  return shoes as unknown as Shoe[]
 }
 
 export default async function NewReviewPage() {
@@ -29,4 +32,3 @@ export default async function NewReviewPage() {
     </div>
   )
 }
-

@@ -19,6 +19,7 @@
     "update:reviews-publish": "tsx update-reviews-publish.ts"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "5.11.0",
     "@radix-ui/react-avatar": "^1.0.4",
