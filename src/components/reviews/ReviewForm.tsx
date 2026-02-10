@@ -13,7 +13,9 @@ import { Textarea } from '@/components/ui/Textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { ReviewRating } from '@/components/reviews/ReviewRating'
 import { AIReviewAssist } from '@/components/reviews/AIReviewAssist'
+import { VoiceReviewInput } from '@/components/reviews/VoiceReviewInput'
 import type { Shoe } from '@/types/shoe'
+import type { VoiceReviewResult } from '@/types/ai'
 import { ReviewDetailedFields } from '@/components/reviews/ReviewDetailedFields'
 
 interface ReviewFormProps {
@@ -121,6 +123,42 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
     setValue('title', title)
   }
 
+  // 音声レビューAI解析結果をフォームに反映
+  const handleVoiceResult = (result: VoiceReviewResult) => {
+    // 詳細入力モードに切り替え
+    setInputMode('detailed')
+
+    // 評価値を反映
+    setValue('overallRating', result.overallRating)
+    if (result.comfortRating != null) setValue('comfortRating', result.comfortRating)
+    if (result.cushioningRating != null) setValue('cushioningRating', result.cushioningRating)
+    if (result.stabilityRating != null) setValue('stabilityRating', result.stabilityRating)
+    if (result.lightnessRating != null) setValue('lightnessRating', result.lightnessRating)
+    if (result.gripRating != null) setValue('gripRating', result.gripRating)
+    if (result.responsivenessRating != null) setValue('responsivenessRating', result.responsivenessRating)
+    if (result.designRating != null) setValue('designRating', result.designRating)
+    if (result.durabilityRating != null) setValue('durabilityRating', result.durabilityRating)
+
+    // ステップイン
+    if (result.stepInToeWidth != null) setValue('stepInToeWidth', result.stepInToeWidth)
+    if (result.stepInInstepHeight != null) setValue('stepInInstepHeight', result.stepInInstepHeight)
+    if (result.stepInHeelHold != null) setValue('stepInHeelHold', result.stepInHeelHold)
+
+    // 疲労感
+    if (result.fatigueSole != null) setValue('fatigueSole', result.fatigueSole)
+    if (result.fatigueCalf != null) setValue('fatigueCalf', result.fatigueCalf)
+    if (result.fatigueKnee != null) setValue('fatigueKnee', result.fatigueKnee)
+
+    // テキスト
+    if (result.title) setValue('title', result.title)
+    if (result.content) setValue('content', result.content)
+    if (result.pros?.length) setValue('pros', result.pros)
+    if (result.cons?.length) setValue('cons', result.cons)
+    if (result.usagePeriod) setValue('usagePeriod', result.usagePeriod)
+    if (result.onomatopoeia) setValue('onomatopoeia', result.onomatopoeia)
+    if (result.purchaseSize) setValue('purchaseSize', result.purchaseSize)
+  }
+
   // 総合評価を自動計算（評価された項目の平均）※ステップインは除外
   useEffect(() => {
     if (inputMode === 'detailed') {
@@ -221,6 +259,14 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
           {error && (
             <div className="rounded-md bg-red-50 p-3 text-sm text-red-800">{error}</div>
           )}
+
+          {/* 音声入力セクション */}
+          <VoiceReviewInput
+            shoeBrand={selectedShoe?.brand}
+            shoeModel={selectedShoe?.modelName}
+            onApplyResult={handleVoiceResult}
+            disabled={isLoading}
+          />
 
           {/* 入力モード選択タブ */}
           <div className="border-b border-gray-200">

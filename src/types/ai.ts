@@ -50,6 +50,32 @@ export interface AIAssistSettings {
     autoSuggestTitle: boolean
 }
 
+// 音声レビューAI解析結果
+export interface VoiceReviewResult {
+    overallRating: number
+    comfortRating?: number
+    cushioningRating?: number
+    stabilityRating?: number
+    lightnessRating?: number
+    gripRating?: number
+    responsivenessRating?: number
+    designRating?: number
+    durabilityRating?: number
+    stepInToeWidth?: number
+    stepInInstepHeight?: number
+    stepInHeelHold?: number
+    fatigueSole?: number
+    fatigueCalf?: number
+    fatigueKnee?: number
+    title: string
+    content: string
+    pros: string[]
+    cons: string[]
+    usagePeriod?: string
+    onomatopoeia?: string
+    purchaseSize?: string
+}
+
 // YouTube動画要約結果（著作権配慮版）
 export interface YouTubeSummaryResult {
     videoInfo: {
