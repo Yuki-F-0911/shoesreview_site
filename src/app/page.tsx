@@ -322,6 +322,7 @@ export default async function HomePage() {
                             collectedAt: review.collectedAt.toISOString(),
                             keyPoints: review.keyPoints as string[],
                           }}
+                          showShoeInfo={true}
                         />
                       </div>
                     ))}

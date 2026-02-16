@@ -259,6 +259,7 @@ export default async function ReviewsPage({
                         collectedAt: review.collectedAt.toISOString(),
                         keyPoints: review.keyPoints as string[],
                       }}
+                      showShoeInfo={true}
                     />
                   </div>
                 ))}
@@ -345,6 +346,7 @@ export default async function ReviewsPage({
                           collectedAt: review.collectedAt.toISOString(),
                           keyPoints: review.keyPoints as string[],
                         }}
+                        showShoeInfo={true}
                       />
                     </div>
                   ))}
