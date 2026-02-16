@@ -94,11 +94,30 @@ export function ExternalReviewCard({ review }: { review: ExternalReviewData }) {
                     </span>
                 </div>
 
-                {/* 本文 */}
+                {/* 意見・感想（メインコンテンツ） */}
                 <div className="px-4 pb-3">
-                    <p className="text-sm text-neutral-600 leading-relaxed line-clamp-3">
-                        {contentPreview}
-                    </p>
+                    {review.aiSummary ? (
+                        <>
+                            {/* AI抽出された意見をquoteスタイルで表示 */}
+                            <div className="border-l-2 border-neutral-300 pl-3 mb-2">
+                                <p className="text-sm text-neutral-800 leading-relaxed line-clamp-3">
+                                    {review.aiSummary}
+                                </p>
+                            </div>
+                            {/* 元のスニペット（補足として薄く） */}
+                            {review.snippet && (
+                                <p className="text-xs text-neutral-400 leading-relaxed line-clamp-2 mt-1">
+                                    {review.snippet.length > 80 ? review.snippet.slice(0, 80) + '...' : review.snippet}
+                                </p>
+                            )}
+                        </>
+                    ) : review.snippet ? (
+                        <div className="border-l-2 border-neutral-200 pl-3">
+                            <p className="text-sm text-neutral-700 leading-relaxed line-clamp-3">
+                                {contentPreview}
+                            </p>
+                        </div>
+                    ) : null}
                 </div>
 
                 {/* キーポイント（あれば） */}
@@ -109,7 +128,7 @@ export function ExternalReviewCard({ review }: { review: ExternalReviewData }) {
                                 key={i}
                                 className="text-xs px-2 py-0.5 bg-neutral-50 text-neutral-500 border border-neutral-100"
                             >
-                                {point.length > 15 ? point.slice(0, 15) + '…' : point}
+                                {point.length > 20 ? point.slice(0, 20) + '…' : point}
                             </span>
                         ))}
                     </div>

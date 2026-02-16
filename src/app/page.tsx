@@ -4,6 +4,7 @@ import { Metadata } from 'next'
 import { prisma } from '@/lib/prisma/client'
 import { Button } from '@/components/ui/Button'
 import { ReviewCard } from '@/components/reviews/ReviewCard'
+import { ExternalReviewCard } from '@/components/reviews/ExternalReviewCard'
 import { Card, CardContent } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { JsonLd } from '@/components/seo/JsonLd'
@@ -13,6 +14,7 @@ import {
   ChevronRight,
   ArrowRight,
   MessageSquare,
+  Globe,
 } from 'lucide-react'
 
 // ISR: 60秒ごとにバックグラウンドで再生成
@@ -101,14 +103,37 @@ async function getTrendingShoes() {
 
 async function getStats() {
   try {
-    const [shoeCount, reviewCount, userCount] = await Promise.all([
+    const [shoeCount, reviewCount, userCount, externalReviewCount] = await Promise.all([
       prisma.shoe.count(),
       prisma.review.count(),
       prisma.user.count(),
+      prisma.externalReview.count(),
     ])
-    return { shoeCount, reviewCount, userCount }
+    return { shoeCount, reviewCount, userCount, externalReviewCount }
   } catch (error) {
-    return { shoeCount: 0, reviewCount: 0, userCount: 0 }
+    return { shoeCount: 0, reviewCount: 0, userCount: 0, externalReviewCount: 0 }
+  }
+}
+
+async function getLatestExternalReviews() {
+  try {
+    const reviews = await prisma.externalReview.findMany({
+      orderBy: { collectedAt: 'desc' },
+      take: 6,
+      include: {
+        shoe: {
+          select: {
+            id: true,
+            brand: true,
+            modelName: true,
+          },
+        },
+      },
+    })
+    return reviews
+  } catch (error) {
+    console.error('Failed to fetch external reviews:', error)
+    return []
   }
 }
 
@@ -124,10 +149,11 @@ const CATEGORIES = [
 const BRANDS = ['Nike', 'Adidas', 'ASICS', 'New Balance', 'Hoka', 'On', 'Saucony', 'Brooks', 'Mizuno']
 
 export default async function HomePage() {
-  const [reviews, trendingShoes, stats] = await Promise.all([
+  const [reviews, trendingShoes, stats, externalReviews] = await Promise.all([
     getTimelineReviews(),
     getTrendingShoes(),
     getStats(),
+    getLatestExternalReviews(),
   ])
 
   const shoeListSchema = generateItemListSchema(
@@ -156,7 +182,7 @@ export default async function HomePage() {
                 </div>
               </Link>
               <p className="text-neutral-400 text-xs text-center mt-3">
-                {stats.reviewCount}件のレビュー掲載中
+                {stats.reviewCount + stats.externalReviewCount}件のレビュー掲載中
               </p>
             </div>
           </div>
@@ -203,6 +229,10 @@ export default async function HomePage() {
                     <div className="flex justify-between">
                       <span className="text-neutral-500">レビュー</span>
                       <span className="text-neutral-900 font-medium">{stats.reviewCount}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-neutral-500">外部レビュー</span>
+                      <span className="text-neutral-900 font-medium">{stats.externalReviewCount}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-neutral-500">ユーザー</span>
@@ -263,6 +293,39 @@ export default async function HomePage() {
                       もっと見る
                     </Button>
                   </Link>
+                </div>
+              )}
+
+              {/* 世界のランナーの声 */}
+              {externalReviews.length > 0 && (
+                <div className="mt-12 pt-8 border-t border-neutral-100">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-sm font-medium text-neutral-400 uppercase tracking-wider flex items-center gap-2">
+                      <Globe className="h-4 w-4" />
+                      世界のランナーの声
+                    </h2>
+                    <Link href="/reviews?type=external" className="text-neutral-500 text-sm hover:text-neutral-900 flex items-center">
+                      すべて
+                      <ChevronRight className="h-4 w-4 ml-1" />
+                    </Link>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {externalReviews.map((review) => (
+                      <div key={review.id}>
+                        <p className="text-xs text-neutral-400 mb-1">
+                          {review.shoe.brand} {review.shoe.modelName}
+                        </p>
+                        <ExternalReviewCard
+                          review={{
+                            ...review,
+                            publishedAt: review.publishedAt ? review.publishedAt.toISOString() : null,
+                            collectedAt: review.collectedAt.toISOString(),
+                            keyPoints: review.keyPoints as string[],
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </main>
