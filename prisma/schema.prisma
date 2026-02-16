@@ -154,11 +154,12 @@ model Shoe {
   registeredByUserId  String? // ユーザー登録の場合の登録者ID
   registrationStatus  String    @default("approved") // pending, approved, rejected
 
-  reviews         Review[]
-  media           ShoeMedia[]
-  curatedSources  CuratedSource[]
-  userShoes       UserShoe[]
-  recommendations ShoeRecommendation[]
+  reviews          Review[]
+  media            ShoeMedia[]
+  curatedSources   CuratedSource[]
+  userShoes        UserShoe[]
+  recommendations  ShoeRecommendation[]
+  externalReviews  ExternalReview[]
 
   @@map("shoes")
 }
@@ -475,4 +476,32 @@ model ShoeRecommendation {
   @@unique([userId, shoeId])
   @@index([userId, matchScore])
   @@map("shoe_recommendations")
+}
+
+// ================================
+// 外部レビュー収集（著作権保護）
+// ================================
+
+model ExternalReview {
+  id             String   @id @default(cuid())
+  shoeId         String
+  platform       String   // "reddit", "twitter", "youtube", "blog", "strava"
+  sourceUrl      String   @db.Text  // 元記事・投稿のURL（必須）
+  sourceTitle    String?  // 元記事タイトル
+  authorName     String?  // 著者名/ユーザー名
+  authorUrl      String?  // 著者プロフィールURL
+  snippet        String   @db.Text  // 引用スニペット（200文字以内）
+  aiSummary      String?  @db.Text  // AI要約による個人意見の構造化
+  language       String   @default("ja") // 元記事の言語
+  sentiment      String?  // "positive", "negative", "neutral", "mixed"
+  keyPoints      String[] @default([]) // 主要ポイント
+  publishedAt    DateTime? // 元記事の公開日
+  collectedAt    DateTime @default(now())
+  isVerified     Boolean  @default(false) // 管理者確認済みフラグ
+
+  shoe Shoe @relation(fields: [shoeId], references: [id], onDelete: Cascade)
+
+  @@index([shoeId, platform])
+  @@index([language])
+  @@map("external_reviews")
 }

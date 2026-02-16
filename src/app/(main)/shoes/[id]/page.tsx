@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma/client'
 import { ReviewCard } from '@/components/reviews/ReviewCard'
 import { ReviewList } from '@/components/reviews/ReviewList'
+import { ExternalReviewSection } from '@/components/reviews/ExternalReviewCard'
 import { Badge } from '@/components/ui/Badge'
 import { RatingRadarChart } from '@/components/shoes/RatingRadarChart'
 import { ProsConsList } from '@/components/shoes/ProsConsList'
@@ -90,6 +91,20 @@ interface ShoeMedia {
 
 interface ShoeWithRelations extends ShoeWithReviews {
   media: ShoeMedia[]
+  externalReviews: Array<{
+    id: string
+    platform: string
+    sourceUrl: string
+    sourceTitle: string | null
+    authorName: string | null
+    snippet: string
+    aiSummary: string | null
+    language: string
+    sentiment: string | null
+    keyPoints: string[]
+    publishedAt: Date | null
+    collectedAt: Date
+  }>
 }
 
 async function getShoe(id: string): Promise<ShoeWithRelations | null> {
@@ -161,9 +176,22 @@ async function getShoe(id: string): Promise<ShoeWithRelations | null> {
       // ShoeMediaモデルが存在しない場合は空配列
     }
 
+    // 外部レビューを取得
+    let externalReviews: ShoeWithRelations['externalReviews'] = []
+    try {
+      externalReviews = await prisma.externalReview.findMany({
+        where: { shoeId: id },
+        orderBy: { collectedAt: 'desc' },
+        take: 20,
+      })
+    } catch {
+      // ExternalReviewテーブルが存在しない場合は空配列
+    }
+
     return {
       ...shoe,
       media,
+      externalReviews,
     }
   } catch (error) {
     console.error('Failed to fetch shoe:', error)
@@ -404,6 +432,15 @@ export default async function ShoeDetailPage({ params }: { params: { id: string 
               <ProsConsList pros={pros} cons={cons} />
             </section>
           )}
+
+          {/* 外部レビューセクション */}
+          <ExternalReviewSection
+            reviews={shoe.externalReviews.map(r => ({
+              ...r,
+              publishedAt: r.publishedAt ? r.publishedAt.toISOString() : null,
+              collectedAt: r.collectedAt.toISOString(),
+            }))}
+          />
 
           {/* レビューセクション */}
           <section>
