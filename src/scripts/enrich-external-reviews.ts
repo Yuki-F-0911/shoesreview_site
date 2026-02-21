@@ -14,10 +14,35 @@ async function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms))
 }
 
+async function callGeminiWithRetry(prompt: string, maxRetries: number = 3): Promise<string | null> {
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+            const result = await model.generateContent(prompt)
+            const response = await result.response
+            return response.text()
+        } catch (error: any) {
+            const statusCode = error?.status || error?.httpStatusCode || 0
+            const isRateLimit = statusCode === 429 || error?.message?.includes('429') || error?.message?.includes('RESOURCE_EXHAUSTED')
+
+            if (isRateLimit && attempt < maxRetries) {
+                // エクスポネンシャルバックオフ: 10s, 30s, 60s
+                const waitTime = Math.min(10000 * Math.pow(3, attempt), 60000)
+                console.log(`  ⏳ レート制限、${waitTime / 1000}秒待機... (リトライ ${attempt + 1}/${maxRetries})`)
+                await sleep(waitTime)
+                continue
+            }
+
+            throw error
+        }
+    }
+
+    return null
+}
+
 async function enrichReviewWithAI(review: any) {
     try {
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
-
         const prompt = `
 以下は「${review.shoe.brand} ${review.shoe.modelName}」に関するウェブ上のレビュー（スニペット）です。
 この内容を元に、**日本語で**個人の意見・感想を要約してください。
@@ -40,21 +65,23 @@ async function enrichReviewWithAI(review: any) {
 - 著者の主観がない（単なる製品説明）場合は、aiSummaryをnullにすること。
 `
 
-        const result = await model.generateContent(prompt)
-        const response = await result.response
-        const text = response.text()
+        const text = await callGeminiWithRetry(prompt)
+        if (!text) {
+            console.warn(`  ⚠️ Empty response for review ${review.id}`)
+            return null
+        }
 
         // JSON抽出
         const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/) || text.match(/{[\s\S]*}/)
         if (!jsonMatch) {
-            console.warn(`JSON parsing failed for review ${review.id}`)
+            console.warn(`  ⚠️ JSON parsing failed for review ${review.id}`)
             return null
         }
 
         const { aiSummary, sentiment, keyPoints } = JSON.parse(jsonMatch[1] || jsonMatch[0])
 
         if (!aiSummary) {
-            console.log(`Skipping review ${review.id}: No personal opinion detected`)
+            console.log(`  ⏭️ Skipping review ${review.id}: No personal opinion detected`)
             return null
         }
 
@@ -65,37 +92,44 @@ async function enrichReviewWithAI(review: any) {
                 aiSummary,
                 sentiment: sentiment || 'neutral',
                 keyPoints: keyPoints || [],
-                // 収集済みなのでcollectedAtは更新しない
             }
         })
 
-        console.log(`Updated review ${review.id}: ${aiSummary.substring(0, 30)}...`)
+        console.log(`  ✅ ${review.shoe.brand} ${review.shoe.modelName}: ${aiSummary.substring(0, 40)}...`)
         return true
 
-    } catch (error) {
-        console.error(`Error processing review ${review.id}:`, error)
+    } catch (error: any) {
+        console.error(`  ❌ Error review ${review.id}:`, error?.message || error)
         return null
     }
 }
 
 async function main() {
-    console.log('Starting AI enrichment for external reviews...')
+    console.log('🚀 Starting AI enrichment for external reviews...\n')
 
-    // AI要約がないレビューを取得（includeなし）
+    // AI要約がないレビューを取得
     const reviewsToProcess = await prisma.externalReview.findMany({
         where: {
             aiSummary: null,
-            snippet: { not: null }
+            snippet: { not: '' }
         },
-        take: 100 // 一回の上限
+        take: 10 // 無料枠レート制限を考慮して10件ずつ
     })
 
-    console.log(`Found ${reviewsToProcess.length} reviews to process.`)
+    console.log(`📋 Found ${reviewsToProcess.length} reviews to process.\n`)
+
+    if (reviewsToProcess.length === 0) {
+        console.log('✨ All reviews already have AI summaries!')
+        return
+    }
 
     let processedCount = 0
-    for (const review of reviewsToProcess) {
-        // APIレート制限考慮
-        await sleep(2000)
+    let errorCount = 0
+
+    for (let i = 0; i < reviewsToProcess.length; i++) {
+        const review = reviewsToProcess[i]
+
+        console.log(`[${i + 1}/${reviewsToProcess.length}] Processing review ${review.id}...`)
 
         // シューズ情報を個別に取得
         const shoe = await prisma.shoe.findUnique({
@@ -103,15 +137,24 @@ async function main() {
         })
 
         if (!shoe) {
-            console.warn(`Shoe not found for review ${review.id}`)
+            console.warn(`  ⚠️ Shoe not found for review ${review.id}`)
             continue
         }
 
         const success = await enrichReviewWithAI({ ...review, shoe })
-        if (success) processedCount++
+        if (success) {
+            processedCount++
+        } else {
+            errorCount++
+        }
+
+        // APIレート制限考慮: 10秒間隔
+        if (i < reviewsToProcess.length - 1) {
+            await sleep(10000)
+        }
     }
 
-    console.log(`Finished! Successfully processed ${processedCount}/${reviewsToProcess.length} reviews.`)
+    console.log(`\n🏁 Finished! Successfully processed ${processedCount}/${reviewsToProcess.length} reviews. (${errorCount} errors)`)
 }
 
 main()
