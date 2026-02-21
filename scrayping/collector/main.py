@@ -28,6 +28,7 @@ from db_handler import (
     create_shoe,
     ensure_shoe_exists,
     create_curated_source,
+    create_external_review,
     get_curated_sources_for_shoe,
     get_stats,
     test_connection,
@@ -159,45 +160,46 @@ def cmd_collect(args):
                 total_collected += 1
         print(f'   YouTube: {len(videos)} 件取得\n')
 
-    # Social (Twitter/X + Reddit via Web検索 - API不要)
+    # Social (Twitter/X + Reddit + note via Web検索 - API不要)
     if 'social' in sources and SERPER_API_KEY:
         social_results = search_shoe_reviews_social(brand, model_name, max_results=10)
-        
-        # Twitter/X
-        twitter_posts = social_results.get('twitter', [])
-        for post in twitter_posts:
-            source_id = create_curated_source(
-                shoe_id=shoe_id,
-                source_type='SNS',
-                platform='twitter.com',
-                title=post.title,
-                url=post.url,
-                author=post.author,
-                excerpt=post.snippet[:200] if post.snippet else None,
-                reliability=0.65,
-            )
-            if source_id:
-                print(f'   ✅ 🐦 {post.author}: {post.title[:40]}...')
-                total_collected += 1
-        print(f'   X (Twitter): {len(twitter_posts)} 件取得')
 
-        # Reddit
-        reddit_posts = social_results.get('reddit', [])
-        for post in reddit_posts:
-            source_id = create_curated_source(
-                shoe_id=shoe_id,
-                source_type='COMMUNITY',
-                platform='reddit.com',
-                title=post.title,
-                url=post.url,
-                author=post.author,
-                excerpt=post.snippet[:200] if post.snippet else None,
-                reliability=0.6,
-            )
-            if source_id:
-                print(f'   ✅ 📝 {post.author}: {post.title[:40]}...')
-                total_collected += 1
-        print(f'   Reddit: {len(reddit_posts)} 件取得\n')
+        # プラットフォームごとの設定
+        platform_config = {
+            'twitter': {'source_type': 'SNS', 'platform': 'twitter.com', 'reliability': 0.65, 'emoji': '🐦'},
+            'reddit': {'source_type': 'COMMUNITY', 'platform': 'reddit.com', 'reliability': 0.6, 'emoji': '📝'},
+            'note': {'source_type': 'ARTICLE', 'platform': 'note.com', 'reliability': 0.7, 'emoji': '📗'},
+        }
+
+        for plat_key, config in platform_config.items():
+            posts = social_results.get(plat_key, [])
+            for post in posts:
+                # CuratedSource に保存
+                source_id = create_curated_source(
+                    shoe_id=shoe_id,
+                    source_type=config['source_type'],
+                    platform=config['platform'],
+                    title=post.title,
+                    url=post.url,
+                    author=post.author,
+                    excerpt=post.snippet[:200] if post.snippet else None,
+                    reliability=config['reliability'],
+                )
+                # ExternalReview にも保存
+                ext_id = create_external_review(
+                    shoe_id=shoe_id,
+                    platform=plat_key,
+                    source_url=post.url,
+                    source_title=post.title,
+                    author_name=post.author or None,
+                    snippet=post.snippet,
+                    language='ja',
+                )
+                if source_id or ext_id:
+                    print(f'   ✅ {config["emoji"]} {post.author}: {post.title[:40]}...')
+                    total_collected += 1
+            print(f'   {plat_key}: {len(posts)} 件取得')
+        print()
     elif 'social' in sources:
         print('⚠️ SERPER_API_KEYが未設定のためソーシャル検索をスキップ\n')
 
@@ -239,39 +241,42 @@ def cmd_collect_all(args):
                 )
             print(f'   YouTube: {len(videos)} 件')
 
-        # Social (Web検索ベース - API不要)
+        # Social (Web検索ベース - API不要: Twitter + Reddit + note)
         if 'social' in sources and SERPER_API_KEY:
             social_results = search_shoe_reviews_social(
                 shoe['brand'], shoe['modelName'], max_results=5
             )
-            
-            twitter_count = 0
-            for post in social_results.get('twitter', []):
-                if create_curated_source(
-                    shoe_id=shoe['id'],
-                    source_type='SNS',
-                    platform='twitter.com',
-                    title=post.title,
-                    url=post.url,
-                    author=post.author,
-                    reliability=0.65,
-                ):
-                    twitter_count += 1
-            print(f'   X (Twitter): {twitter_count} 件')
-            
-            reddit_count = 0
-            for post in social_results.get('reddit', []):
-                if create_curated_source(
-                    shoe_id=shoe['id'],
-                    source_type='COMMUNITY',
-                    platform='reddit.com',
-                    title=post.title,
-                    url=post.url,
-                    author=post.author,
-                    reliability=0.6,
-                ):
-                    reddit_count += 1
-            print(f'   Reddit: {reddit_count} 件')
+
+            platform_config = {
+                'twitter': {'source_type': 'SNS', 'platform': 'twitter.com', 'reliability': 0.65},
+                'reddit': {'source_type': 'COMMUNITY', 'platform': 'reddit.com', 'reliability': 0.6},
+                'note': {'source_type': 'ARTICLE', 'platform': 'note.com', 'reliability': 0.7},
+            }
+
+            for plat_key, config in platform_config.items():
+                count = 0
+                for post in social_results.get(plat_key, []):
+                    created = create_curated_source(
+                        shoe_id=shoe['id'],
+                        source_type=config['source_type'],
+                        platform=config['platform'],
+                        title=post.title,
+                        url=post.url,
+                        author=post.author,
+                        reliability=config['reliability'],
+                    )
+                    create_external_review(
+                        shoe_id=shoe['id'],
+                        platform=plat_key,
+                        source_url=post.url,
+                        source_title=post.title,
+                        author_name=post.author or None,
+                        snippet=post.snippet,
+                        language='ja',
+                    )
+                    if created:
+                        count += 1
+                print(f'   {plat_key}: {count} 件')
 
         print()
 

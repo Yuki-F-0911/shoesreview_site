@@ -195,6 +195,64 @@ def search_reddit_posts_via_web(
     return posts
 
 
+def extract_note_username(url: str) -> str:
+    """URLからnote.comのユーザー名を抽出"""
+    match = re.search(r'note\.com/([^/]+)', url)
+    if match:
+        username = match.group(1)
+        if username not in ['search', 'hashtag', 'explore', 'ranking', 'topics', 'categories']:
+            return username
+    return ''
+
+
+def search_note_posts(
+    query: str,
+    max_results: int = 10,
+) -> List[SocialPost]:
+    """
+    Web検索経由でnote.comの投稿を検索
+    日本のランナーの個人意見が豊富なプラットフォーム
+    """
+    search_query = f'{query} site:note.com'
+
+    results = search_serper(search_query, max_results * 2)
+
+    posts = []
+    seen_urls = set()
+
+    for result in results:
+        url = result.get('link', '')
+
+        if 'note.com' not in url:
+            continue
+
+        if url in seen_urls:
+            continue
+        seen_urls.add(url)
+
+        # 記事ページのみ（/n/ を含む）
+        if '/n/' not in url:
+            continue
+
+        username = extract_note_username(url)
+        title = result.get('title', '')
+        snippet = result.get('snippet', '')
+
+        posts.append(SocialPost(
+            platform='note',
+            title=title,
+            url=url,
+            snippet=snippet,
+            author=username,
+            post_type='note_article',
+        ))
+
+        if len(posts) >= max_results:
+            break
+
+    return posts
+
+
 def search_shoe_reviews_social(
     brand: str,
     model_name: str,
@@ -214,7 +272,7 @@ def search_shoe_reviews_social(
         プラットフォームごとの投稿リスト
     """
     if platforms is None:
-        platforms = ['twitter', 'reddit']
+        platforms = ['twitter', 'reddit', 'note']
     
     results = {}
     
@@ -254,6 +312,19 @@ def search_shoe_reviews_social(
         results['reddit'] = reddit_posts[:max_results]
         print(f'   {len(results["reddit"])} 件取得')
     
+    if 'note' in platforms:
+        print('📗 note.com 検索中...')
+        note_posts = []
+        seen = set()
+        for query in queries:
+            posts = search_note_posts(query, max_results=max_results)
+            for post in posts:
+                if post.url not in seen:
+                    seen.add(post.url)
+                    note_posts.append(post)
+        results['note'] = note_posts[:max_results]
+        print(f'   {len(results["note"])} 件取得')
+
     return results
 
 

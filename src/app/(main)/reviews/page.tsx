@@ -91,11 +91,13 @@ async function getReviews(page: number = 1, pageSize: number = 12, sort: SortTyp
   }
 }
 
-async function getExternalReviews(page: number = 1, pageSize: number = 12) {
+async function getExternalReviews(page: number = 1, pageSize: number = 12, platform?: string) {
   try {
     const skip = (page - 1) * pageSize
+    const where = platform ? { platform } : {}
     const [reviews, total] = await Promise.all([
       prisma.externalReview.findMany({
+        where,
         orderBy: { collectedAt: 'desc' },
         skip,
         take: pageSize,
@@ -109,7 +111,7 @@ async function getExternalReviews(page: number = 1, pageSize: number = 12) {
           },
         },
       }),
-      prisma.externalReview.count(),
+      prisma.externalReview.count({ where }),
     ])
     return {
       reviews,
@@ -127,11 +129,12 @@ async function getExternalReviews(page: number = 1, pageSize: number = 12) {
 export default async function ReviewsPage({
   searchParams,
 }: {
-  searchParams: { page?: string; sort?: string; type?: string }
+  searchParams: { page?: string; sort?: string; type?: string; platform?: string }
 }) {
   const page = parseInt(searchParams.page || '1', 10)
   const sort = (searchParams.sort === 'popular' ? 'popular' : 'latest') as SortType
   const reviewType = (['all', 'user', 'ai', 'external'].includes(searchParams.type || '') ? searchParams.type : 'all') as ReviewType
+  const platformFilter = ['twitter', 'reddit', 'note', 'youtube', 'blog'].includes(searchParams.platform || '') ? searchParams.platform : undefined
 
   const isExternal = reviewType === 'external'
   const { reviews, total, totalPages } = isExternal
@@ -139,7 +142,7 @@ export default async function ReviewsPage({
     : await getReviews(page, 12, sort, reviewType)
 
   const externalData = isExternal
-    ? await getExternalReviews(page, 12)
+    ? await getExternalReviews(page, 12, platformFilter)
     : (reviewType === 'all' ? await getExternalReviews(1, 6) : { reviews: [], total: 0, page: 1, pageSize: 12, totalPages: 0 })
 
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -241,49 +244,80 @@ export default async function ReviewsPage({
 
         {isExternal ? (
           /* 外部レビューモード */
-          externalData.reviews.length > 0 ? (
-            <>
-              <p className="text-sm text-slate-500 mb-4">
-                世界中のブログ・SNSから収集した個人レビューです。各リンクから元の記事をお読みいただけます。
-              </p>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {externalData.reviews.map((review) => (
-                  <div key={review.id}>
-                    <p className="text-xs text-indigo-600 font-medium mb-1">
-                      {review.shoe.brand} {review.shoe.modelName}
-                    </p>
-                    <ExternalReviewCard
-                      review={{
-                        ...review,
-                        publishedAt: review.publishedAt ? review.publishedAt.toISOString() : null,
-                        collectedAt: review.collectedAt.toISOString(),
-                        keyPoints: review.keyPoints as string[],
-                      }}
-                      showShoeInfo={true}
+          <>
+            {/* プラットフォームフィルター */}
+            <div className="mb-4 flex items-center gap-2 flex-wrap">
+              {[
+                { key: undefined, label: 'すべて' },
+                { key: 'twitter', label: 'X' },
+                { key: 'reddit', label: 'Reddit' },
+                { key: 'note', label: 'note' },
+                { key: 'youtube', label: 'YouTube' },
+                { key: 'blog', label: 'Blog' },
+              ].map(({ key, label }) => {
+                const isActive = platformFilter === key || (!platformFilter && !key)
+                const href = key
+                  ? `/reviews?sort=${sort}&type=external&platform=${key}`
+                  : `/reviews?sort=${sort}&type=external`
+                return (
+                  <Link
+                    key={label}
+                    href={href}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                      isActive
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                    }`}
+                  >
+                    {label}
+                  </Link>
+                )
+              })}
+            </div>
+            <p className="text-sm text-slate-500 mb-4">
+              世界中のブログ・SNSから収集した個人レビューです。各リンクから元の記事をお読みいただけます。
+            </p>
+            {externalData.reviews.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {externalData.reviews.map((review) => (
+                    <div key={review.id}>
+                      <p className="text-xs text-indigo-600 font-medium mb-1">
+                        {review.shoe.brand} {review.shoe.modelName}
+                      </p>
+                      <ExternalReviewCard
+                        review={{
+                          ...review,
+                          publishedAt: review.publishedAt ? review.publishedAt.toISOString() : null,
+                          collectedAt: review.collectedAt.toISOString(),
+                          keyPoints: review.keyPoints as string[],
+                        }}
+                        showShoeInfo={true}
+                      />
+                    </div>
+                  ))}
+                </div>
+                {externalData.totalPages > 1 && (
+                  <div className="mt-8">
+                    <Pagination
+                      currentPage={page}
+                      totalPages={externalData.totalPages}
+                      basePath="/reviews"
+                      searchParams={{ sort, type: 'external', ...(platformFilter ? { platform: platformFilter } : {}) }}
                     />
                   </div>
-                ))}
-              </div>
-              {externalData.totalPages > 1 && (
-                <div className="mt-8">
-                  <Pagination
-                    currentPage={page}
-                    totalPages={externalData.totalPages}
-                    basePath="/reviews"
-                    searchParams={{ sort, type: 'external' }}
-                  />
-                </div>
-              )}
-              <p className="text-xs text-slate-400 mt-4 text-center">
-                ※ 出典元の著者に帰属する内容です。AI による独自要約を含みます。
-              </p>
-            </>
-          ) : (
-            <EmptyState
-              title="外部レビューがありません"
-              description="外部レビューの収集を待っています"
-            />
-          )
+                )}
+                <p className="text-xs text-slate-400 mt-4 text-center">
+                  ※ 出典元の著者に帰属する内容です。AI による独自要約を含みます。
+                </p>
+              </>
+            ) : (
+              <EmptyState
+                title="外部レビューがありません"
+                description="外部レビューの収集を待っています"
+              />
+            )}
+          </>
         ) : (
           /* 通常レビューモード */
           <>

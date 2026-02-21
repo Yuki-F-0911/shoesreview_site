@@ -235,6 +235,74 @@ def get_curated_sources_for_shoe(shoe_id: str) -> List[Dict]:
         conn.close()
 
 
+# ===== 外部レビュー操作 =====
+
+def create_external_review(
+    shoe_id: str,
+    platform: str,
+    source_url: str,
+    source_title: Optional[str] = None,
+    author_name: Optional[str] = None,
+    author_url: Optional[str] = None,
+    snippet: Optional[str] = None,
+    ai_summary: Optional[str] = None,
+    language: str = 'ja',
+    sentiment: Optional[str] = None,
+    key_points: Optional[List[str]] = None,
+) -> Optional[str]:
+    """ExternalReviewテーブルに直接保存"""
+    conn = get_db_connection()
+    if not conn:
+        return None
+
+    try:
+        with conn.cursor() as cur:
+            # 重複チェック（sourceUrl + shoeId）
+            cur.execute('''
+                SELECT id FROM "ExternalReview" WHERE "sourceUrl" = %s AND "shoeId" = %s
+            ''', (source_url, shoe_id))
+            if cur.fetchone():
+                print(f'⚠️ ExternalReview 既に登録済み: {source_url[:50]}...')
+                return None
+
+            cur.execute('''
+                INSERT INTO "ExternalReview" (
+                    id, "shoeId", platform, "sourceUrl", "sourceTitle",
+                    "authorName", "authorUrl", snippet, "aiSummary",
+                    language, sentiment, "keyPoints",
+                    "collectedAt", "isVerified"
+                )
+                VALUES (
+                    gen_random_uuid()::text, %s, %s, %s, %s,
+                    %s, %s, %s, %s,
+                    %s, %s, %s,
+                    NOW(), false
+                )
+                RETURNING id
+            ''', (
+                shoe_id,
+                platform,
+                source_url,
+                source_title,
+                author_name,
+                author_url,
+                snippet[:200] if snippet else None,
+                ai_summary,
+                language,
+                sentiment,
+                key_points or [],
+            ))
+            review_id = cur.fetchone()[0]
+            conn.commit()
+            return review_id
+    except Exception as e:
+        conn.rollback()
+        print(f'❌ ExternalReview作成エラー: {e}')
+        return None
+    finally:
+        conn.close()
+
+
 # ===== AIソース操作 =====
 
 def create_ai_source(

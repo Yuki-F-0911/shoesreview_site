@@ -29,16 +29,17 @@ const platformConfig: Record<string, { label: string; color: string; bgColor: st
     twitter: { label: 'X', color: 'text-neutral-800', bgColor: 'bg-neutral-100', initial: 'X' },
     youtube: { label: 'YouTube', color: 'text-red-600', bgColor: 'bg-red-50', initial: '▶' },
     blog: { label: 'Blog', color: 'text-emerald-600', bgColor: 'bg-emerald-50', initial: 'B' },
+    note: { label: 'note', color: 'text-green-700', bgColor: 'bg-green-50', initial: 'N' },
     strava: { label: 'Strava', color: 'text-orange-500', bgColor: 'bg-orange-50', initial: 'S' },
     instagram: { label: 'Instagram', color: 'text-pink-600', bgColor: 'bg-pink-50', initial: 'I' },
     threads: { label: 'Threads', color: 'text-neutral-800', bgColor: 'bg-neutral-100', initial: '@' },
 }
 
-const sentimentConfig: Record<string, { label: string; color: string }> = {
-    positive: { label: '好評', color: 'text-emerald-600' },
-    negative: { label: '不評', color: 'text-red-500' },
-    neutral: { label: '中立', color: 'text-neutral-400' },
-    mixed: { label: '賛否', color: 'text-amber-500' },
+const sentimentConfig: Record<string, { label: string; color: string; bgColor: string }> = {
+    positive: { label: '好評', color: 'text-emerald-700', bgColor: 'bg-emerald-50' },
+    negative: { label: '不評', color: 'text-red-700', bgColor: 'bg-red-50' },
+    neutral: { label: '中立', color: 'text-neutral-600', bgColor: 'bg-neutral-100' },
+    mixed: { label: '賛否', color: 'text-amber-700', bgColor: 'bg-amber-50' },
 }
 
 const languageFlags: Record<string, string> = {
@@ -48,6 +49,22 @@ const languageFlags: Record<string, string> = {
     zh: '🇨🇳',
     de: '🇩🇪',
     fr: '🇫🇷',
+}
+
+// 相対日時を計算
+function getRelativeTime(dateStr: string): string {
+    const date = new Date(dateStr)
+    const now = new Date()
+    const diffMs = now.getTime() - date.getTime()
+    const diffMinutes = Math.floor(diffMs / (1000 * 60))
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+    if (diffMinutes < 60) return `${diffMinutes}分前`
+    if (diffHours < 24) return `${diffHours}時間前`
+    if (diffDays < 30) return `${diffDays}日前`
+    if (diffDays < 365) return `${Math.floor(diffDays / 30)}ヶ月前`
+    return `${Math.floor(diffDays / 365)}年前`
 }
 
 export function ExternalReviewCard({ review, showShoeInfo = false }: { review: ExternalReviewData; showShoeInfo?: boolean }) {
@@ -67,6 +84,9 @@ export function ExternalReviewCard({ review, showShoeInfo = false }: { review: E
         : null
 
     const shoeImage = review.shoe?.imageUrls?.[0] || null
+    const timeDisplay = review.publishedAt
+        ? getRelativeTime(review.publishedAt)
+        : getRelativeTime(review.collectedAt)
 
     return (
         <a
@@ -115,10 +135,14 @@ export function ExternalReviewCard({ review, showShoeInfo = false }: { review: E
                             <span className="flex items-center gap-0.5">
                                 {langFlag} {platform.label}
                             </span>
+                            <span>•</span>
+                            <span>{timeDisplay}</span>
                             {sentiment && (
                                 <>
                                     <span>•</span>
-                                    <span className={sentiment.color}>{sentiment.label}</span>
+                                    <span className={`${sentiment.color} ${sentiment.bgColor} px-1.5 py-0.5 rounded text-[10px] font-medium`}>
+                                        {sentiment.label}
+                                    </span>
                                 </>
                             )}
                         </div>
@@ -153,11 +177,11 @@ export function ExternalReviewCard({ review, showShoeInfo = false }: { review: E
 
                 {/* キーポイント（あれば） */}
                 {review.keyPoints.length > 0 && (
-                    <div className="px-4 pb-3 flex flex-wrap gap-1 mt-auto">
+                    <div className="px-4 pb-3 flex flex-wrap gap-1.5 mt-auto">
                         {review.keyPoints.slice(0, 3).map((point, i) => (
                             <span
                                 key={i}
-                                className="text-[10px] px-2 py-0.5 bg-neutral-50 text-neutral-500 border border-neutral-100 rounded"
+                                className="text-[10px] px-2 py-1 bg-indigo-50 text-indigo-600 border border-indigo-100 rounded-full font-medium"
                             >
                                 {point.length > 20 ? point.slice(0, 20) + '…' : point}
                             </span>
