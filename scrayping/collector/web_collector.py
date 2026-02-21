@@ -340,8 +340,10 @@ def search_general_running_social(max_results: int = 20) -> Dict[str, List[Socia
     
     all_twitter = []
     all_reddit = []
+    all_note = []
     seen_twitter = set()
     seen_reddit = set()
+    seen_note = set()
     
     for query in queries:
         # Twitter
@@ -357,10 +359,18 @@ def search_general_running_social(max_results: int = 20) -> Dict[str, List[Socia
             if post.url not in seen_reddit:
                 seen_reddit.add(post.url)
                 all_reddit.append(post)
+        
+        # note.com
+        posts = search_note_posts(query, max_results=10)
+        for post in posts:
+            if post.url not in seen_note:
+                seen_note.add(post.url)
+                all_note.append(post)
     
     return {
         'twitter': all_twitter[:max_results],
         'reddit': all_reddit[:max_results],
+        'note': all_note[:max_results],
     }
 
 
