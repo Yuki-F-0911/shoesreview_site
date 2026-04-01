@@ -3,7 +3,8 @@ import Image from 'next/image'
 import { Avatar } from '@/components/ui/Avatar'
 import { Card } from '@/components/ui/Card'
 import { formatDate } from '@/lib/utils/date'
-import { ThumbsUp, MessageCircle } from 'lucide-react'
+import { ThumbsUp, MessageCircle, Bookmark } from 'lucide-react'
+import { BookmarkButton } from './BookmarkButton'
 import type { Prisma } from '@prisma/client'
 
 type ReviewWithRelations = Prisma.ReviewGetPayload<{
@@ -130,15 +131,18 @@ export function ReviewCard({ review }: ReviewCardProps) {
           </p>
 
           {/* アクション */}
-          <div className="flex items-center space-x-4 pt-3 border-t border-neutral-100">
-            <button className="flex items-center text-neutral-400 hover:text-neutral-900 transition-colors">
-              <ThumbsUp className="h-4 w-4" />
-              <span className="ml-1.5 text-xs">{review._count?.likes || 0}</span>
-            </button>
-            <button className="flex items-center text-neutral-400 hover:text-neutral-900 transition-colors">
-              <MessageCircle className="h-4 w-4" />
-              <span className="ml-1.5 text-xs">{review._count?.comments || 0}</span>
-            </button>
+          <div className="flex items-center justify-between pt-3 border-t border-neutral-100">
+            <div className="flex items-center space-x-4">
+              <button className="flex items-center text-neutral-400 hover:text-neutral-900 transition-colors">
+                <ThumbsUp className="h-4 w-4" />
+                <span className="ml-1.5 text-xs">{review._count?.likes || 0}</span>
+              </button>
+              <button className="flex items-center text-neutral-400 hover:text-neutral-900 transition-colors">
+                <MessageCircle className="h-4 w-4" />
+                <span className="ml-1.5 text-xs">{review._count?.comments || 0}</span>
+              </button>
+            </div>
+            <BookmarkButton reviewId={review.id} />
           </div>
         </div>
       </Card>

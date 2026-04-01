@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma/client'
 import { auth } from '@/lib/auth/auth'
+import { createNotification } from '@/lib/notifications'
 
 // POST: ユーザーをフォロー
 export async function POST(
@@ -62,6 +63,18 @@ export async function POST(
                 followerId,
                 followingId,
             },
+        })
+
+        // 通知を作成
+        const actor = await prisma.user.findUnique({
+            where: { id: followerId },
+            select: { displayName: true },
+        })
+        await createNotification({
+            type: 'follow',
+            userId: followingId,
+            actorId: followerId,
+            message: `${actor?.displayName || 'ユーザー'}があなたをフォローしました`,
         })
 
         return NextResponse.json({

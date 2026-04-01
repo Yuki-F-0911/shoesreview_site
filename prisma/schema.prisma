@@ -75,6 +75,7 @@ model User {
   reviews             Review[]
   comments            Comment[]
   likes               Like[]
+  bookmarks           Bookmark[]
   accounts            Account[]
   sessions            Session[]
   curatedSources      CuratedSource[]
@@ -86,6 +87,8 @@ model User {
   following           Follow[]             @relation("follower")
   reviewVotes         ReviewVote[]
   shoeRecommendations ShoeRecommendation[]
+  notifications       Notification[]       @relation("notificationRecipient")
+  actedNotifications  Notification[]       @relation("notificationActor")
 
   @@map("users")
 }
@@ -251,6 +254,7 @@ model Review {
   user        User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
   comments    Comment[]
   likes       Like[]
+  bookmarks   Bookmark[]
   aiSources   AISource[]
   reviewVotes ReviewVote[]
 
@@ -504,4 +508,38 @@ model ExternalReview {
   @@index([shoeId, platform])
   @@index([language])
   @@map("external_reviews")
+}
+
+// ブックマーク
+model Bookmark {
+  id        String   @id @default(cuid())
+  reviewId  String
+  userId    String
+  createdAt DateTime @default(now())
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, userId])
+  @@index([userId])
+  @@map("bookmarks")
+}
+
+// 通知
+model Notification {
+  id        String   @id @default(cuid())
+  type      String   // "like", "comment", "follow"
+  userId    String   // 通知を受け取るユーザー
+  actorId   String   // アクションを起こしたユーザー
+  reviewId  String?  // 関連レビュー（任意）
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user  User    @relation("notificationRecipient", fields: [userId], references: [id], onDelete: Cascade)
+  actor User    @relation("notificationActor", fields: [actorId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+  @@map("notifications")
 }

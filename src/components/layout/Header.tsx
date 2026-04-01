@@ -6,6 +6,7 @@ import { useSession, signOut } from 'next-auth/react'
 import { Button } from '@/components/ui/Button'
 import { Avatar } from '@/components/ui/Avatar'
 import { Menu, X, Search, ChevronDown, Home } from 'lucide-react'
+import { NotificationBell } from './NotificationBell'
 
 const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || '').split(',').filter(Boolean)
 
@@ -105,6 +106,7 @@ export function Header() {
                 <Link href="/reviews/new">
                   <Button size="sm">投稿</Button>
                 </Link>
+                <NotificationBell />
                 <Link href="/profile" className="hover:opacity-80 transition-opacity">
                   <Avatar src={null} fallback={session.user?.name?.[0] || 'U'} className="h-8 w-8" />
                 </Link>
@@ -133,10 +135,11 @@ export function Header() {
       `}>
         <div className="flex h-14 items-center justify-between px-4">
           <Link href="/" className="text-lg font-semibold text-neutral-900">Stride</Link>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1">
             <Link href="/search" className="p-2 text-neutral-500">
               <Search className="h-5 w-5" />
             </Link>
+            {session && <NotificationBell />}
             <button onClick={() => setShowMobileMenu(!showMobileMenu)} className="p-2 text-neutral-500">
               {showMobileMenu ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>

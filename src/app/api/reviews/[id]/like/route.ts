@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth/auth'
 import { prisma } from '@/lib/prisma/client'
+import { createNotification } from '@/lib/notifications'
 
 // GET: いいね状態を取得
 export async function GET(
@@ -81,6 +82,21 @@ export async function POST(
                 userId: session.user.id,
             },
         })
+
+        // 通知を作成
+        if (review.userId) {
+            const actor = await prisma.user.findUnique({
+                where: { id: session.user.id },
+                select: { displayName: true },
+            })
+            await createNotification({
+                type: 'like',
+                userId: review.userId,
+                actorId: session.user.id,
+                reviewId,
+                message: `${actor?.displayName || 'ユーザー'}があなたのレビューにいいねしました`,
+            })
+        }
 
         // 新しいいいね数を取得
         const likeCount = await prisma.like.count({

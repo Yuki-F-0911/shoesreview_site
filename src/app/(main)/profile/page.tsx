@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma/client'
 import { ProfileForm } from '@/components/profile/ProfileForm'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Avatar } from '@/components/ui/Avatar'
+import { BookmarkButton } from '@/components/reviews/BookmarkButton'
 
 export const metadata = {
     title: 'マイページ | Stride',
@@ -60,6 +61,26 @@ export default async function ProfilePage() {
         take: 10,
     })
 
+    // ブックマークしたレビューを取得
+    const bookmarks = await prisma.bookmark.findMany({
+        where: { userId: session.user.id },
+        include: {
+            review: {
+                include: {
+                    shoe: true,
+                    _count: {
+                        select: {
+                            likes: true,
+                            comments: true,
+                        },
+                    },
+                },
+            },
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 10,
+    })
+
     // 獲得いいね数を計算
     const receivedLikes = await prisma.like.count({
         where: {
@@ -90,7 +111,7 @@ export default async function ProfilePage() {
                     </div>
 
                     {/* 統計情報 */}
-                    <div className="mt-6 grid grid-cols-3 gap-4 text-center">
+                    <div className="mt-6 grid grid-cols-4 gap-4 text-center">
                         <div className="bg-neutral-50 rounded-lg p-3">
                             <div className="text-2xl font-bold text-neutral-900">{user._count.reviews}</div>
                             <div className="text-xs text-neutral-500">レビュー</div>
@@ -102,6 +123,10 @@ export default async function ProfilePage() {
                         <div className="bg-neutral-50 rounded-lg p-3">
                             <div className="text-2xl font-bold text-neutral-900">{user._count.likes}</div>
                             <div className="text-xs text-neutral-500">いいね済み</div>
+                        </div>
+                        <div className="bg-neutral-50 rounded-lg p-3">
+                            <div className="text-2xl font-bold text-neutral-900">{bookmarks.length}</div>
+                            <div className="text-xs text-neutral-500">ブックマーク</div>
                         </div>
                     </div>
                 </CardContent>
@@ -137,6 +162,64 @@ export default async function ProfilePage() {
 
             {/* プロフィール編集フォーム */}
             <ProfileForm />
+
+            {/* ブックマーク */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>ブックマーク</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {bookmarks.length > 0 ? (
+                        <div className="space-y-4">
+                            {bookmarks.map(bookmark => (
+                                <Link
+                                    key={bookmark.id}
+                                    href={`/reviews/${bookmark.review.id}`}
+                                    className="block p-4 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors"
+                                >
+                                    <div className="flex items-start justify-between">
+                                        <div className="flex-1">
+                                            <div className="flex items-center space-x-2 mb-1">
+                                                <span className="text-xs text-neutral-400 uppercase tracking-wider">
+                                                    {bookmark.review.shoe.brand}
+                                                </span>
+                                                <span className="text-xs text-neutral-300">•</span>
+                                                <span className="text-xs text-neutral-400">
+                                                    {bookmark.review.postedAt.toLocaleDateString('ja-JP')}
+                                                </span>
+                                            </div>
+                                            <h4 className="font-medium text-neutral-900">
+                                                {bookmark.review.shoe.modelName}
+                                            </h4>
+                                            {(bookmark.review.content || bookmark.review.quickComment) && (
+                                                <p className="text-sm text-neutral-600 mt-1 line-clamp-2">
+                                                    {bookmark.review.content || bookmark.review.quickComment}
+                                                </p>
+                                            )}
+                                        </div>
+                                        {bookmark.review.overallRating && (
+                                            <div className="ml-4 text-right">
+                                                <span className="text-xl font-bold text-neutral-900">
+                                                    {Number(bookmark.review.overallRating).toFixed(1)}
+                                                </span>
+                                                <span className="text-xs text-neutral-400 ml-0.5">/10</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="flex items-center space-x-4 mt-3 text-xs text-neutral-500">
+                                        <span>♥ {bookmark.review._count.likes}</span>
+                                        <span>💬 {bookmark.review._count.comments}</span>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-center py-8 text-neutral-500">
+                            まだブックマークしたレビューはありません
+                        </p>
+                    )}
+                </CardContent>
+            </Card>
 
             {/* 投稿したレビュー */}
             <Card>

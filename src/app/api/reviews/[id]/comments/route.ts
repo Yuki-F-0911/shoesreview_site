@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth/auth'
 import { prisma } from '@/lib/prisma/client'
+import { createNotification } from '@/lib/notifications'
 import { z } from 'zod'
 
 const commentSchema = z.object({
@@ -80,6 +81,17 @@ export async function POST(
                 },
             },
         })
+
+        // 通知を作成
+        if (review.userId) {
+            await createNotification({
+                type: 'comment',
+                userId: review.userId,
+                actorId: session.user.id,
+                reviewId,
+                message: `${comment.user.displayName}があなたのレビューにコメントしました`,
+            })
+        }
 
         return NextResponse.json({ comment })
     } catch (error) {
