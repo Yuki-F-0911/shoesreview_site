@@ -12,6 +12,7 @@ import { ProsConsList } from '@/components/shoes/ProsConsList'
 import { generateProductSchema, generateBreadcrumbSchema, combineSchemas } from '@/lib/seo/structured-data'
 import { generateShoeMetadata } from '@/lib/seo/metadata'
 import { generatePriceComparisonLinks } from '@/lib/curation/price-comparison'
+import { ShoeSpecifications } from '@/components/shoes/ShoeSpecifications'
 import type { Prisma } from '@prisma/client'
 
 // ISR: 2分ごとにバックグラウンドで再生成
@@ -422,6 +423,16 @@ export default async function ShoeDetailPage(props: { params: Promise<{ id: stri
               </div>
             </div>
           </div>
+
+          {/* スペックセクション */}
+          {shoe.specifications && typeof shoe.specifications === 'object' && Object.keys(shoe.specifications).length > 0 && (
+            <section className="mb-12">
+              <ShoeSpecifications
+                specifications={shoe.specifications as Record<string, unknown>}
+                targetRunner={shoe.targetRunner}
+              />
+            </section>
+          )}
 
           {/* Pros/Cons セクション */}
           {(pros.length > 0 || cons.length > 0) && (

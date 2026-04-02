@@ -16,7 +16,8 @@
     "import:reviews": "tsx src/scripts/import-scraped-reviews.ts",
     "import:backup": "tsx src/scripts/import-all-backup-reviews.ts",
     "check:reviews": "tsx check-reviews.ts",
-    "update:reviews-publish": "tsx update-reviews-publish.ts"
+    "update:reviews-publish": "tsx update-reviews-publish.ts",
+    "enrich:specs": "tsx src/scripts/enrich-shoe-specs.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
