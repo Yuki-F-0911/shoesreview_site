@@ -92,6 +92,10 @@ export function Header() {
                       <Link href="/admin/curation" className="block px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50" onClick={() => setShowAdminMenu(false)}>
                         キュレーション
                       </Link>
+                      <div className="border-t border-neutral-100 my-1" />
+                      <Link href="/admin/gsc" className="block px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50" onClick={() => setShowAdminMenu(false)}>
+                        Search Console
+                      </Link>
                     </div>
                   </>
                 )}

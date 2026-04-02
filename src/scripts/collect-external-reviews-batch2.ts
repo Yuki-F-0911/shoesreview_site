@@ -112,7 +112,7 @@ JSON形式で出力:
 
 注: 原文コピー厳禁、ECサイト/プレスリリースは false、「${brand} ${model}」に無関係なら false`
 
-    const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.0-flash-lite'
+    const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite'
 
     try {
         const res = await fetch(

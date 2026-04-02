@@ -205,7 +205,7 @@ async function extractPersonalReview(
 
 個人の意見でない場合や、「${brand} ${model}」に関係ない内容の場合は、is_personal_review を false にしてください。`
 
-    const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.0-flash-lite'
+    const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite'
 
     try {
         const response = await fetch(

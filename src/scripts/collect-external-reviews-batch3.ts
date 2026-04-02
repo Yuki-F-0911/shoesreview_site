@@ -139,7 +139,7 @@ async function aiExtract(snippet: string, title: string, brand: string, model: s
 JSON:
 {"is_personal":true/false,"is_running":true/false,"summary":"独自要約(50-80文字、原文コピー禁止)","sentiment":"positive/negative/neutral/mixed","key_points":["ポイント1","ポイント2"],"author":"著者名"}`
 
-    const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.0-flash-lite'
+    const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite'
     try {
         const res = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${key}`,
