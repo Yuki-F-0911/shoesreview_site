@@ -4,7 +4,8 @@ import { isAdminEmail } from '@/lib/auth/permissions'
 import { refreshCuratedSourcesForShoe } from '@/lib/curation/service'
 import { refreshCurationSchema } from '@/lib/validations/curation'
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const { id } = await props.params
   const session = await auth()
 
   if (!session || !isAdminEmail(session.user?.email)) {
@@ -16,7 +17,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     .catch(() => ({}))
 
   const payload = refreshCurationSchema.parse(json ?? {})
-  const result = await refreshCuratedSourcesForShoe(params.id, payload)
+  const result = await refreshCuratedSourcesForShoe(id, payload)
 
   return NextResponse.json({ success: true, data: result })
 }

@@ -5,11 +5,12 @@ export const revalidate = 300 // 5分ごとに再検証
 
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await props.params
         const externalReviews = await prisma.externalReview.findMany({
-            where: { shoeId: params.id },
+            where: { shoeId: id },
             orderBy: { collectedAt: 'desc' },
             take: 30,
             select: {

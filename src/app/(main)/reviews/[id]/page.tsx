@@ -19,13 +19,12 @@ import { CommentSection } from '@/components/reviews/CommentSection'
 import { ReviewContentGate } from '@/components/reviews/ReviewContentGate'
 
 // メタデータ生成
-export async function generateMetadata({
-  params
-}: {
-  params: { id: string }
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: { params: Promise<{ id: string }> }
+): Promise<Metadata> {
+  const { id } = await props.params
   const review = await prisma.review.findUnique({
-    where: { id: params.id },
+    where: { id },
     select: {
       id: true,
       title: true,
@@ -97,8 +96,9 @@ async function getReview(id: string) {
   }
 }
 
-export default async function ReviewDetailPage({ params }: { params: { id: string } }) {
-  const review = await getReview(params.id)
+export default async function ReviewDetailPage(props: { params: Promise<{ id: string }> }) {
+  const { id } = await props.params
+  const review = await getReview(id)
 
   if (!review) {
     notFound()

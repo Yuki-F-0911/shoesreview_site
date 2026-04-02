@@ -126,11 +126,10 @@ async function getExternalReviews(page: number = 1, pageSize: number = 12, platf
   }
 }
 
-export default async function ReviewsPage({
-  searchParams,
-}: {
-  searchParams: { page?: string; sort?: string; type?: string; platform?: string }
-}) {
+export default async function ReviewsPage(
+  props: { searchParams: Promise<{ page?: string; sort?: string; type?: string; platform?: string }> }
+) {
+  const searchParams = await props.searchParams
   const page = parseInt(searchParams.page || '1', 10)
   const sort = (searchParams.sort === 'popular' ? 'popular' : 'latest') as SortType
   const reviewType = (['all', 'user', 'ai', 'external'].includes(searchParams.type || '') ? searchParams.type : 'all') as ReviewType

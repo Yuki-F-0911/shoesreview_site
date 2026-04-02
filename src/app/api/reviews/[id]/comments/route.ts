@@ -11,10 +11,11 @@ const commentSchema = z.object({
 // GET: コメント一覧を取得
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
-        const reviewId = params.id
+        const { id } = await props.params
+        const reviewId = id
 
         const comments = await prisma.comment.findMany({
             where: { reviewId },
@@ -40,16 +41,17 @@ export async function GET(
 // POST: コメントを投稿
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await props.params
         const session = await auth()
 
         if (!session?.user?.id) {
             return NextResponse.json({ error: '認証が必要です' }, { status: 401 })
         }
 
-        const reviewId = params.id
+        const reviewId = id
         const body = await request.json()
 
         // バリデーション
@@ -96,7 +98,7 @@ export async function POST(
         return NextResponse.json({ comment })
     } catch (error) {
         if (error instanceof z.ZodError) {
-            return NextResponse.json({ error: error.errors[0].message }, { status: 400 })
+            return NextResponse.json({ error: error.issues[0].message }, { status: 400 })
         }
         console.error('Failed to create comment:', error)
         return NextResponse.json({ error: 'コメントの投稿に失敗しました' }, { status: 500 })

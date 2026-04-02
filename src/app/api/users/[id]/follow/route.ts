@@ -6,9 +6,10 @@ import { createNotification } from '@/lib/notifications'
 // POST: ユーザーをフォロー
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await props.params
         const session = await auth()
         if (!session?.user?.id) {
             return NextResponse.json(
@@ -17,7 +18,7 @@ export async function POST(
             )
         }
 
-        const followingId = params.id
+        const followingId = id
         const followerId = session.user.id
 
         // 自分自身をフォローしようとした場合
@@ -93,9 +94,10 @@ export async function POST(
 // DELETE: フォロー解除
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await props.params
         const session = await auth()
         if (!session?.user?.id) {
             return NextResponse.json(
@@ -104,7 +106,7 @@ export async function DELETE(
             )
         }
 
-        const followingId = params.id
+        const followingId = id
         const followerId = session.user.id
 
         // フォロー関係を削除

@@ -5,11 +5,12 @@ import { prisma } from '@/lib/prisma/client'
 // GET: ブックマーク状態を取得
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await props.params
         const session = await auth()
-        const reviewId = params.id
+        const reviewId = id
 
         let isBookmarked = false
         if (session?.user?.id) {
@@ -34,16 +35,17 @@ export async function GET(
 // POST: ブックマークを追加
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await props.params
         const session = await auth()
 
         if (!session?.user?.id) {
             return NextResponse.json({ error: '認証が必要です' }, { status: 401 })
         }
 
-        const reviewId = params.id
+        const reviewId = id
 
         const review = await prisma.review.findUnique({
             where: { id: reviewId },
@@ -83,16 +85,17 @@ export async function POST(
 // DELETE: ブックマークを解除
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await props.params
         const session = await auth()
 
         if (!session?.user?.id) {
             return NextResponse.json({ error: '認証が必要です' }, { status: 401 })
         }
 
-        const reviewId = params.id
+        const reviewId = id
 
         await prisma.bookmark.delete({
             where: {

@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error: '入力データが正しくありません',
-          details: error.errors.map(e => e.message).join(', ')
+          details: error.issues.map(e => e.message).join(', ')
         },
         { status: 400 }
       )

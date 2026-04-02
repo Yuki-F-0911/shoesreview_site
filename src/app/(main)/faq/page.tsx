@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { generateFAQSchema, generateBreadcrumbSchema, combineSchemas } from '@/lib/seo/structured-data'
 import { Plus, Minus } from 'lucide-react'
 
@@ -171,12 +172,12 @@ export default function FAQPage() {
               >
                 問い合わせる
               </a>
-              <a
+              <Link
                 href="/shoes"
                 className="border border-white/30 text-white font-medium px-6 py-2.5 rounded hover:bg-white/10 transition-colors text-sm"
               >
                 シューズを探す
-              </a>
+              </Link>
             </div>
           </section>
         </div>

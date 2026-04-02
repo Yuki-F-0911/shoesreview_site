@@ -5,10 +5,11 @@ import { auth } from '@/lib/auth/auth'
 // GET: フォロー中のユーザー一覧を取得
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
-        const userId = params.id
+        const { id } = await props.params
+        const userId = id
         const session = await auth()
         const currentUserId = session?.user?.id
 

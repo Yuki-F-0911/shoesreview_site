@@ -112,11 +112,10 @@ async function getFilterOptions() {
   }
 }
 
-export default async function ShoesPage({
-  searchParams,
-}: {
-  searchParams: { brands?: string; categories?: string; category?: string; sort?: string }
-}) {
+export default async function ShoesPage(
+  props: { searchParams: Promise<{ brands?: string; categories?: string; category?: string; sort?: string }> }
+) {
+  const searchParams = await props.searchParams
   const brands = searchParams.brands?.split(',') || []
   // category（単数）またはcategories（複数）の両方をサポート
   const categoryParam = searchParams.category || searchParams.categories

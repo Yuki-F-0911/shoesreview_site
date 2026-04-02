@@ -5,9 +5,10 @@ import { auth } from '@/lib/auth/auth'
 // POST: レビューに投票
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await props.params
         const session = await auth()
         if (!session?.user?.id) {
             return NextResponse.json(
@@ -16,7 +17,7 @@ export async function POST(
             )
         }
 
-        const reviewId = params.id
+        const reviewId = id
         const userId = session.user.id
         const body = await request.json()
         const { isHelpful } = body
@@ -125,9 +126,10 @@ export async function POST(
 // DELETE: 投票を取り消し
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await props.params
         const session = await auth()
         if (!session?.user?.id) {
             return NextResponse.json(
@@ -136,7 +138,7 @@ export async function DELETE(
             )
         }
 
-        const reviewId = params.id
+        const reviewId = id
         const userId = session.user.id
 
         // 既存の投票を確認
@@ -186,15 +188,16 @@ export async function DELETE(
 // GET: 自分の投票状態を取得
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await props.params
         const session = await auth()
         if (!session?.user?.id) {
             return NextResponse.json({ vote: null })
         }
 
-        const reviewId = params.id
+        const reviewId = id
         const userId = session.user.id
 
         const vote = await prisma.reviewVote.findUnique({

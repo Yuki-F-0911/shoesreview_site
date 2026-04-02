@@ -3,11 +3,12 @@ import { prisma } from '@/lib/prisma/client'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await props.params
     const shoe = await prisma.shoe.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         reviews: {
           where: {},

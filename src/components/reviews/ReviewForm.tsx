@@ -66,7 +66,8 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
       usageScene: initialData?.usageScene || [],
       pros: initialData?.pros || [],
       cons: initialData?.cons || [],
-      // isDraft removed
+      reviewerExpertise: initialData?.reviewerExpertise || [],
+      reviewerFootShape: initialData?.reviewerFootShape || [],
     },
   })
 
@@ -205,7 +206,7 @@ export function ReviewForm({ shoes, initialData, reviewId }: ReviewFormProps) {
       setNewShoe({ brand: '', modelName: '', category: 'ランニング', imageUrls: [] })
     } catch (err) {
       if (err instanceof z.ZodError) {
-        setCreateShoeError(err.errors[0].message)
+        setCreateShoeError(err.issues[0].message)
       } else {
         setCreateShoeError('予期しないエラーが発生しました')
       }

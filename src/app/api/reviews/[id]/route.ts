@@ -5,11 +5,12 @@ import { reviewSchema } from '@/lib/validations/review'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await props.params
     const review = await prisma.review.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         user: {
           select: {
@@ -56,9 +57,10 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await props.params
     const session = await auth()
 
     if (!session) {
@@ -66,7 +68,7 @@ export async function PUT(
     }
 
     const review = await prisma.review.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!review) {
@@ -81,7 +83,7 @@ export async function PUT(
     const validatedData = reviewSchema.partial().parse(body)
 
     const updatedReview = await prisma.review.update({
-      where: { id: params.id },
+      where: { id },
       data: validatedData as any,
       include: {
         user: {
@@ -119,9 +121,10 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await props.params
     const session = await auth()
 
     if (!session) {
@@ -129,7 +132,7 @@ export async function DELETE(
     }
 
     const review = await prisma.review.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!review) {
@@ -141,7 +144,7 @@ export async function DELETE(
     }
 
     await prisma.review.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     return NextResponse.json({ success: true })

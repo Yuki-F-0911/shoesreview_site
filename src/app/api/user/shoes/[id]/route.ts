@@ -159,7 +159,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     } catch (error) {
         if (error instanceof z.ZodError) {
             return NextResponse.json(
-                { error: 'バリデーションエラー', details: error.errors },
+                { error: 'バリデーションエラー', details: error.issues },
                 { status: 400 }
             )
         }

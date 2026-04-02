@@ -20,13 +20,12 @@ import type { Prisma } from '@prisma/client'
 export const revalidate = 120
 
 // メタデータ生成
-export async function generateMetadata({
-  params
-}: {
-  params: { id: string }
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: { params: Promise<{ id: string }> }
+): Promise<Metadata> {
+  const { id } = await props.params
   const shoe = await prisma.shoe.findUnique({
-    where: { id: params.id },
+    where: { id },
     select: {
       id: true,
       brand: true,
@@ -199,8 +198,9 @@ async function getShoe(id: string): Promise<ShoeWithRelations | null> {
   }
 }
 
-export default async function ShoeDetailPage({ params }: { params: { id: string } }) {
-  const shoe = await getShoe(params.id)
+export default async function ShoeDetailPage(props: { params: Promise<{ id: string }> }) {
+  const { id } = await props.params
+  const shoe = await getShoe(id)
 
   if (!shoe) {
     notFound()

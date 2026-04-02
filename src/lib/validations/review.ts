@@ -12,13 +12,13 @@ export const reviewSchema = z.object({
   gripRating: z.number().min(0).max(10).optional(),
   responsivenessRating: z.number().min(0).max(10).optional(),
   // 簡易入力モードではtitle/contentは任意（空の場合はquickCommentから生成）
-  title: z.string().max(200, 'タイトルは200文字以内で入力してください').optional().default(''),
-  content: z.string().max(5000, 'レビュー本文は5000文字以内で入力してください').optional().default(''),
-  imageUrls: z.array(z.string().url()).optional().default([]),
+  title: z.string().max(200, 'タイトルは200文字以内で入力してください').optional(),
+  content: z.string().max(5000, 'レビュー本文は5000文字以内で入力してください').optional(),
+  imageUrls: z.array(z.string().url()).optional(),
   usagePeriod: z.string().optional(),
-  usageScene: z.array(z.string()).default([]),
-  pros: z.array(z.string()).default([]),
-  cons: z.array(z.string()).default([]),
+  usageScene: z.array(z.string()).optional(),
+  pros: z.array(z.string()).optional(),
+  cons: z.array(z.string()).optional(),
   // 簡易レビュー用のコメント（どんな時に使っているか）
   quickComment: z.string().optional(),
   // 詳細評価項目（1-10スケール）
@@ -33,22 +33,16 @@ export const reviewSchema = z.object({
   onomatopoeia: z.string().optional(),
   purchaseSize: z.string().optional(),
   // レビュアー属性（空の入力を許容）
-  reviewerAge: z.preprocess(
-    (val) => (val === '' || val === undefined || val === null || Number.isNaN(val) ? undefined : Number(val)),
-    z.number().min(10).max(100).optional()
-  ),
+  reviewerAge: z.number().min(10).max(100).optional(),
   reviewerGender: z.string().optional(),
   // 身長・体重は範囲選択（プライバシー保護）
   reviewerHeightRange: z.string().optional(),
   reviewerWeightRange: z.string().optional(),
-  reviewerWeeklyDistance: z.preprocess(
-    (val) => (val === '' || val === undefined || val === null || Number.isNaN(val) ? undefined : Number(val)),
-    z.number().optional()
-  ),
+  reviewerWeeklyDistance: z.number().optional(),
   // 自己ベストは範囲選択（プライバシー保護）
   reviewerPersonalBestLevel: z.string().optional(),
-  reviewerExpertise: z.array(z.string()).default([]),
-  reviewerFootShape: z.array(z.string()).default([]),
+  reviewerExpertise: z.array(z.string()).optional(),
+  reviewerFootShape: z.array(z.string()).optional(),
   reviewerFootShapeDetail: z.string().optional(),
   reviewerLandingType: z.string().optional(),
   reviewerLandingTypeDetail: z.string().optional(),

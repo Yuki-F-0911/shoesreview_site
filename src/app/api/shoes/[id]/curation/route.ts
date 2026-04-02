@@ -6,7 +6,8 @@ import { prisma } from '@/lib/prisma/client'
 import { curatedSourceSchema } from '@/lib/validations/curation'
 import { reliabilityScore } from '@/lib/curation/service'
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
+  const { id } = await props.params
   const { searchParams } = new URL(request.url)
   const limit = Math.min(parseInt(searchParams.get('limit') || '12', 10), 30)
   const typeParam = searchParams.get('type')
@@ -18,7 +19,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
   const sources = await prisma.curatedSource.findMany({
     where: {
-      shoeId: params.id,
+      shoeId: id,
       status: CuratedSourceStatus.PUBLISHED,
       ...(type ? { type } : {}),
     },
@@ -32,7 +33,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
   return NextResponse.json({ success: true, data: sources })
 }
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, props: { params: Promise<{ id: string }> }) {
+  const { id } = await props.params
   const session = await auth()
 
   if (!session || !isAdminEmail(session.user?.email)) {
@@ -40,7 +42,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
   }
 
   const shoe = await prisma.shoe.findUnique({
-    where: { id: params.id },
+    where: { id },
     select: {
       id: true,
       locale: true,

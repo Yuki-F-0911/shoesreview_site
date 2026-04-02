@@ -2,7 +2,6 @@
 const nextConfig = {
   // 本番環境での最適化設定
   reactStrictMode: true,
-  swcMinify: true,
 
   // webpack設定: cheerioとundiciをサーバーサイドのみで使用
   webpack: (config, { isServer }) => {

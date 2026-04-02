@@ -6,11 +6,12 @@ import { createNotification } from '@/lib/notifications'
 // GET: いいね状態を取得
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await props.params
         const session = await auth()
-        const reviewId = params.id
+        const reviewId = id
 
         // いいね数を取得
         const likeCount = await prisma.like.count({
@@ -41,16 +42,17 @@ export async function GET(
 // POST: いいねを追加
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await props.params
         const session = await auth()
 
         if (!session?.user?.id) {
             return NextResponse.json({ error: '認証が必要です' }, { status: 401 })
         }
 
-        const reviewId = params.id
+        const reviewId = id
 
         // レビューの存在確認
         const review = await prisma.review.findUnique({
@@ -113,16 +115,17 @@ export async function POST(
 // DELETE: いいねを解除
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await props.params
         const session = await auth()
 
         if (!session?.user?.id) {
             return NextResponse.json({ error: '認証が必要です' }, { status: 401 })
         }
 
-        const reviewId = params.id
+        const reviewId = id
 
         // いいねを削除
         await prisma.like.delete({
