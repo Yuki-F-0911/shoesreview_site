@@ -83,7 +83,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-gray-100">
           <p className="text-center text-sm text-gray-400">
-            &copy; 2025 Stride. All rights reserved.
+            &copy; {new Date().getFullYear()} Stride. All rights reserved.
           </p>
         </div>
       </div>

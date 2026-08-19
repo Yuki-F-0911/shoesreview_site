@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Avatar } from '@/components/ui/Avatar'
 import { Card } from '@/components/ui/Card'
-import { formatDate } from '@/lib/utils/date'
+import { getReviewDisplayDate } from '@/lib/utils/review'
 import { ThumbsUp, MessageCircle, Bookmark } from 'lucide-react'
 import { BookmarkButton } from './BookmarkButton'
 import type { Prisma } from '@prisma/client'
@@ -65,7 +65,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
               />
               <div className="ml-3 flex-1 min-w-0">
                 <p className="text-sm font-medium text-neutral-900 truncate">{user.displayName}</p>
-                <p className="text-xs text-neutral-400">{formatDate((review as any).createdAt)}</p>
+                <p className="text-xs text-neutral-400">{getReviewDisplayDate(review)}</p>
               </div>
             </>
           ) : isAISummary ? (

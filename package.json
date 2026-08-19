@@ -2,9 +2,15 @@
   "name": "shoes-review-site",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "npm@11.5.2",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
+    "test": "tsx --test tests/**/*.test.ts",
+    "verify": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "prisma generate",

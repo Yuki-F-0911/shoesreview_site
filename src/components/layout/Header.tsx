@@ -58,6 +58,9 @@ export function Header() {
             <Link href="/reviews" className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
               レビュー
             </Link>
+            <Link href="/compare" className="text-sm text-neutral-600 hover:text-neutral-900 transition-colors">
+              比較
+            </Link>
             <Link href="/search" className="text-neutral-500 hover:text-neutral-900 transition-colors">
               <Search className="h-4 w-4" />
             </Link>
@@ -158,6 +161,9 @@ export function Header() {
               </Link>
               <Link href="/reviews" className="block px-3 py-2 text-neutral-700 hover:bg-neutral-50" onClick={() => setShowMobileMenu(false)}>
                 レビュー
+              </Link>
+              <Link href="/compare" className="block px-3 py-2 text-neutral-700 hover:bg-neutral-50" onClick={() => setShowMobileMenu(false)}>
+                シューズ比較
               </Link>
               {session && isAdmin && (
                 <>

@@ -21,8 +21,8 @@ export default function DeveloperPage() {
             <div>
               <h3 className="mb-2 font-medium text-gray-800">フロントエンド</h3>
               <div className="flex flex-wrap gap-2">
-                <Badge variant="outline">Next.js 14.2.0</Badge>
-                <Badge variant="outline">React 18.3.0</Badge>
+                <Badge variant="outline">Next.js 15</Badge>
+                <Badge variant="outline">React 19</Badge>
                 <Badge variant="outline">TypeScript 5.3.3</Badge>
                 <Badge variant="outline">Tailwind CSS 3.4.0</Badge>
               </div>
@@ -31,7 +31,7 @@ export default function DeveloperPage() {
               <h3 className="mb-2 font-medium text-gray-800">バックエンド</h3>
               <div className="flex flex-wrap gap-2">
                 <Badge variant="outline">Next.js API Routes</Badge>
-                <Badge variant="outline">Prisma 5.11.0</Badge>
+                <Badge variant="outline">Prisma 5</Badge>
                 <Badge variant="outline">PostgreSQL 18.1.1</Badge>
               </div>
             </div>
@@ -63,4 +63,3 @@ export default function DeveloperPage() {
     </div>
   )
 }
-

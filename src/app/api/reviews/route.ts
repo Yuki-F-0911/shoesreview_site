@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache'
 import { auth } from '@/lib/auth/auth'
 import { prisma } from '@/lib/prisma/client'
 import { reviewSchema } from '@/lib/validations/review'
+import { LATEST_REVIEW_ORDER } from '@/lib/reviews/query'
 
 export async function GET(request: Request) {
   try {
@@ -39,7 +40,7 @@ export async function GET(request: Request) {
             },
           },
         },
-        // Note: orderBy removed because createdAt column doesn't exist in Review model
+        orderBy: LATEST_REVIEW_ORDER,
         skip,
         take: pageSize,
       }),

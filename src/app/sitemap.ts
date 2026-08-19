@@ -6,6 +6,7 @@
 
 import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma/client'
+import { isValidBrandName } from '@/lib/shoes/brand'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://shoe-review.jp'
 
@@ -29,6 +30,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.95,
+    },
+    {
+      url: `${SITE_URL}/compare`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
     },
     {
       url: `${SITE_URL}/faq`,
@@ -70,7 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       distinct: ['brand'],
     })
 
-    brandPages = brands.map((b) => ({
+    brandPages = brands.filter((b) => isValidBrandName(b.brand)).map((b) => ({
       url: `${SITE_URL}/shoes?brand=${encodeURIComponent(b.brand)}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
