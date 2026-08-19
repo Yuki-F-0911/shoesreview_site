@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
+import { searchExternalReviewResults } from '@/lib/external-reviews/search'
 
 const prisma = new PrismaClient()
 
-const SERPER_API_KEY = process.env.SERPER_API_KEY || ''
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || ''
 
 // 認証チェック
@@ -22,33 +22,6 @@ function isAuthorized(request: NextRequest): boolean {
     }
 
     return false
-}
-
-// Serper APIで検索
-async function searchSerper(query: string, numResults: number = 10): Promise<Array<{ title: string; link: string; snippet: string }>> {
-    if (!SERPER_API_KEY) return []
-
-    try {
-        const response = await fetch('https://google.serper.dev/search', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-API-KEY': SERPER_API_KEY,
-            },
-            body: JSON.stringify({
-                q: query,
-                num: numResults,
-                gl: 'jp',
-                hl: 'ja',
-            }),
-        })
-
-        if (!response.ok) return []
-        const data = await response.json()
-        return data.organic || []
-    } catch {
-        return []
-    }
 }
 
 // プラットフォーム検出
@@ -185,7 +158,7 @@ export async function GET(request: NextRequest) {
             try {
                 for (const platform of platforms) {
                     const query = `${shoe.brand} ${shoe.modelName} レビュー ${siteQueries[platform]}`
-                    const searchResults = await searchSerper(query, 10)
+                    const searchResults = await searchExternalReviewResults(query, 10)
 
                     for (const result of searchResults) {
                         const detectedPlatform = detectPlatform(result.link)

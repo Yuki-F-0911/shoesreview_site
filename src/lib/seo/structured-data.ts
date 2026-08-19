@@ -152,9 +152,9 @@ export function generateReviewSchema(
     aiSources?: { sourceUrl: string; sourceTitle: string | null }[] // AIソースを追加
   }
 ) {
-  const rating = typeof review.overallRating === 'number'
-    ? review.overallRating
-    : parseFloat(String(review.overallRating)) || 0
+  const rating = review.overallRating == null
+    ? null
+    : Number(review.overallRating)
 
   // タイトルとコンテンツのnull対応
   const reviewTitle = review.title || (review.shoe ? `${review.shoe.brand} ${review.shoe.modelName}のレビュー` : 'シューズレビュー')
@@ -165,15 +165,18 @@ export function generateReviewSchema(
     '@type': 'Review',
     name: reviewTitle,
     reviewBody: reviewContent,
-    datePublished: (review as any).createdAt?.toISOString?.() || new Date().toISOString(),
-    dateModified: (review as any).updatedAt?.toISOString?.() || new Date().toISOString(),
-    reviewRating: {
+    datePublished: review.postedAt.toISOString(),
+    dateModified: review.postedAt.toISOString(),
+    url: `${SITE_INFO.url}/reviews/${review.id}`,
+  }
+
+  if (rating !== null && Number.isFinite(rating)) {
+    reviewSchema.reviewRating = {
       '@type': 'Rating',
       ratingValue: rating,
       bestRating: 10,
       worstRating: 0,
-    },
-    url: `${SITE_INFO.url}/reviews/${review.id}`,
+    }
   }
 
   // 著者情報

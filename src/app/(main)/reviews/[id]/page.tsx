@@ -12,6 +12,7 @@ import { JsonLd } from '@/components/seo/JsonLd'
 import { generateReviewSchema, generateBreadcrumbSchema } from '@/lib/seo/structured-data'
 import { generateReviewMetadata } from '@/lib/seo/metadata'
 import { formatDate } from '@/lib/utils/date'
+import { formatRating } from '@/lib/utils/review'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 import { ReviewDetailedStats } from '@/components/reviews/ReviewDetailedStats'
 import { LikeButton } from '@/components/reviews/LikeButton'
@@ -110,6 +111,7 @@ export default async function ReviewDetailPage(props: { params: Promise<{ id: st
   // タイトルとコンテンツのnull対応
   const displayTitle = review.title || (shoe ? `${shoe.brand} ${shoe.modelName}のレビュー` : 'シューズレビュー')
   const displayContent = review.content || (review as any).quickComment || ''
+  const displayRating = formatRating(review.overallRating)
 
   // 構造化データ
   const reviewSchema = generateReviewSchema(review as any)
@@ -168,12 +170,14 @@ export default async function ReviewDetailPage(props: { params: Promise<{ id: st
                       </p>
                     )}
                   </div>
-                  <div className="ml-4 text-right">
-                    <div className="text-4xl font-bold text-gray-900">
-                      {parseFloat(String(review.overallRating)).toFixed(1)}
+                  {displayRating && (
+                    <div className="ml-4 text-right">
+                      <div className="text-4xl font-bold text-gray-900">
+                        {displayRating}
+                      </div>
+                      <div className="text-sm text-gray-500">/10.0</div>
                     </div>
-                    <div className="text-sm text-gray-500">/10.0</div>
-                  </div>
+                  )}
                 </div>
               </CardHeader>
               <CardContent>
